@@ -8,6 +8,7 @@ import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.utils.TestUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -22,6 +23,30 @@ public class RuleTest {
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\" }");
         Assert.assertTrue(rule.matches(node));
+        long currentTime = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            if(!rule.matches(node)) {
+                System.err.println("Mismatch");
+            }
+        }
+        System.out.println("Time taken: " + (System.currentTimeMillis() - currentTime));
+    }
+
+    @Test
+    @Ignore
+    public void testPerf() throws Exception {
+        final String ruleRepr = TestUtils.read("/complex.rule");
+        Rule rule = Rule.create(ruleRepr, mapper);
+        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\" }");
+        for(int j = 0; j < 10; j++) {
+            long currentTime = System.currentTimeMillis();
+            for (long i = 0; i < 10_000_000; i++) {
+                if(!rule.matches(node)) {
+                    System.err.println("Mismatch");
+                }
+            }
+            System.out.println("Time taken: " + (System.currentTimeMillis() - currentTime));
+        }
     }
 
     @Test
