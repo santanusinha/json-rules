@@ -23,4 +23,8 @@ public class Rule {
                         .node(node)
                         .build());
     }
+
+    public String representation(ObjectMapper mapper) throws Exception {
+        return mapper.writeValueAsString(expression);
+    }
 }

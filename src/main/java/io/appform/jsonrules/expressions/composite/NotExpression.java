@@ -20,8 +20,8 @@ public class NotExpression extends CompositeExpression {
     }
 
     @Builder
-    public NotExpression(ExpressionType type, @Singular List<Expression> children) {
-        super(type, children);
+    public NotExpression(@Singular List<Expression> children) {
+        super(ExpressionType.not, children);
     }
 
     @Override

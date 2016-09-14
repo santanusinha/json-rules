@@ -20,8 +20,8 @@ public class OrExpression extends CompositeExpression {
     }
 
     @Builder
-    public OrExpression(ExpressionType type, @Singular List<Expression> children) {
-        super(type, children);
+    public OrExpression(@Singular List<Expression> children) {
+        super(ExpressionType.or, children);
     }
 
     @Override

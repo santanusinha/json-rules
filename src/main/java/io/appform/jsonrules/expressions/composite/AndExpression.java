@@ -20,8 +20,8 @@ public class AndExpression extends CompositeExpression {
     }
 
     @Builder
-    public AndExpression(ExpressionType type, @Singular List<Expression> children) {
-        super(type, children);
+    public AndExpression(@Singular List<Expression> children) {
+        super(ExpressionType.and, children);
     }
 
     @Override

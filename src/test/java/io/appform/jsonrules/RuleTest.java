@@ -2,6 +2,10 @@ package io.appform.jsonrules;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.appform.jsonrules.expressions.composite.NotExpression;
+import io.appform.jsonrules.expressions.composite.OrExpression;
+import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
+import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.utils.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,4 +24,25 @@ public class RuleTest {
         Assert.assertTrue(rule.matches(node));
     }
 
+    @Test
+    public void testRepresentation() throws Exception {
+        Rule rule = new Rule(NotExpression.builder()
+                .child(
+                        OrExpression.builder()
+                                .child(LessThanExpression.builder()
+                                        .path("/value")
+                                        .value(11)
+                                        .build())
+                                .child(GreaterThanExpression.builder()
+                                        .path("/value")
+                                        .value(30)
+                                        .build())
+                                .build())
+                .build());
+
+        final String ruleRep = rule.representation(mapper);
+
+        System.out.println(ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"value\":11},{\"type\":\"greater_than\",\"path\":\"/value\",\"value\":30}]}]}", ruleRep);
+    }
 }
