@@ -6,6 +6,7 @@ import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
+import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
 import org.junit.Assert;
 import org.junit.Ignore;

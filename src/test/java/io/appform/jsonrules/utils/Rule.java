@@ -15,10 +15,12 @@
  *
  */
 
-package io.appform.jsonrules;
+package io.appform.jsonrules.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.appform.jsonrules.Expression;
+import io.appform.jsonrules.ExpressionEvaluationContext;
 
 /**
  * A basic rule
