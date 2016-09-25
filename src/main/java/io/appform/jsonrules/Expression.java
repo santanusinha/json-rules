@@ -19,6 +19,7 @@ package io.appform.jsonrules;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
@@ -61,6 +62,10 @@ public abstract class Expression {
 
     protected Expression(ExpressionType type) {
         this.type = type;
+    }
+
+    public boolean evaluate(JsonNode node) {
+        return evaluate(ExpressionEvaluationContext.builder().node(node).build());
     }
 
     abstract public boolean evaluate(ExpressionEvaluationContext context);

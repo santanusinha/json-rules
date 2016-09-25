@@ -29,6 +29,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class ExpressionEvaluationContext {
-    private byte json[];
+    //private byte json[];
     private JsonNode node;
 }
