@@ -34,6 +34,14 @@ public enum ExpressionType {
     greater_than_equals,
     less_than_equals,
 
+    //String
+    empty,
+    not_empty,
+
+    //Meta
+    exists,
+    not_exists,
+
     //Joiner
     and,
     or,
