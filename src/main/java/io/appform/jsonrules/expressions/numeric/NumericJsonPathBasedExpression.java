@@ -45,7 +45,7 @@ public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpres
 
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        if(!evaluatedNode.isNumber()) {
+        if( null == evaluatedNode || !evaluatedNode.isNumber()) {
             return false;
         }
         int comparisonResult = 0;
