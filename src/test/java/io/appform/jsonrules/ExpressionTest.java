@@ -41,7 +41,7 @@ public class ExpressionTest {
     public void testExpressions() throws Exception { //Todo:: break
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\" }");
+        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"boolean\" : true }");
         ExpressionEvaluationContext context = ExpressionEvaluationContext.builder().node(node).build();
 
         Assert.assertTrue(GreaterThanExpression.builder()
@@ -142,6 +142,18 @@ public class ExpressionTest {
                                         .build())
                         .build()
                         .evaluate(context));
+
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/boolean")
+                .value(true)
+            .build()
+            .evaluate(context));
+
+        Assert.assertFalse(EqualsExpression.builder()
+                .path("/boolean")
+                .value(false)
+            .build()
+            .evaluate(context));
 
         Assert.assertTrue(EqualsExpression.builder()
                 .path("/value")
