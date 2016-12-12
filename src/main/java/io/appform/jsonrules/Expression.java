@@ -27,10 +27,14 @@ import io.appform.jsonrules.expressions.equality.EqualsExpression;
 import io.appform.jsonrules.expressions.equality.InExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
 import io.appform.jsonrules.expressions.equality.NotInExpression;
+import io.appform.jsonrules.expressions.meta.ExistsExpression;
+import io.appform.jsonrules.expressions.meta.NotExistsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
+import io.appform.jsonrules.expressions.string.EmptyExpression;
+import io.appform.jsonrules.expressions.string.NotEmptyExpression;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -56,6 +60,12 @@ import lombok.ToString;
         @JsonSubTypes.Type(name = "and", value = AndExpression.class),
         @JsonSubTypes.Type(name = "or", value = OrExpression.class),
         @JsonSubTypes.Type(name = "not", value = NotExpression.class),
+
+        @JsonSubTypes.Type(name = "exists", value = ExistsExpression.class),
+        @JsonSubTypes.Type(name = "not_exists", value = NotExistsExpression.class),
+
+        @JsonSubTypes.Type(name = "empty", value = EmptyExpression.class),
+        @JsonSubTypes.Type(name = "not_empty", value = NotEmptyExpression.class),
 })
 public abstract class Expression {
     private final ExpressionType type;
