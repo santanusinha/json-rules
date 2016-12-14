@@ -39,6 +39,16 @@ public interface ComparisonUtils {
                 throw new IllegalArgumentException("Type mismatch between operator and operand");
             }
         }
+        else if(evaluatedNode.isBoolean()) {
+            if (Boolean.class.isAssignableFrom(value.getClass())) {
+                Boolean bValue = Boolean.parseBoolean(value.toString());
+                comparisonResult = Boolean.compare(evaluatedNode.asBoolean(),bValue);
+            }
+            else {
+                throw new IllegalArgumentException("Type mismatch between operator and operand");
+            }
+
+        }
         else if(evaluatedNode.isTextual()) {
             if (String.class.isAssignableFrom(value.getClass())) {
                 comparisonResult = evaluatedNode.asText().compareTo(String.valueOf(value));
