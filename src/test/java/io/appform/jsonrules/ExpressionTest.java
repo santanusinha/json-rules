@@ -35,13 +35,15 @@ import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 public class ExpressionTest {
 
     @Test
     public void testExpressions() throws Exception { //Todo:: break
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\" }");
+        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null }");
         ExpressionEvaluationContext context = ExpressionEvaluationContext.builder().node(node).build();
 
         Assert.assertTrue(GreaterThanExpression.builder()
@@ -230,6 +232,39 @@ public class ExpressionTest {
                 .evaluate(context));
         Assert.assertFalse(NotExistsExpression.builder()
                 .path("/string")
+                .build()
+                .evaluate(context));
+
+        Assert.assertTrue(NotInExpression.builder()
+                .path("/string")
+                .values(new ArrayList<String>() {
+                    {
+                        add("abcd");
+                        add("efgh");
+                    }
+                })
+                .build()
+                .evaluate(context));
+
+        Assert.assertTrue(NotInExpression.builder()
+                .path("/kid")
+                .values(new ArrayList<String>() {
+                    {
+                        add("stupid");
+                        add("dumb");
+                    }
+                })
+                .build()
+                .evaluate(context));
+
+        Assert.assertTrue(NotInExpression.builder()
+                .path("/xyz")
+                .values(new ArrayList<String>() {
+                    {
+                        add("stupid");
+                        add("dumb");
+                    }
+                })
                 .build()
                 .evaluate(context));
     }
