@@ -33,166 +33,44 @@ import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
 public class ExpressionTest {
 
-    @Test
-    public void testExpressions() throws Exception { //Todo:: break
+    private ExpressionEvaluationContext context;
 
+    @Before
+    public void setUp() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null }");
-        ExpressionEvaluationContext context = ExpressionEvaluationContext.builder().node(node).build();
+        context = ExpressionEvaluationContext.builder().node(node).build();
+    }
 
-        Assert.assertTrue(GreaterThanExpression.builder()
-                .path("/value")
-                .value(5)
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(GreaterThanEqualsExpression.builder()
-                .path("/value")
-                .value(20)
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(LessThanEqualsExpression.builder()
-                .path("/value")
-                .value(20)
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(LessThanExpression.builder()
-                .path("/value")
-                .value(30)
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(
-                AndExpression.builder()
-                        .child(LessThanExpression.builder()
-                                .path("/value")
-                                .value(30)
-                                .build())
-                        .child(GreaterThanExpression.builder()
-                                .path("/value")
-                                .value(10)
-                                .build())
-                        .build()
-                        .evaluate(context));
-        Assert.assertTrue(
-                AndExpression.builder()
-                        .child(LessThanExpression.builder()
-                                .path("/value")
-                                .value(30)
-                                .build())
-                        .child(GreaterThanExpression.builder()
-                                .path("/value")
-                                .value(10)
-                                .build())
-                        .build()
-                        .evaluate(context));
-
-        Assert.assertTrue(
-                OrExpression.builder()
-                        .child(LessThanExpression.builder()
-                                .path("/value")
-                                .value(20)
-                                .build())
-                        .child(GreaterThanExpression.builder()
-                                .path("/value")
-                                .value(10)
-                                .build())
-                        .build()
-                        .evaluate(context));
-
-        Assert.assertTrue(
-                OrExpression.builder()
-                        .child(LessThanExpression.builder()
-                                .path("/value")
-                                .value(21)
-                                .build())
-                        .child(GreaterThanExpression.builder()
-                                .path("/value")
-                                .value(30)
-                                .build())
-                        .build()
-                        .evaluate(context));
-        Assert.assertFalse(
-                OrExpression.builder()
-                        .child(LessThanExpression.builder()
-                                .path("/value")
-                                .value(11)
-                                .build())
-                        .child(GreaterThanExpression.builder()
-                                .path("/value")
-                                .value(30)
-                                .build())
-                        .build()
-                        .evaluate(context));
-
-        Assert.assertTrue(
-                NotExpression.builder()
-                        .child(
-                                OrExpression.builder()
-                                        .child(LessThanExpression.builder()
-                                                .path("/value")
-                                                .value(11)
-                                                .build())
-                                        .child(GreaterThanExpression.builder()
-                                                .path("/value")
-                                                .value(30)
-                                                .build())
-                                        .build())
-                        .build()
-                        .evaluate(context));
-
+    @Test
+    public void testEqualsExpression() throws Exception {
         Assert.assertTrue(EqualsExpression.builder()
                 .path("/value")
                 .value(20)
                 .build()
                 .evaluate(context));
-
         Assert.assertFalse(EqualsExpression.builder()
                 .path("/abcd")
                 .value(20)
                 .build()
                 .evaluate(context));
-
         Assert.assertFalse(EqualsExpression.builder()
                 .path("/kid")
                 .value(20)
                 .build()
                 .evaluate(context));
-
         Assert.assertFalse(EqualsExpression.builder()
                 .path("/value")
                 .value(10)
                 .build()
                 .evaluate(context));
-
-        Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/value")
-                .value(20)
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(NotEqualsExpression.builder()
-                .path("/value")
-                .value(10)
-                .build()
-                .evaluate(context));
-
-        Assert.assertTrue(NotEqualsExpression.builder()
-                .path("/kid")
-                .value(20)
-                .build()
-                .evaluate(context));
-
-        Assert.assertTrue(NotEqualsExpression.builder()
-                .path("/efgh")
-                .value(20)
-                .build()
-                .evaluate(context));
-
-
         Assert.assertTrue(EqualsExpression.builder()
                 .path("/string")
                 .value("Hello")
@@ -203,7 +81,30 @@ public class ExpressionTest {
                 .value("hello")
                 .build()
                 .evaluate(context));
+    }
 
+    @Test
+    public void testNotEqualsExpression() throws Exception {
+        Assert.assertFalse(NotEqualsExpression.builder()
+                .path("/value")
+                .value(20)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotEqualsExpression.builder()
+                .path("/value")
+                .value(10)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotEqualsExpression.builder()
+                .path("/kid")
+                .value(20)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotEqualsExpression.builder()
+                .path("/efgh")
+                .value(20)
+                .build()
+                .evaluate(context));
         Assert.assertFalse(NotEqualsExpression.builder()
                 .path("/string")
                 .value("Hello")
@@ -214,7 +115,10 @@ public class ExpressionTest {
                 .value("hello")
                 .build()
                 .evaluate(context));
+    }
 
+    @Test
+    public void testInExpression() throws Exception {
         Assert.assertTrue(InExpression.builder()
                 .path("/string")
                 .value("Hello")
@@ -242,7 +146,10 @@ public class ExpressionTest {
                 .value("world")
                 .build()
                 .evaluate(context));
+    }
 
+    @Test
+    public void testNotInExpression() throws Exception {
         Assert.assertFalse(NotInExpression.builder()
                 .path("/string")
                 .value("Hello")
@@ -254,41 +161,6 @@ public class ExpressionTest {
                 .path("/string")
                 .value("hello")
                 .value("world")
-                .build()
-                .evaluate(context));
-
-        Assert.assertFalse(ExistsExpression.builder()
-                .path("/somepath")
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(ExistsExpression.builder()
-                .path("/string")
-                .build()
-                .evaluate(context));
-        Assert.assertFalse(ExistsExpression.builder()
-                .path("/kid")
-                .build()
-                .evaluate(context));
-        Assert.assertFalse(ExistsExpression.builder()
-                .path("/efgh")
-                .build()
-                .evaluate(context));
-
-
-        Assert.assertTrue(NotExistsExpression.builder()
-                .path("/somepath")
-                .build()
-                .evaluate(context));
-        Assert.assertFalse(NotExistsExpression.builder()
-                .path("/string")
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(NotExistsExpression.builder()
-                .path("/kid")
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(NotExistsExpression.builder()
-                .path("/efgh")
                 .build()
                 .evaluate(context));
 
@@ -326,4 +198,156 @@ public class ExpressionTest {
                 .evaluate(context));
     }
 
+    @Test
+    public void testExistsExpression() throws Exception {
+        Assert.assertFalse(ExistsExpression.builder()
+                .path("/somepath")
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(ExistsExpression.builder()
+                .path("/string")
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(ExistsExpression.builder()
+                .path("/kid")
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(ExistsExpression.builder()
+                .path("/efgh")
+                .build()
+                .evaluate(context));
+    }
+
+    @Test
+    public void testNotExistsExpression() throws Exception {
+        Assert.assertTrue(NotExistsExpression.builder()
+                .path("/somepath")
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(NotExistsExpression.builder()
+                .path("/string")
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotExistsExpression.builder()
+                .path("/kid")
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotExistsExpression.builder()
+                .path("/efgh")
+                .build()
+                .evaluate(context));
+    }
+
+    @Test
+    public void testNumericExpression() {
+        Assert.assertTrue(GreaterThanExpression.builder()
+                .path("/value")
+                .value(5)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(GreaterThanEqualsExpression.builder()
+                .path("/value")
+                .value(20)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(LessThanEqualsExpression.builder()
+                .path("/value")
+                .value(20)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(LessThanExpression.builder()
+                .path("/value")
+                .value(30)
+                .build()
+                .evaluate(context));
+    }
+
+    @Test
+    public void testAndExpression() {
+        Assert.assertTrue(
+                AndExpression.builder()
+                        .child(LessThanExpression.builder()
+                                .path("/value")
+                                .value(30)
+                                .build())
+                        .child(GreaterThanExpression.builder()
+                                .path("/value")
+                                .value(10)
+                                .build())
+                        .build()
+                        .evaluate(context));
+        Assert.assertTrue(
+                AndExpression.builder()
+                        .child(LessThanExpression.builder()
+                                .path("/value")
+                                .value(30)
+                                .build())
+                        .child(GreaterThanExpression.builder()
+                                .path("/value")
+                                .value(10)
+                                .build())
+                        .build()
+                        .evaluate(context));
+    }
+
+    @Test
+    public void testOrExpression() {
+        Assert.assertTrue(
+                OrExpression.builder()
+                        .child(LessThanExpression.builder()
+                                .path("/value")
+                                .value(20)
+                                .build())
+                        .child(GreaterThanExpression.builder()
+                                .path("/value")
+                                .value(10)
+                                .build())
+                        .build()
+                        .evaluate(context));
+
+        Assert.assertTrue(
+                OrExpression.builder()
+                        .child(LessThanExpression.builder()
+                                .path("/value")
+                                .value(21)
+                                .build())
+                        .child(GreaterThanExpression.builder()
+                                .path("/value")
+                                .value(30)
+                                .build())
+                        .build()
+                        .evaluate(context));
+        Assert.assertFalse(
+                OrExpression.builder()
+                        .child(LessThanExpression.builder()
+                                .path("/value")
+                                .value(11)
+                                .build())
+                        .child(GreaterThanExpression.builder()
+                                .path("/value")
+                                .value(30)
+                                .build())
+                        .build()
+                        .evaluate(context));
+    }
+
+    @Test
+    public void testNotExpression() throws Exception {
+        Assert.assertTrue(
+                NotExpression.builder()
+                        .child(
+                                OrExpression.builder()
+                                        .child(LessThanExpression.builder()
+                                                .path("/value")
+                                                .value(11)
+                                                .build())
+                                        .child(GreaterThanExpression.builder()
+                                                .path("/value")
+                                                .value(30)
+                                                .build())
+                                        .build())
+                        .build()
+                        .evaluate(context));
+
+    }
 }
