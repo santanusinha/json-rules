@@ -48,6 +48,8 @@ public class NotInExpression extends JsonPathBasedExpression {
     @Override
     protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
         return null != values
-                && values.stream().allMatch(value -> ComparisonUtils.compare(evaluatedNode, value) != 0);
+                && (ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
+                || values.stream().allMatch(value -> ComparisonUtils.compare(evaluatedNode, value) != 0)
+        );
     }
 }
