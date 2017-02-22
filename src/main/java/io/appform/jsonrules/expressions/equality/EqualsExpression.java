@@ -48,6 +48,6 @@ public class EqualsExpression extends JsonPathBasedExpression {
 
     @Override
     protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        return null != evaluatedNode && ComparisonUtils.compare(evaluatedNode, value) == 0;
+        return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode) && ComparisonUtils.compare(evaluatedNode, value) == 0;
     }
 }

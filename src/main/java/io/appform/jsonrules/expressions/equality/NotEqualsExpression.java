@@ -48,6 +48,10 @@ public class NotEqualsExpression extends JsonPathBasedExpression {
 
     @Override
     protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        return ComparisonUtils.compare(evaluatedNode, value) != 0;
+        return value == null
+                || ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
+                || ComparisonUtils.compare(evaluatedNode, value) != 0;
+
+
     }
 }

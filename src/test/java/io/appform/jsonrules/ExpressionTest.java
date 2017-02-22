@@ -148,8 +148,21 @@ public class ExpressionTest {
         Assert.assertTrue(EqualsExpression.builder()
                 .path("/value")
                 .value(20)
-            .build()
-            .evaluate(context));
+                .build()
+                .evaluate(context));
+
+        Assert.assertFalse(EqualsExpression.builder()
+                .path("/abcd")
+                .value(20)
+                .build()
+                .evaluate(context));
+
+        Assert.assertFalse(EqualsExpression.builder()
+                .path("/kid")
+                .value(20)
+                .build()
+                .evaluate(context));
+
         Assert.assertFalse(EqualsExpression.builder()
                 .path("/value")
                 .value(10)
@@ -164,6 +177,18 @@ public class ExpressionTest {
         Assert.assertTrue(NotEqualsExpression.builder()
                 .path("/value")
                 .value(10)
+                .build()
+                .evaluate(context));
+
+        Assert.assertTrue(NotEqualsExpression.builder()
+                .path("/kid")
+                .value(20)
+                .build()
+                .evaluate(context));
+
+        Assert.assertTrue(NotEqualsExpression.builder()
+                .path("/efgh")
+                .value(20)
                 .build()
                 .evaluate(context));
 
@@ -198,6 +223,20 @@ public class ExpressionTest {
                 .evaluate(context));
 
         Assert.assertFalse(InExpression.builder()
+                .path("/kid")
+                .value("Hello")
+                .value("World")
+                .build()
+                .evaluate(context));
+
+        Assert.assertFalse(InExpression.builder()
+                .path("/abcd")
+                .value("Hello")
+                .value("World")
+                .build()
+                .evaluate(context));
+
+        Assert.assertFalse(InExpression.builder()
                 .path("/string")
                 .value("hello")
                 .value("world")
@@ -219,19 +258,37 @@ public class ExpressionTest {
                 .evaluate(context));
 
         Assert.assertFalse(ExistsExpression.builder()
-            .path("/somepath")
-            .build()
-            .evaluate(context));
+                .path("/somepath")
+                .build()
+                .evaluate(context));
         Assert.assertTrue(ExistsExpression.builder()
-            .path("/string")
-            .build()
-            .evaluate(context));
+                .path("/string")
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(ExistsExpression.builder()
+                .path("/kid")
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(ExistsExpression.builder()
+                .path("/efgh")
+                .build()
+                .evaluate(context));
+
+
         Assert.assertTrue(NotExistsExpression.builder()
                 .path("/somepath")
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotExistsExpression.builder()
                 .path("/string")
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotExistsExpression.builder()
+                .path("/kid")
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotExistsExpression.builder()
+                .path("/efgh")
                 .build()
                 .evaluate(context));
 
