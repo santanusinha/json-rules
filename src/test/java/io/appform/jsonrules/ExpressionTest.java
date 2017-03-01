@@ -41,11 +41,12 @@ import java.util.ArrayList;
 public class ExpressionTest {
 
     private ExpressionEvaluationContext context;
+    private ObjectMapper mapper;
 
     @Before
     public void setUp() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null }");
+        mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
@@ -81,6 +82,18 @@ public class ExpressionTest {
                 .value("hello")
                 .build()
                 .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/boolean")
+                .value(true)
+                .build()
+                .evaluate(context));
+
+        Assert.assertFalse(EqualsExpression.builder()
+                .path("/boolean")
+                .value(false)
+                .build()
+                .evaluate(context));
+
     }
 
     @Test
