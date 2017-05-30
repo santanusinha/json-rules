@@ -19,6 +19,7 @@ package io.appform.jsonrules.expressions.numeric;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
+import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
 
 /**
@@ -30,8 +31,8 @@ public class GreaterThanEqualsExpression extends NumericJsonPathBasedExpression 
     }
 
     @Builder
-    public GreaterThanEqualsExpression(String path, Number value) {
-        super(ExpressionType.greater_than_equals, path, value);
+    public GreaterThanEqualsExpression(String path, Number value, PreOperation<?> preoperation) {
+        super(ExpressionType.greater_than_equals, path, value, preoperation);
     }
 
     protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult) {

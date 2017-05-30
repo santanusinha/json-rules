@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
+import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
 
 /**
@@ -32,8 +33,8 @@ public class EmptyExpression extends JsonPathBasedExpression {
     }
 
     @Builder
-    public EmptyExpression(String path) {
-        super(ExpressionType.empty, path);
+    public EmptyExpression(String path, PreOperation<?> preoperation) {
+        super(ExpressionType.empty, path, preoperation);
     }
 
     @Override

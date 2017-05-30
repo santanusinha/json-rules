@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
+import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
 
 /**
@@ -32,8 +33,8 @@ public class NotEmptyExpression extends JsonPathBasedExpression {
     }
 
     @Builder
-    public NotEmptyExpression(String path) {
-        super(ExpressionType.not_empty, path);
+    public NotEmptyExpression(String path, PreOperation<?> preoperation) {
+        super(ExpressionType.not_empty, path, preoperation);
     }
 
     @Override
