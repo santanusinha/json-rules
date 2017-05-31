@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
+import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -41,8 +42,8 @@ public class EqualsExpression extends JsonPathBasedExpression {
     }
 
     @Builder
-    public EqualsExpression(String path, Object value) {
-        super(ExpressionType.equals, path);
+    public EqualsExpression(String path, Object value, PreOperation<?> preoperation) {
+        super(ExpressionType.equals, path, preoperation);
         this.value = value;
     }
 

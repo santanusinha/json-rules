@@ -18,12 +18,16 @@
 package io.appform.jsonrules.expressions;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.appform.jsonrules.ExpressionEvaluationContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.appform.jsonrules.Expression;
+import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
+import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.val;
 
 /**
  * All expressions that evaluate a json path uses this.
@@ -33,20 +37,27 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public abstract class JsonPathBasedExpression extends Expression {
     private String path;
+    private PreOperation<?> preoperation;
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     protected JsonPathBasedExpression(ExpressionType type) {
         super(type);
     }
 
-    protected JsonPathBasedExpression(ExpressionType type, String path) {
+    protected JsonPathBasedExpression(ExpressionType type, String path, PreOperation<?> preoperation) {
         this(type);
         this.path = path;
+        this.preoperation = preoperation;
     }
 
     @Override
     public final boolean evaluate(ExpressionEvaluationContext context) {
         //T value = context.getParsedContext().read(path, clazz);
-        final JsonNode evaluatedNode = context.getNode().at(path);
+        JsonNode evaluatedNode = context.getNode().at(path);
+        if (preoperation != null) {
+        	val computedValue = preoperation.compute(evaluatedNode);
+        	evaluatedNode = mapper.valueToTree(computedValue);
+        }
         return evaluate(context, path, evaluatedNode);
     }
 

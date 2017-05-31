@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
+import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -38,8 +39,8 @@ public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpres
         super(type);
     }
 
-    protected NumericJsonPathBasedExpression(ExpressionType type, String path, Number value) {
-        super(type, path);
+    protected NumericJsonPathBasedExpression(ExpressionType type, String path, Number value, PreOperation<?> preoperation) {
+        super(type, path, preoperation);
         this.value = value;
     }
 

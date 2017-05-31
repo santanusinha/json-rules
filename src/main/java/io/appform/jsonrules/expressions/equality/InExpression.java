@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
+import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
 import lombok.*;
 
@@ -40,8 +41,8 @@ public class InExpression extends JsonPathBasedExpression {
     }
 
     @Builder
-    public InExpression(String path, @Singular List<Object> values) {
-        super(ExpressionType.in, path);
+    public InExpression(String path, @Singular List<Object> values, PreOperation<?> preoperation) {
+        super(ExpressionType.in, path, preoperation);
         this.values = values;
     }
 

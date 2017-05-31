@@ -17,6 +17,7 @@
 
 package io.appform.jsonrules.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.appform.jsonrules.Expression;
@@ -44,6 +45,8 @@ public class Rule {
     }
 
     public String representation(ObjectMapper mapper) throws Exception {
+    	mapper.setSerializationInclusion(Include.NON_NULL);
+    	mapper.setSerializationInclusion(Include.NON_EMPTY);
         return mapper.writeValueAsString(expression);
     }
 }
