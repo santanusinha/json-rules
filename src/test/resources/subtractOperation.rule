@@ -1,0 +1,17 @@
+{
+    "type": "and",
+    "children": [
+        {
+            "type": "equals",
+            "path": "/value",
+            "value": 11,
+            "preoperation": {"operation" : "subtract", "operand" : -3}
+        },
+        {
+            "type": "less_than",
+            "path": "/value",
+            "value": 5,
+            "preoperation": {"operation" : "subtract", "operand" : 4}
+        }
+    ]
+}

@@ -46,8 +46,8 @@ import lombok.ToString;
         @JsonSubTypes.Type(name = "divide", value = DivideOperation.class),
         @JsonSubTypes.Type(name = "modulo", value = ModuloOperation.class),
 
-        @JsonSubTypes.Type(name = "epoch_date", value = EpochOperation.class),
-        @JsonSubTypes.Type(name = "standard_date", value = DateTimeOperation.class),
+        @JsonSubTypes.Type(name = "epoch", value = EpochOperation.class),
+        @JsonSubTypes.Type(name = "date_time", value = DateTimeOperation.class),
 })
 public abstract class PreOperation<T> {
 	private final PreOperationType operation;

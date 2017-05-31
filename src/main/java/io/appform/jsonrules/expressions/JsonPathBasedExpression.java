@@ -20,8 +20,8 @@ package io.appform.jsonrules.expressions;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.Expression;
+import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Data;
@@ -49,7 +49,7 @@ public abstract class JsonPathBasedExpression extends Expression {
         this.path = path;
         this.preoperation = preoperation;
     }
-    
+
     @Override
     public final boolean evaluate(ExpressionEvaluationContext context) {
         //T value = context.getParsedContext().read(path, clazz);

@@ -69,6 +69,6 @@ public class RuleTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"preoperation\":null,\"value\":11},{\"type\":\"greater_than\",\"path\":\"/value\",\"preoperation\":null,\"value\":30}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"value\":11},{\"type\":\"greater_than\",\"path\":\"/value\",\"value\":30}]}]}", ruleRep);
     }
 }

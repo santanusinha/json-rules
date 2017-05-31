@@ -33,7 +33,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class DateTimeOperation extends CalendarOperation {
 
-	public DateTimeOperation() {
+	protected DateTimeOperation() {
 		super(PreOperationType.date_time);
 	}
 	

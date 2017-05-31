@@ -25,6 +25,10 @@ import java.time.temporal.ChronoField;
 
 public class PreOperationUtils {
 
+	private PreOperationUtils() {
+		// to prevent instantion of this utils class.
+	}
+
 	private static final String MONTH_OF_YEAR = "month_of_year";
 	private static final String WEEK_OF_YEAR = "week_of_year";
 	private static final String WEEK_OF_MONTH = "week_of_month";
@@ -53,8 +57,8 @@ public class PreOperationUtils {
 		case MONTH_OF_YEAR:
 			return dateTime.get(ChronoField.MONTH_OF_YEAR);
 		default:
-			throw new IllegalArgumentException("Operand doesnot represent a valid field");
 		}
+		throw new IllegalArgumentException("Operand doesnot represent a valid field");
 	}
 	
 	public static final OffsetDateTime getDateTime(long epoch, String zoneOffSet) {
@@ -65,7 +69,7 @@ public class PreOperationUtils {
 			} else {
 				instant = Instant.ofEpochSecond(epoch);
 			}
-			if (zoneOffSet != null) {
+			if (zoneOffSet != null && !zoneOffSet.trim().isEmpty()) {
 				return instant.atOffset(ZoneOffset.of(zoneOffSet));
 			}
 			return instant.atOffset(ZoneOffset.UTC);
@@ -77,7 +81,7 @@ public class PreOperationUtils {
 	public static final OffsetDateTime getDateTime(String dateTimeStr, String zoneOffSet) {
 		try {
 			Instant instant = Instant.parse(dateTimeStr);
-			if (zoneOffSet != null) {
+			if (zoneOffSet != null && !zoneOffSet.trim().isEmpty()) {
 				return instant.atOffset(ZoneOffset.of(zoneOffSet));
 			}
 			return instant.atOffset(ZoneOffset.UTC);

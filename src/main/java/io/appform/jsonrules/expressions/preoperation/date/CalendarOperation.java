@@ -31,22 +31,22 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class CalendarOperation extends PreOperation<Object> {
+public abstract class CalendarOperation extends PreOperation<Number> {
 	private String operand;
 	private String zoneOffSet;
 
-	public CalendarOperation(PreOperationType type) {
+	protected CalendarOperation(PreOperationType type) {
 		super(type);
 	}
 	
-	public CalendarOperation(PreOperationType type, String operand, String zoneOffSet) {
+	protected CalendarOperation(PreOperationType type, String operand, String zoneOffSet) {
 		this(type);
 		this.operand = operand;
 		this.zoneOffSet = zoneOffSet;
 	}
 
 	@Override
-	public Object compute(JsonNode evaluatedNode) {
+	public Number compute(JsonNode evaluatedNode) {
 		if (evaluatedNode.isNumber() && operand != null) {
 			return compute(evaluatedNode, operand, zoneOffSet);
 		} else if (evaluatedNode.isTextual() && operand != null) {
@@ -56,6 +56,6 @@ public abstract class CalendarOperation extends PreOperation<Object> {
 		}
 	}
 
-	protected abstract Number compute(JsonNode evaluatedNode, String operand2, String zoneOffSet2);
+	protected abstract Number compute(JsonNode evaluatedNode, String operand, String zoneOffSet);
 
 }

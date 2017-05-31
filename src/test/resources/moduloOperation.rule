@@ -1,0 +1,17 @@
+{
+    "type": "and",
+    "children": [
+        {
+            "type": "equals",
+            "path": "/value",
+            "value": 2,
+            "preoperation": {"operation" : "modulo", "operand" : 3}
+        },
+        {
+            "type": "greater_than",
+            "path": "/value",
+            "value": 1,
+            "preoperation": {"operation" : "modulo", "operand" : 3}
+        }
+    ]
+}

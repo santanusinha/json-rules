@@ -48,7 +48,7 @@ public class DivideOperation extends NumericPreOperation {
 	@Override
 	public double compute(double leftOperand, double rightOperand) {
 		if (Double.isInfinite(leftOperand) || Double.isInfinite(rightOperand)) {
-			throw new IllegalArgumentException("Either of the operands is infinite");
+			throw new IllegalArgumentException("Atleast one of the operands is infinite");
 		} else if (rightOperand == 0) {
 			throw new IllegalArgumentException("Division by zero not allowed");
 		}
