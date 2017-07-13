@@ -289,15 +289,15 @@ public class ExpressionTest {
                                 .build())
                         .build()
                         .evaluate(context));
-        Assert.assertTrue(
+        Assert.assertFalse(
                 AndExpression.builder()
                         .child(LessThanExpression.builder()
                                 .path("/value")
-                                .value(30)
+                                .value(10)
                                 .build())
                         .child(GreaterThanExpression.builder()
                                 .path("/value")
-                                .value(10)
+                                .value(30)
                                 .build())
                         .build()
                         .evaluate(context));

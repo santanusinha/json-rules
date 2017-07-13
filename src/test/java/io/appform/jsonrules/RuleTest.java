@@ -34,6 +34,21 @@ public class RuleTest {
     }
 
     @Test
+    public void testExistential() throws Exception {
+        final String ruleRepr = TestUtils.read("/exists_equals.rule");
+        Rule rule = Rule.create(ruleRepr, mapper);
+        JsonNode node = mapper.readTree("{ \"value\": 20, \"non_existing_key\" : \"Hello\" }");
+        Assert.assertTrue(rule.matches(node));
+        long currentTime = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            if(!rule.matches(node)) {
+                System.err.println("Mismatch");
+            }
+        }
+        System.out.println("Time taken: " + (System.currentTimeMillis() - currentTime));
+    }
+
+    @Test
     @Ignore
     public void testPerf() throws Exception {
         final String ruleRepr = TestUtils.read("/complex.rule");

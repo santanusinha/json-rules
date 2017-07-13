@@ -23,10 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
-import io.appform.jsonrules.expressions.equality.EqualsExpression;
-import io.appform.jsonrules.expressions.equality.InExpression;
-import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
-import io.appform.jsonrules.expressions.equality.NotInExpression;
+import io.appform.jsonrules.expressions.equality.*;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
@@ -51,6 +48,9 @@ import lombok.ToString;
         @JsonSubTypes.Type(name = "not_equals", value = NotEqualsExpression.class),
         @JsonSubTypes.Type(name = "in", value = InExpression.class),
         @JsonSubTypes.Type(name = "not_in", value = NotInExpression.class),
+
+        @JsonSubTypes.Type(name = "exist_equals", value = ExistentialEqualsExpression.class),
+        @JsonSubTypes.Type(name = "exist_in", value = ExistentialInExpression.class),
 
         @JsonSubTypes.Type(name = "greater_than", value = GreaterThanExpression.class),
         @JsonSubTypes.Type(name = "greater_than_equals", value = GreaterThanEqualsExpression.class),

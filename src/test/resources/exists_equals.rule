@@ -1,0 +1,5 @@
+{
+  "type" : "exist_equals",
+  "path" : "/string",
+  "value" : "Hello"
+}
