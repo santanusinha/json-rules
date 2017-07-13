@@ -27,6 +27,8 @@ public enum ExpressionType {
     not_equals,
     in,
     not_in,
+    exist_equals,
+    exist_in,
 
     //Numeric
     greater_than,
