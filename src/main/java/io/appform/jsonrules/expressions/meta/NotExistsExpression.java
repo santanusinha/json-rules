@@ -35,7 +35,7 @@ public class NotExistsExpression extends JsonPathBasedExpression {
 
     @Builder
     public NotExistsExpression(String path, PreOperation<?> preoperation) {
-        super(ExpressionType.not_exists, path, preoperation);
+        super(ExpressionType.not_exists, path, null, preoperation);
     }
 
     @Override

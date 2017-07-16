@@ -42,8 +42,8 @@ public class EqualsExpression extends JsonPathBasedExpression {
     }
 
     @Builder
-    public EqualsExpression(String path, Object value, PreOperation<?> preoperation) {
-        super(ExpressionType.equals, path, preoperation);
+    public EqualsExpression(String path, Object value, Boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.equals, path, defaultResult, preoperation);
         this.value = value;
     }
 

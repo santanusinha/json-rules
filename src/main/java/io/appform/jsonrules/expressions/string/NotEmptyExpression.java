@@ -33,8 +33,8 @@ public class NotEmptyExpression extends JsonPathBasedExpression {
     }
 
     @Builder
-    public NotEmptyExpression(String path, PreOperation<?> preoperation) {
-        super(ExpressionType.not_empty, path, preoperation);
+    public NotEmptyExpression(String path, Boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.not_empty, path, defaultResult, preoperation);
     }
 
     @Override
