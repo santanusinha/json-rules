@@ -31,8 +31,8 @@ public class GreaterThanEqualsExpression extends NumericJsonPathBasedExpression 
     }
 
     @Builder
-    public GreaterThanEqualsExpression(String path, Number value, PreOperation<?> preoperation) {
-        super(ExpressionType.greater_than_equals, path, value, preoperation);
+    public GreaterThanEqualsExpression(String path, Number value, Boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.greater_than_equals, path, value, defaultResult, preoperation);
     }
 
     protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult) {

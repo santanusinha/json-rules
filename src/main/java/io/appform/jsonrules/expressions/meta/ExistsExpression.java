@@ -35,7 +35,7 @@ public class ExistsExpression extends JsonPathBasedExpression {
 
     @Builder
     public ExistsExpression(String path, PreOperation<?> preoperation) {
-        super(ExpressionType.exists, path, preoperation);
+        super(ExpressionType.exists, path, null, preoperation);
     }
 
     @Override

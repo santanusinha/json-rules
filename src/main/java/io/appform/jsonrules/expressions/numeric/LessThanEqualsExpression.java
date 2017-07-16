@@ -31,8 +31,8 @@ public class LessThanEqualsExpression extends NumericJsonPathBasedExpression {
     }
 
     @Builder
-    public LessThanEqualsExpression(String path, Number value, PreOperation<?> preoperation) {
-        super(ExpressionType.less_than_equals, path, value, preoperation);
+    public LessThanEqualsExpression(String path, Number value, Boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.less_than_equals, path, value, defaultResult, preoperation);
     }
 
     protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult) {

@@ -34,6 +34,14 @@ public class RuleTest {
     }
 
     @Test
+    public void testDefaultResultRule() throws Exception {
+        final String ruleRepr = TestUtils.read("/simple_rule_with_default.rule");
+        Rule rule = Rule.create(ruleRepr, mapper);
+        JsonNode nodeWithMissingOperandPath = mapper.readTree("{ \"value\": 20, \"name\" : \"Hello\" }");
+        Assert.assertTrue(rule.matches(node));
+    }
+
+    @Test
     @Ignore
     public void testPerf() throws Exception {
         final String ruleRepr = TestUtils.read("/complex.rule");

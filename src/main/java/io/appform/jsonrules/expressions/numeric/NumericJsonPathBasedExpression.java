@@ -34,13 +34,12 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpression {
     private Number value;
-
     protected NumericJsonPathBasedExpression(ExpressionType type) {
         super(type);
     }
 
-    protected NumericJsonPathBasedExpression(ExpressionType type, String path, Number value, PreOperation<?> preoperation) {
-        super(type, path, preoperation);
+    protected NumericJsonPathBasedExpression(ExpressionType type, String path, Number value, Boolean defaultResult, PreOperation<?> preoperation) {
+        super(type, path, defaultResult, preoperation);
         this.value = value;
     }
 

@@ -42,8 +42,8 @@ public class NotEqualsExpression extends JsonPathBasedExpression {
     }
 
     @Builder
-    public NotEqualsExpression(String path, Object value, PreOperation<?> preoperation) {
-        super(ExpressionType.not_equals, path, preoperation);
+    public NotEqualsExpression(String path, Object value, Boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.not_equals, path, defaultResult, preoperation);
         this.value = value;
     }
 
