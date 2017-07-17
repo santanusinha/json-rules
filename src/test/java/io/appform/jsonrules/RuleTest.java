@@ -38,7 +38,11 @@ public class RuleTest {
         final String ruleRepr = TestUtils.read("/simple_rule_with_default.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode nodeWithMissingOperandPath = mapper.readTree("{ \"value\": 20, \"name\" : \"Hello\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assert.assertTrue(rule.matches(nodeWithMissingOperandPath));
+
+        final String ruleRepr2 = TestUtils.read("/simple.rule");
+        Rule rule2 = Rule.create(ruleRepr2, mapper);
+        Assert.assertFalse(rule2.matches(nodeWithMissingOperandPath));
     }
 
     @Test
@@ -77,6 +81,6 @@ public class RuleTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"value\":11},{\"type\":\"greater_than\",\"path\":\"/value\",\"value\":30}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"defaultResult\":false,\"value\":11},{\"type\":\"greater_than\",\"path\":\"/value\",\"defaultResult\":false,\"value\":30}]}]}", ruleRep);
     }
 }

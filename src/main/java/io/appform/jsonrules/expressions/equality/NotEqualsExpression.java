@@ -23,10 +23,8 @@ import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Tolerate;
 
 /**
  * Compares objects
@@ -43,7 +41,7 @@ public class NotEqualsExpression extends JsonPathBasedExpression {
 
     @Builder
     public NotEqualsExpression(String path, Object value, Boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.not_equals, path, defaultResult, preoperation);
+        super(ExpressionType.not_equals, path, null == defaultResult ? true : defaultResult.booleanValue(), preoperation);
         this.value = value;
     }
 
@@ -52,7 +50,5 @@ public class NotEqualsExpression extends JsonPathBasedExpression {
         return value == null
                 || ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
                 || ComparisonUtils.compare(evaluatedNode, value) != 0;
-
-
     }
 }

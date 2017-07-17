@@ -38,7 +38,7 @@ public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpres
         super(type);
     }
 
-    protected NumericJsonPathBasedExpression(ExpressionType type, String path, Number value, Boolean defaultResult, PreOperation<?> preoperation) {
+    protected NumericJsonPathBasedExpression(ExpressionType type, String path, Number value, boolean defaultResult, PreOperation<?> preoperation) {
         super(type, path, defaultResult, preoperation);
         this.value = value;
     }
