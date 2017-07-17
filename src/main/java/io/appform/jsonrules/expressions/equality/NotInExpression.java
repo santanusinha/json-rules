@@ -42,7 +42,7 @@ public class NotInExpression extends JsonPathBasedExpression {
 
     @Builder
     public NotInExpression(String path, @Singular List<Object> values, Boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.not_in, path, defaultResult, preoperation);
+        super(ExpressionType.not_in, path, null == defaultResult? true : defaultResult.booleanValue(), preoperation);
         this.values = values;
     }
 

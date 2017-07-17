@@ -51,7 +51,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackson.version>2.7.4</jackson.version>
-        <lombok.version>1.16.6</lombok.version>
+        <lombok.version>1.16.16</lombok.version>
         <junit.version>4.12</junit.version>
     </properties>
 
