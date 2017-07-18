@@ -114,8 +114,14 @@ public class ExpressionTest {
                 .build()
                 .evaluate(context));
         Assert.assertTrue(NotEqualsExpression.builder()
-                .path("/efgh")
+                .path("/NON_EXISITING_KEY")
                 .value(20)
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(NotEqualsExpression.builder()
+                .path("/NON_EXISITING_KEY")
+                .value(20)
+                .defaultResult(false)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotEqualsExpression.builder()
@@ -200,7 +206,19 @@ public class ExpressionTest {
                 .evaluate(context));
 
         Assert.assertTrue(NotInExpression.builder()
-                .path("/xyz")
+                .path("/NON_EXISITING_KEY")
+                .values(new ArrayList<String>() {
+                    {
+                        add("stupid");
+                        add("dumb");
+                    }
+                })
+                .build()
+                .evaluate(context));
+
+        Assert.assertFalse(NotInExpression.builder()
+                .path("/NON_EXISITING_KEY")
+                .defaultResult(false)
                 .values(new ArrayList<String>() {
                     {
                         add("stupid");
