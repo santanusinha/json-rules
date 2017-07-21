@@ -39,25 +39,32 @@ public abstract class JsonPathBasedExpression extends Expression {
     private String path;
     private PreOperation<?> preoperation;
     private static final ObjectMapper mapper = new ObjectMapper();
+    private boolean defaultResult;
 
     protected JsonPathBasedExpression(ExpressionType type) {
         super(type);
     }
 
-    protected JsonPathBasedExpression(ExpressionType type, String path, PreOperation<?> preoperation) {
+    protected JsonPathBasedExpression(ExpressionType type, String path, boolean defaultResult, PreOperation<?> preoperation) {
         this(type);
         this.path = path;
         this.preoperation = preoperation;
+        this.defaultResult = defaultResult;
     }
 
     @Override
     public final boolean evaluate(ExpressionEvaluationContext context) {
-        //T value = context.getParsedContext().read(path, clazz);
         JsonNode evaluatedNode = context.getNode().at(path);
+
         if (preoperation != null) {
         	val computedValue = preoperation.compute(evaluatedNode);
         	evaluatedNode = mapper.valueToTree(computedValue);
         }
+
+        if (evaluatedNode.isMissingNode()) {
+            return defaultResult;
+        }
+
         return evaluate(context, path, evaluatedNode);
     }
 

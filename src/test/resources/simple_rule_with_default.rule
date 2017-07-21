@@ -1,0 +1,6 @@
+{
+  "type" : "equals",
+  "path" : "/string",
+  "value" : "Hello",
+  "defaultResult": true
+}

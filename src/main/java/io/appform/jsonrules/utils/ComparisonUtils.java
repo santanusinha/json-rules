@@ -60,4 +60,10 @@ public interface ComparisonUtils {
     public static boolean isNodeMissingOrNull(JsonNode node) {
         return node.isMissingNode() || node.isNull();
     }
+
+    public static boolean getDefaultResult(Boolean defaultResult, boolean resultIfNull) {
+        if (null == defaultResult)
+            return resultIfNull;
+        return defaultResult.booleanValue();
+    }
 }

@@ -438,7 +438,7 @@ public class EpochOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/unixTime\",\"preoperation\":{\"operation\":\"epoch\",\"operand\":\"hour_of_day\"},\"value\":11},{\"type\":\"greater_than\",\"path\":\"/unixTime\",\"preoperation\":{\"operation\":\"epoch\",\"operand\":\"week_of_month\"},\"value\":30}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/unixTime\",\"preoperation\":{\"operation\":\"epoch\",\"operand\":\"hour_of_day\"},\"defaultResult\":false,\"value\":11},{\"type\":\"greater_than\",\"path\":\"/unixTime\",\"preoperation\":{\"operation\":\"epoch\",\"operand\":\"week_of_month\"},\"defaultResult\":false,\"value\":30}]}]}", ruleRep);
     }
     
 }
