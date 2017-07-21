@@ -62,7 +62,8 @@ public interface ComparisonUtils {
     }
 
     public static boolean getDefaultResult(Boolean defaultResult, boolean resultIfNull) {
-        if (null == defaultResult) return resultIfNull;
+        if (null == defaultResult)
+            return resultIfNull;
         return defaultResult.booleanValue();
     }
 }
