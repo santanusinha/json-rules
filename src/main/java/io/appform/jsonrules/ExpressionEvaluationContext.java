@@ -22,6 +22,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * Context passed to expression evaluator
  */
@@ -29,6 +31,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class ExpressionEvaluationContext {
-    //private byte json[];
     private JsonNode node;
+    private Map<OptionKeys, Object> options;
 }

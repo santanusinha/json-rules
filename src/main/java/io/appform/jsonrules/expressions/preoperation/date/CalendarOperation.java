@@ -19,6 +19,7 @@ package io.appform.jsonrules.expressions.preoperation.date;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.expressions.preoperation.PreOperationType;
 import lombok.Data;
@@ -45,7 +46,6 @@ public abstract class CalendarOperation extends PreOperation<Number> {
 		this.zoneOffSet = zoneOffSet;
 	}
 
-	@Override
 	public Number compute(JsonNode evaluatedNode) {
 		if (evaluatedNode.isNumber() && operand != null) {
 			return compute(evaluatedNode, operand, zoneOffSet);
@@ -54,6 +54,12 @@ public abstract class CalendarOperation extends PreOperation<Number> {
 		} else {
 			throw new IllegalArgumentException("Operands do not represent valid values");
 		}
+	}
+
+	@Override
+	public Number compute(ExpressionEvaluationContext context) {
+		JsonNode node = context.getNode();
+		return compute(node);
 	}
 
 	protected abstract Number compute(JsonNode evaluatedNode, String operand, String zoneOffSet);
