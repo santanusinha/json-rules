@@ -39,6 +39,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * A base expression
  */
@@ -75,7 +78,11 @@ public abstract class Expression {
     }
 
     public boolean evaluate(JsonNode node) {
-        return evaluate(ExpressionEvaluationContext.builder().node(node).build());
+        return evaluate(node, Collections.emptyMap());
+    }
+
+    public boolean evaluate(JsonNode node, Map<OptionKeys, Object> options) {
+        return evaluate(ExpressionEvaluationContext.builder().node(node).options(options).build());
     }
 
     abstract public boolean evaluate(ExpressionEvaluationContext context);

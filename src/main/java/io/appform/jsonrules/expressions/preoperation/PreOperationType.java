@@ -31,5 +31,6 @@ public enum PreOperationType {
 	
 	// Calendar
 	epoch,
+	current_epoch_diff,
 	date_time
 }
