@@ -70,10 +70,9 @@ public abstract class JsonPathBasedExpression extends Expression {
             return payload;
         }
 
-        ExpressionEvaluationContext nodeEvaluationContext = ExpressionEvaluationContext.builder()
-                .node(payload)
-                .options(globalContext.getOptions())
-                .build();
+        ExpressionEvaluationContext nodeEvaluationContext = globalContext.deepCopy();
+        nodeEvaluationContext.setNode(payload);
+
         val computedValue = preoperation.compute(nodeEvaluationContext);
         payload = mapper.valueToTree(computedValue);
 
