@@ -54,18 +54,29 @@ public abstract class JsonPathBasedExpression extends Expression {
 
     @Override
     public final boolean evaluate(ExpressionEvaluationContext context) {
-        JsonNode evaluatedNode = context.getNode().at(path);
-
-        if (preoperation != null) {
-        	val computedValue = preoperation.compute(evaluatedNode);
-        	evaluatedNode = mapper.valueToTree(computedValue);
-        }
+        JsonNode evaluatedNode = applyPreoperation(context);
 
         if (evaluatedNode.isMissingNode()) {
             return defaultResult;
         }
 
         return evaluate(context, path, evaluatedNode);
+    }
+
+    private JsonNode applyPreoperation(ExpressionEvaluationContext globalContext) {
+        JsonNode payload = globalContext.getNode().at(path);
+
+        if (null == preoperation) {
+            return payload;
+        }
+
+        ExpressionEvaluationContext nodeEvaluationContext = globalContext.deepCopy();
+        nodeEvaluationContext.setNode(payload);
+
+        val computedValue = preoperation.compute(nodeEvaluationContext);
+        payload = mapper.valueToTree(computedValue);
+
+        return payload;
     }
 
     abstract protected boolean evaluate(ExpressionEvaluationContext context, final String path, JsonNode evaluatedNode);

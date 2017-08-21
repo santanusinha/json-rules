@@ -23,6 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 
+import java.util.Collections;
+
 /**
  * A basic rule
  */
@@ -41,6 +43,7 @@ public class Rule {
         return expression.evaluate(
                 ExpressionEvaluationContext.builder()
                         .node(node)
+                        .options(Collections.emptyMap())
                         .build());
     }
 

@@ -21,7 +21,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.date.DateTimeOperation;
+import io.appform.jsonrules.expressions.preoperation.date.DiffFromCurrentEpochOperation;
 import io.appform.jsonrules.expressions.preoperation.date.EpochOperation;
 import io.appform.jsonrules.expressions.preoperation.numeric.AddOperation;
 import io.appform.jsonrules.expressions.preoperation.numeric.DivideOperation;
@@ -48,9 +50,10 @@ import lombok.ToString;
 
         @JsonSubTypes.Type(name = "epoch", value = EpochOperation.class),
         @JsonSubTypes.Type(name = "date_time", value = DateTimeOperation.class),
+		@JsonSubTypes.Type(name = "current_epoch_diff", value = DiffFromCurrentEpochOperation.class),
 })
 public abstract class PreOperation<T> {
 	private final PreOperationType operation;
 	
-	public abstract T compute(JsonNode evaluatedNode);
+	public abstract T compute(ExpressionEvaluationContext context);
 }

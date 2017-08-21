@@ -19,6 +19,7 @@ package io.appform.jsonrules.expressions.preoperation.numeric;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.expressions.preoperation.PreOperationType;
 import lombok.Data;
@@ -43,7 +44,6 @@ public abstract class NumericPreOperation extends PreOperation<Number> {
 		this.operand = operand;
 	}
 
-	@Override
 	public Number compute(JsonNode evaluatedNode) {
 		if (evaluatedNode.isNumber()) {
 			if (evaluatedNode.isIntegralNumber()) {
@@ -55,7 +55,13 @@ public abstract class NumericPreOperation extends PreOperation<Number> {
             throw new IllegalArgumentException("Non numeric operations are not supported");
         }
 	}
-	
+
+	@Override
+	public Number compute(ExpressionEvaluationContext context) {
+		JsonNode node = context.getNode();
+		return compute(node);
+	}
+
 	public abstract long compute(long leftOperand, long rightOperand);
 	
 	public abstract double compute(double leftOperand, double rightOperand);
