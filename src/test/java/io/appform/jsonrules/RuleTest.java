@@ -53,6 +53,7 @@ public class RuleTest {
         Assert.assertTrue(rule.matches(nodeWithMissingOperandPath));
 
     }
+
     @Test
     @Ignore
     public void testPerf() throws Exception {
