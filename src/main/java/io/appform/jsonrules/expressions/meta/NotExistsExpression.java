@@ -31,6 +31,7 @@ import lombok.Builder;
 public class NotExistsExpression extends JsonPathBasedExpression {
     public NotExistsExpression() {
         super(ExpressionType.not_exists);
+        setDefaultResult(true);
     }
 
     @Builder

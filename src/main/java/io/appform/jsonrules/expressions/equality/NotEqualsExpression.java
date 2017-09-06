@@ -37,6 +37,7 @@ public class NotEqualsExpression extends JsonPathBasedExpression {
 
     public NotEqualsExpression() {
         super(ExpressionType.not_equals);
+        setDefaultResult(true);
     }
 
     @Builder
