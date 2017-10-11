@@ -53,7 +53,7 @@ public class MultiplyOperationTest {
         dateTime = Instant.now();
         long epoch = dateTime.getEpochSecond();
         String dateTimeStr = new StringBuilder().append("\"").append(dateTime.toString()).append("\"").toString();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
+        JsonNode node = mapper.readTree("{ \"stringifiedValue\": \"9886098860\",\"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
@@ -77,9 +77,22 @@ public class MultiplyOperationTest {
                 .value(0)
                 .build()
                 .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedValue")
+                .preoperation(MultiplyOperation.builder().operand(-1).build())
+                .value(-9886098860L)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedValue")
+                .preoperation(MultiplyOperation.builder().operand(10).build())
+                .value(98860988600L)
+                .build()
+                .evaluate(context));
+
         try {
         	EqualsExpression.builder()
-            .path("/abcd")
+            .path("/string")
             .preoperation(MultiplyOperation.builder().operand(2).build())
             .value(20)
             .build()

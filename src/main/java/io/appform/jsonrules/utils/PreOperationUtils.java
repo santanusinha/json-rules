@@ -23,6 +23,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class PreOperationUtils {
 
 	private PreOperationUtils() {
@@ -109,5 +111,14 @@ public class PreOperationUtils {
 			throw new IllegalArgumentException("Operand doesnot represent a valid date");
 		}
 	}
-	
+
+	public static final boolean isNumericRepresentation(JsonNode evaluatedNode) {
+		try {
+			Double.parseDouble(evaluatedNode.asText());
+		} catch (NumberFormatException exception) {
+			return false;
+		}
+		return true;
+	}
+
 }

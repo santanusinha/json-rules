@@ -49,7 +49,7 @@ public class DivideOperationTest {
         dateTime = Instant.now();
         long epoch = dateTime.getEpochSecond();
         String dateTimeStr = new StringBuilder().append("\"").append(dateTime.toString()).append("\"").toString();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
+        JsonNode node = mapper.readTree("{ \"stringifiedDecimalValue\": \"98860.98860\", \"stringifiedValue\": \"9886098860\", \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
@@ -67,6 +67,25 @@ public class DivideOperationTest {
                 .value(-10)
                 .build()
                 .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedValue")
+                .preoperation(DivideOperation.builder().operand(-10).build())
+                .value(-988609886)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedValue")
+                .preoperation(DivideOperation.builder().operand(1000).build())
+                .value(9886098.86)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedDecimalValue")
+                .preoperation(DivideOperation.builder().operand(98860).build())
+                .value(1.00001)
+                .build()
+                .evaluate(context));
+
         try {
         	Assert.assertTrue(EqualsExpression.builder()
         			.path("/value")

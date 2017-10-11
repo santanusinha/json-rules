@@ -51,7 +51,7 @@ public class SubtractOperationTest {
         dateTime = Instant.now();
         long epoch = dateTime.getEpochSecond();
         String dateTimeStr = new StringBuilder().append("\"").append(dateTime.toString()).append("\"").toString();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
+        JsonNode node = mapper.readTree("{ \"stringifiedValue\": \"9886098860\",\"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
@@ -67,6 +67,18 @@ public class SubtractOperationTest {
                 .path("/value")
                 .preoperation(SubtractOperation.builder().operand(-2).build())
                 .value(22)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedValue")
+                .preoperation(SubtractOperation.builder().operand(-2).build())
+                .value(9886098862L)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedValue")
+                .preoperation(SubtractOperation.builder().operand(2).build())
+                .value(9886098858L)
                 .build()
                 .evaluate(context));
         
