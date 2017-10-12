@@ -6,7 +6,7 @@
 
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>0.3.4</version>
+    <version>0.3.5</version>
 
     <distributionManagement>
         <repository>
