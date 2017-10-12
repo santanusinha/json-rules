@@ -1,0 +1,16 @@
+{
+    "type": "and",
+    "children": [
+        {
+            "type": "ends_with",
+            "path": "/string",
+            "value": "WORLD",
+            "ignoreCase" : true
+        },
+        {
+            "type": "ends_with",
+            "path": "/string",
+            "value": "World"
+        }
+    ]
+}
