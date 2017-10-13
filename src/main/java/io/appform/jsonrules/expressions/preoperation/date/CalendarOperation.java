@@ -47,9 +47,7 @@ public abstract class CalendarOperation extends PreOperation<Number> {
 	}
 
 	public Number compute(JsonNode evaluatedNode) {
-		if (evaluatedNode.isNumber() && operand != null) {
-			return compute(evaluatedNode, operand, zoneOffSet);
-		} else if (evaluatedNode.isTextual() && operand != null) {
+		if (operand != null && (evaluatedNode.isNumber() || evaluatedNode.isTextual())) {
 			return compute(evaluatedNode, operand, zoneOffSet);
 		} else {
 			throw new IllegalArgumentException("Operands do not represent valid values");

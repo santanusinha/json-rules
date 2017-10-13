@@ -20,6 +20,8 @@ package io.appform.jsonrules;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
@@ -34,7 +36,10 @@ import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.expressions.string.EmptyExpression;
+import io.appform.jsonrules.expressions.string.EndsWithExpression;
+import io.appform.jsonrules.expressions.string.MatchesExpression;
 import io.appform.jsonrules.expressions.string.NotEmptyExpression;
+import io.appform.jsonrules.expressions.string.StartsWithExpression;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -69,6 +74,9 @@ import java.util.Map;
 
         @JsonSubTypes.Type(name = "empty", value = EmptyExpression.class),
         @JsonSubTypes.Type(name = "not_empty", value = NotEmptyExpression.class),
+        @JsonSubTypes.Type(name = "starts_with", value = StartsWithExpression.class),
+        @JsonSubTypes.Type(name = "ends_with", value = EndsWithExpression.class),
+        @JsonSubTypes.Type(name = "matches", value = MatchesExpression.class),
 })
 public abstract class Expression {
     private final ExpressionType type;
@@ -82,6 +90,10 @@ public abstract class Expression {
     }
 
     public boolean evaluate(JsonNode node, Map<OptionKeys, Object> options) {
+        if (null == node) {
+            // Fail safe check to make the node an empty node if its null.
+            node = new ObjectMapper().createObjectNode();
+        }
         return evaluate(ExpressionEvaluationContext.builder().node(node).options(options).build());
     }
 

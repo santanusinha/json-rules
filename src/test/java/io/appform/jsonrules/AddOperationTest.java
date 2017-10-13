@@ -51,7 +51,7 @@ public class AddOperationTest {
         dateTime = Instant.now();
         long epoch = dateTime.getEpochSecond();
         String dateTimeStr = new StringBuilder().append("\"").append(dateTime.toString()).append("\"").toString();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
+        JsonNode node = mapper.readTree("{ \"stringifiedValue\": \"9886098860\",\"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
@@ -67,6 +67,18 @@ public class AddOperationTest {
                 .path("/value")
                 .preoperation(AddOperation.builder().operand(-2).build())
                 .value(18)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedValue")
+                .preoperation(AddOperation.builder().operand(-2).build())
+                .value(9886098858L)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("/stringifiedValue")
+                .preoperation(AddOperation.builder().operand(10).build())
+                .value(9886098870L)
                 .build()
                 .evaluate(context));
 
@@ -286,7 +298,7 @@ public class AddOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"add\",\"operand\":5},\"defaultResult\":false,\"value\":11},{\"type\":\"greater_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"add\",\"operand\":-5},\"defaultResult\":false,\"value\":30}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"add\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"add\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 }

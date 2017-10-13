@@ -31,12 +31,14 @@ public class GreaterThanExpression extends NumericJsonPathBasedExpression {
     }
 
     @Builder
-    public GreaterThanExpression(String path, Number value, boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.greater_than, path, value, defaultResult, preoperation);
+    public GreaterThanExpression(String path, Object value, boolean extractValueFromPath, boolean defaultResult,
+            PreOperation<?> preoperation) {
+        super(ExpressionType.greater_than, path, value, extractValueFromPath, defaultResult, preoperation);
     }
 
-    public GreaterThanExpression(String path, Number value, PreOperation<?> preoperation) {
-        this(path, value, false, preoperation);
+    public GreaterThanExpression(String path, Object value, boolean extractValueFromPath,
+            PreOperation<?> preoperation) {
+        this(path, value, extractValueFromPath, false, preoperation);
     }
 
     protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult) {

@@ -36,15 +36,22 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class EqualsExpression extends JsonPathBasedExpression {
     private Object value;
+    private boolean extractValueFromPath;
 
     public EqualsExpression() {
         super(ExpressionType.equals);
     }
 
     @Builder
-    public EqualsExpression(String path, Object value, boolean defaultResult, PreOperation<?> preoperation) {
+    public EqualsExpression(String path, Object value, boolean extractValueFromPath, boolean defaultResult,
+            PreOperation<?> preoperation) {
         super(ExpressionType.equals, path, defaultResult, preoperation);
         this.value = value;
+        this.extractValueFromPath = extractValueFromPath;
+    }
+
+    public EqualsExpression(String path, Object value, boolean extractValueFromPath, PreOperation<?> preoperation) {
+        this(path, value, extractValueFromPath, false, preoperation);
     }
 
     public EqualsExpression(String path, Object value, PreOperation<?> preoperation) {
@@ -53,6 +60,11 @@ public class EqualsExpression extends JsonPathBasedExpression {
 
     @Override
     protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode) && ComparisonUtils.compare(evaluatedNode, value) == 0;
+        if (extractValueFromPath) {
+            return ComparisonUtils.compareForEquality(context, evaluatedNode, value);
+        }
+        return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
+                && ComparisonUtils.compare(evaluatedNode, value) == 0;
     }
+
 }

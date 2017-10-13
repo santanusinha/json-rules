@@ -17,32 +17,27 @@
 
 package io.appform.jsonrules.expressions.string;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.appform.jsonrules.ExpressionEvaluationContext;
+import com.google.common.base.Strings;
+
 import io.appform.jsonrules.ExpressionType;
-import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
 
 /**
  * Check is string is empty or null
  */
-public class EmptyExpression extends JsonPathBasedExpression {
+public class EmptyExpression extends StringJsonPathBasedExpression {
     public EmptyExpression() {
         super(ExpressionType.empty);
     }
 
     @Builder
     public EmptyExpression(String path, Boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.empty, path, defaultResult, preoperation);
+        super(ExpressionType.empty, path, null, false, false, defaultResult, preoperation);
     }
 
     @Override
-    protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        if(!evaluatedNode.isTextual()) {
-            return false;
-        }
-        final String data = evaluatedNode.asText();
-        return null == data || data.isEmpty();
+    protected boolean evaluate(String data, String value, boolean ignoreCase) {
+        return Strings.isNullOrEmpty(data);
     }
 }

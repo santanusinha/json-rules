@@ -45,7 +45,8 @@ public abstract class JsonPathBasedExpression extends Expression {
         super(type);
     }
 
-    protected JsonPathBasedExpression(ExpressionType type, String path, boolean defaultResult, PreOperation<?> preoperation) {
+    protected JsonPathBasedExpression(ExpressionType type, String path, boolean defaultResult,
+            PreOperation<?> preoperation) {
         this(type);
         this.path = path;
         this.preoperation = preoperation;

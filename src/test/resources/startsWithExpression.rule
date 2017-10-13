@@ -1,0 +1,16 @@
+{
+    "type": "and",
+    "children": [
+        {
+            "type": "starts_with",
+            "path": "/string",
+            "value": "HELLO",
+            "ignoreCase" : true
+        },
+        {
+            "type": "starts_with",
+            "path": "/string",
+            "value": "Hello"
+        }
+    ]
+}

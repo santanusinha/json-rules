@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.expressions.preoperation.PreOperationType;
+import io.appform.jsonrules.utils.PreOperationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -51,6 +52,9 @@ public abstract class NumericPreOperation extends PreOperation<Number> {
 			} else {
 				return compute(evaluatedNode.asDouble(), operand.doubleValue());
 			}
+        } else if (PreOperationUtils.isNumericRepresentation(evaluatedNode)) {
+            // For extending pre-operation to numbers represented as text.
+            return compute(Double.parseDouble(evaluatedNode.asText()), operand.doubleValue());
         } else {
             throw new IllegalArgumentException("Non numeric operations are not supported");
         }
