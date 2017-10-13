@@ -116,6 +116,7 @@ public class ExpressionTest {
         Assert.assertTrue(NotEqualsExpression.builder()
                 .path("/NON_EXISITING_KEY")
                 .value(20)
+                .defaultResult(false)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotEqualsExpression.builder()

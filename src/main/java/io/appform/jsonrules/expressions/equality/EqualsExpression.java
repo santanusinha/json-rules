@@ -54,6 +54,10 @@ public class EqualsExpression extends JsonPathBasedExpression {
         this(path, value, extractValueFromPath, false, preoperation);
     }
 
+    public EqualsExpression(String path, Object value, PreOperation<?> preoperation) {
+        this(path, value,false, preoperation);
+    }
+
     @Override
     protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
         if (extractValueFromPath) {

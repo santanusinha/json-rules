@@ -40,6 +40,9 @@ public class NotEmptyExpression extends StringJsonPathBasedExpression {
         this(path, false, preoperation);
     }
 
+    public NotEmptyExpression(String path, PreOperation<?> preoperation) {
+        this(path, false, preoperation);
+    }
     @Override
     protected boolean evaluate(String data, String value, boolean ignoreCase) {
         return !Strings.isNullOrEmpty(data);

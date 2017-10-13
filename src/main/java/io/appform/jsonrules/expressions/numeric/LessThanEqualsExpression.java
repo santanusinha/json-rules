@@ -38,7 +38,7 @@ public class LessThanEqualsExpression extends NumericJsonPathBasedExpression {
 
     public LessThanEqualsExpression(String path, Object value, boolean extractValueFromPath,
             PreOperation<?> preoperation) {
-        this(path, value, extractValueFromPath, false, preoperation);
+        this(path, value, extractValueFromPath, false, preoperation);   
     }
 
     protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult) {

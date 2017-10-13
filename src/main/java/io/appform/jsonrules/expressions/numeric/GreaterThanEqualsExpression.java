@@ -39,6 +39,7 @@ public class GreaterThanEqualsExpression extends NumericJsonPathBasedExpression 
     public GreaterThanEqualsExpression(String path, Object value, boolean extractValueFromPath,
             PreOperation<?> preoperation) {
         this(path, value, extractValueFromPath, false, preoperation);
+    
     }
 
     protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult) {
