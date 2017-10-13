@@ -53,6 +53,7 @@
         <jackson.version>2.7.4</jackson.version>
         <lombok.version>1.16.16</lombok.version>
         <junit.version>4.12</junit.version>
+        <guava.version>19.0</guava.version>
     </properties>
 
 
@@ -88,6 +89,11 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 

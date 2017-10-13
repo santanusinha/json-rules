@@ -17,6 +17,8 @@
 
 package io.appform.jsonrules.expressions.string;
 
+import com.google.common.base.Strings;
+
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
@@ -32,24 +34,24 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class MatchesExpression extends StringJsonPathBasedExpression {
 
-	public MatchesExpression() {
-		super(ExpressionType.mathces);
-	}
+    public MatchesExpression() {
+        super(ExpressionType.mathces);
+    }
 
-	@Builder
-	public MatchesExpression(String path, String value, boolean ignoreCase, boolean extractValueFromPath,
-			Boolean defaultResult, PreOperation<?> preoperation) {
-		super(ExpressionType.mathces, path, value, ignoreCase, extractValueFromPath, defaultResult, preoperation);
-	}
+    @Builder
+    public MatchesExpression(String path, String value, boolean ignoreCase, boolean extractValueFromPath,
+            Boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.mathces, path, value, ignoreCase, extractValueFromPath, defaultResult, preoperation);
+    }
 
-	@Override
-	protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase) {
-		if (null != leftValue) {
-			if (ignoreCase) {
-				return leftValue.toLowerCase().matches(rightValue.toLowerCase());
-			}
-			return leftValue.matches(rightValue);
-		}
-		return false;
-	}
+    @Override
+    protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase) {
+        if (!Strings.isNullOrEmpty(leftValue) && !Strings.isNullOrEmpty(rightValue)) {
+            if (ignoreCase) {
+                return leftValue.toLowerCase().matches(rightValue.toLowerCase());
+            }
+            return leftValue.matches(rightValue);
+        }
+        return false;
+    }
 }

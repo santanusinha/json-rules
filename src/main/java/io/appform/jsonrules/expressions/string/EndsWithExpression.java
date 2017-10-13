@@ -17,6 +17,8 @@
 
 package io.appform.jsonrules.expressions.string;
 
+import com.google.common.base.Strings;
+
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
@@ -32,25 +34,25 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class EndsWithExpression extends StringJsonPathBasedExpression {
 
-	public EndsWithExpression() {
-		super(ExpressionType.ends_with);
-	}
+    public EndsWithExpression() {
+        super(ExpressionType.ends_with);
+    }
 
-	@Builder
-	public EndsWithExpression(String path, String value, boolean ignoreCase, boolean extractValueFromPath,
-			Boolean defaultResult, PreOperation<?> preoperation) {
-		super(ExpressionType.ends_with, path, value, ignoreCase, extractValueFromPath, defaultResult, preoperation);
-	}
+    @Builder
+    public EndsWithExpression(String path, String value, boolean ignoreCase, boolean extractValueFromPath,
+            Boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.ends_with, path, value, ignoreCase, extractValueFromPath, defaultResult, preoperation);
+    }
 
-	@Override
-	protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase) {
-		if (null != leftValue) {
-			if (ignoreCase) {
-				return leftValue.toLowerCase().endsWith(rightValue.toLowerCase());
-			}
-			return leftValue.endsWith(rightValue);
-		}
-		return false;
-	}
+    @Override
+    protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase) {
+        if (!Strings.isNullOrEmpty(leftValue) && !Strings.isNullOrEmpty(rightValue)) {
+            if (ignoreCase) {
+                return leftValue.toLowerCase().endsWith(rightValue.toLowerCase());
+            }
+            return leftValue.endsWith(rightValue);
+        }
+        return false;
+    }
 
 }

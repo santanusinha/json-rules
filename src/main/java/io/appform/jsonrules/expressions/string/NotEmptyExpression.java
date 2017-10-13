@@ -17,6 +17,8 @@
 
 package io.appform.jsonrules.expressions.string;
 
+import com.google.common.base.Strings;
+
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
@@ -25,21 +27,21 @@ import lombok.Builder;
  * Check is string is not empty or null
  */
 public class NotEmptyExpression extends StringJsonPathBasedExpression {
-	public NotEmptyExpression() {
-		super(ExpressionType.not_empty);
-	}
+    public NotEmptyExpression() {
+        super(ExpressionType.not_empty);
+    }
 
-	@Builder
-	public NotEmptyExpression(String path, boolean defaultResult, PreOperation<?> preoperation) {
-		super(ExpressionType.not_empty, path, null, false, false, defaultResult, preoperation);
-	}
+    @Builder
+    public NotEmptyExpression(String path, boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.not_empty, path, null, false, false, defaultResult, preoperation);
+    }
 
-	public NotEmptyExpression(String path, PreOperation<?> preoperation) {
-		this(path, false, preoperation);
-	}
+    public NotEmptyExpression(String path, PreOperation<?> preoperation) {
+        this(path, false, preoperation);
+    }
 
-	@Override
-	protected boolean evaluate(String data, String value, boolean ignoreCase) {
-		return null != data && !data.isEmpty();
-	}
+    @Override
+    protected boolean evaluate(String data, String value, boolean ignoreCase) {
+        return !Strings.isNullOrEmpty(data);
+    }
 }

@@ -35,46 +35,32 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class EqualsExpression extends JsonPathBasedExpression {
-	private Object value;
-	private boolean extractValueFromPath;
+    private Object value;
+    private boolean extractValueFromPath;
 
-	public EqualsExpression() {
-		super(ExpressionType.equals);
-	}
+    public EqualsExpression() {
+        super(ExpressionType.equals);
+    }
 
-	@Builder
-	public EqualsExpression(String path, Object value, boolean extractValueFromPath, boolean defaultResult,
-			PreOperation<?> preoperation) {
-		super(ExpressionType.equals, path, defaultResult, preoperation);
-		this.value = value;
-		this.extractValueFromPath = extractValueFromPath;
-	}
+    @Builder
+    public EqualsExpression(String path, Object value, boolean extractValueFromPath, boolean defaultResult,
+            PreOperation<?> preoperation) {
+        super(ExpressionType.equals, path, defaultResult, preoperation);
+        this.value = value;
+        this.extractValueFromPath = extractValueFromPath;
+    }
 
-	public EqualsExpression(String path, Object value, boolean extractValueFromPath, PreOperation<?> preoperation) {
-		this(path, value, extractValueFromPath, false, preoperation);
-	}
+    public EqualsExpression(String path, Object value, boolean extractValueFromPath, PreOperation<?> preoperation) {
+        this(path, value, extractValueFromPath, false, preoperation);
+    }
 
-	@Override
-	protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-		if (extractValueFromPath) {
-			JsonNode jsonNode = context.getNode().at(String.valueOf(value));
-			if (jsonNode.isNumber()) {
-				if (jsonNode.isIntegralNumber()) {
-					return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-							&& ComparisonUtils.compare(evaluatedNode, jsonNode.asLong()) == 0;
-				} else if (jsonNode.isFloatingPointNumber()) {
-					return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-							&& ComparisonUtils.compare(evaluatedNode, jsonNode.asDouble()) == 0;
-				}
-			} else if (jsonNode.isBoolean()) {
-				return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-						&& ComparisonUtils.compare(evaluatedNode, Boolean.parseBoolean(value.toString())) == 0;
-			} else if (jsonNode.isTextual()) {
-				return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-						&& ComparisonUtils.compare(evaluatedNode, String.valueOf(value)) == 0;
-			}
-		}
-		return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-				&& ComparisonUtils.compare(evaluatedNode, value) == 0;
-	}
+    @Override
+    protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
+        if (extractValueFromPath) {
+            return ComparisonUtils.compareForEquality(context, evaluatedNode, value);
+        }
+        return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
+                && ComparisonUtils.compare(evaluatedNode, value) == 0;
+    }
+
 }

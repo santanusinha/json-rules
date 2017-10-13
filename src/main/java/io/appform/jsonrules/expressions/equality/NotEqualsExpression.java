@@ -33,14 +33,15 @@ import lombok.*;
 @ToString(callSuper = true)
 public class NotEqualsExpression extends JsonPathBasedExpression {
     private Object value;
-	private boolean extractValueFromPath;
+    private boolean extractValueFromPath;
 
     public NotEqualsExpression() {
         super(ExpressionType.not_equals);
     }
 
     @Builder
-    public NotEqualsExpression(String path, Object value, boolean extractValueFromPath, Boolean defaultResult, PreOperation<?> preoperation) {
+    public NotEqualsExpression(String path, Object value, boolean extractValueFromPath, Boolean defaultResult,
+            PreOperation<?> preoperation) {
         super(ExpressionType.not_equals, path, ComparisonUtils.getDefaultResult(defaultResult, true), preoperation);
         this.value = value;
         this.extractValueFromPath = extractValueFromPath;
@@ -48,26 +49,11 @@ public class NotEqualsExpression extends JsonPathBasedExpression {
 
     @Override
     protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-    	if (extractValueFromPath) {
-			JsonNode jsonNode = context.getNode().at(String.valueOf(value));
-			if (jsonNode.isNumber()) {
-				if (jsonNode.isIntegralNumber()) {
-					return ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-							|| ComparisonUtils.compare(evaluatedNode, jsonNode.asLong()) != 0;
-				} else if (jsonNode.isFloatingPointNumber()) {
-					return ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-							|| ComparisonUtils.compare(evaluatedNode, jsonNode.asDouble()) != 0;
-				}
-			} else if (jsonNode.isBoolean()) {
-				return ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-						|| ComparisonUtils.compare(evaluatedNode, Boolean.parseBoolean(value.toString())) != 0;
-			} else if (jsonNode.isTextual()) {
-				return ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-						|| ComparisonUtils.compare(evaluatedNode, String.valueOf(value)) != 0;
-			}
-		}
-        return value == null
-                || ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
+        if (extractValueFromPath) {
+            return ComparisonUtils.compareForNotEquals(context, evaluatedNode, value);
+        }
+        return value == null || ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
                 || ComparisonUtils.compare(evaluatedNode, value) != 0;
     }
+
 }

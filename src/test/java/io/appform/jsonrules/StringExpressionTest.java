@@ -42,7 +42,7 @@ public class StringExpressionTest {
     @Before
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"emptyString\" : \"\", \"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
+        JsonNode node = mapper.readTree("{ \"value\": 20, \"emptyString\" : \"\", \"s3\" : \"Hello.*\", \"s1\" : \"HelloAllHello\", \"s2\" : \"Hello\",\"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
  
@@ -138,6 +138,13 @@ public class StringExpressionTest {
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
+        Assert.assertTrue(StartsWithExpression.builder()
+                .path("/s1")
+                .value("/s2")
+                .extractValueFromPath(true)
+                .defaultResult(false)
+                .build()
+                .evaluate(context));
     }
     
     @Test
@@ -177,6 +184,13 @@ public class StringExpressionTest {
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
+        Assert.assertTrue(EndsWithExpression.builder()
+                .path("/s1")
+                .value("/s2")
+                .extractValueFromPath(true)
+                .defaultResult(false)
+                .build()
+                .evaluate(context));
     }
     
     @Test
@@ -222,6 +236,13 @@ public class StringExpressionTest {
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
+        Assert.assertTrue(MatchesExpression.builder()
+                .path("/s1")
+                .value("/s3")
+                .extractValueFromPath(true)
+                .defaultResult(false)
+                .build()
+                .evaluate(context));
     }
     
     @Test
@@ -261,6 +282,14 @@ public class StringExpressionTest {
         final String ruleRepr = TestUtils.read("/matchesExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 8, \"string\" : \"Hello World\" }");
+        Assert.assertTrue(rule.matches(node));
+    }
+    
+    @Test
+    public void testExtractPathRule() throws Exception {
+        final String ruleRepr = TestUtils.read("/extractPathExpression.rule");
+        Rule rule = Rule.create(ruleRepr, mapper);
+        JsonNode node = mapper.readTree("{ \"value\": 8, \"s1\" : \"Hello World\", \"s2\" : \"Hello.*\" }");
         Assert.assertTrue(rule.matches(node));
     }
 

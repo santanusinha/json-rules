@@ -34,15 +34,15 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public abstract class StringJsonPathBasedExpression extends JsonPathBasedExpression {
     private String value;
-	private boolean ignoreCase;
-	private boolean extractValueFromPath;
+    private boolean ignoreCase;
+    private boolean extractValueFromPath;
 
     protected StringJsonPathBasedExpression(ExpressionType type) {
         super(type);
     }
 
-    protected StringJsonPathBasedExpression(ExpressionType type, String path, String value, boolean ignoreCase, 
-    		boolean extractValueFromPath, boolean defaultResult, PreOperation<?> preoperation) {
+    protected StringJsonPathBasedExpression(ExpressionType type, String path, String value, boolean ignoreCase,
+            boolean extractValueFromPath, boolean defaultResult, PreOperation<?> preoperation) {
         super(type, path, defaultResult, preoperation);
         this.value = value;
         this.ignoreCase = ignoreCase;
@@ -51,16 +51,16 @@ public abstract class StringJsonPathBasedExpression extends JsonPathBasedExpress
 
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-    	 if(!evaluatedNode.isTextual()) {
-             return false;
-         }
-    	 if (extractValueFromPath) {
-    		 final String extractedValue = context.getNode().at(value).asText();
-    		 return evaluate(evaluatedNode.asText(), extractedValue, ignoreCase);
-    	 }
-         return evaluate(evaluatedNode.asText(), value, ignoreCase);
+        if (!evaluatedNode.isTextual()) {
+            return false;
+        }
+        if (extractValueFromPath) {
+            final String extractedValue = context.getNode().at(value).asText();
+            return evaluate(evaluatedNode.asText(), extractedValue, ignoreCase);
+        }
+        return evaluate(evaluatedNode.asText(), value, ignoreCase);
     }
 
     abstract protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase);
-    
+
 }

@@ -20,6 +20,8 @@ package io.appform.jsonrules;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
@@ -88,6 +90,10 @@ public abstract class Expression {
     }
 
     public boolean evaluate(JsonNode node, Map<OptionKeys, Object> options) {
+        if (null == node) {
+            // Fail safe check to make the node an empty node if its null.
+            node = new ObjectMapper().createObjectNode();
+        }
         return evaluate(ExpressionEvaluationContext.builder().node(node).options(options).build());
     }
 

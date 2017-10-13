@@ -33,48 +33,50 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpression {
-	private Object value;
-	private boolean extractValueFromPath;
+    private Object value;
+    private boolean extractValueFromPath;
 
-	protected NumericJsonPathBasedExpression(ExpressionType type) {
-		super(type);
-	}
+    protected NumericJsonPathBasedExpression(ExpressionType type) {
+        super(type);
+    }
 
-	protected NumericJsonPathBasedExpression(ExpressionType type, String path, Object value,
-			boolean extractValueFromPath, boolean defaultResult, PreOperation<?> preoperation) {
-		super(type, path, defaultResult, preoperation);
-		this.value = value;
-		this.extractValueFromPath = extractValueFromPath;
-	}
+    protected NumericJsonPathBasedExpression(ExpressionType type, String path, Object value,
+            boolean extractValueFromPath, boolean defaultResult, PreOperation<?> preoperation) {
+        super(type, path, defaultResult, preoperation);
+        this.value = value;
+        this.extractValueFromPath = extractValueFromPath;
+    }
 
-	@Override
-	protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-		if (null == evaluatedNode || !evaluatedNode.isNumber()) {
-			return false;
-		}
+    @Override
+    protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
+        if (null == evaluatedNode || !evaluatedNode.isNumber()) {
+            return false;
+        }
 
-		Number numericalValue;
-		if (extractValueFromPath) {
-			JsonNode jsonNode = context.getNode().at(String.valueOf(value));
-			if (jsonNode.isIntegralNumber()) {
-				numericalValue = jsonNode.asLong();
-			} else if (jsonNode.isFloatingPointNumber()) {
-				numericalValue = jsonNode.asDouble();
-			} else {
-				throw new IllegalArgumentException("Operand is not a number");
-			}
-		} else {
-			numericalValue = (Number) value;
-		}
+        Number numericalValue;
+        if (extractValueFromPath) {
+            JsonNode jsonNode = context.getNode().at(String.valueOf(value));
+            if (jsonNode.isIntegralNumber()) {
+                numericalValue = jsonNode.asLong();
+            } else if (jsonNode.isFloatingPointNumber()) {
+                numericalValue = jsonNode.asDouble();
+            } else {
+                // If node @value path is missing or not a number, exception
+                // would be thrown.
+                throw new IllegalArgumentException("Operand is not a number");
+            }
+        } else {
+            numericalValue = (Number) value;
+        }
 
-		int comparisonResult = 0;
-		if (evaluatedNode.isIntegralNumber()) {
-			comparisonResult = Long.compare(evaluatedNode.asLong(), numericalValue.longValue());
-		} else if (evaluatedNode.isFloatingPointNumber()) {
-			comparisonResult = Double.compare(evaluatedNode.asDouble(), numericalValue.doubleValue());
-		}
-		return evaluate(context, comparisonResult);
-	}
+        int comparisonResult = 0;
+        if (evaluatedNode.isIntegralNumber()) {
+            comparisonResult = Long.compare(evaluatedNode.asLong(), numericalValue.longValue());
+        } else if (evaluatedNode.isFloatingPointNumber()) {
+            comparisonResult = Double.compare(evaluatedNode.asDouble(), numericalValue.doubleValue());
+        }
+        return evaluate(context, comparisonResult);
+    }
 
-	abstract protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult);
+    abstract protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult);
 }
