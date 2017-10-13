@@ -31,12 +31,12 @@ public class LessThanExpression extends NumericJsonPathBasedExpression {
     }
 
     @Builder
-    public LessThanExpression(String path, Number value, boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.less_than, path, value, defaultResult, preoperation);
+    public LessThanExpression(String path, Object value, boolean extractValueFromPath, boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.less_than, path, value, extractValueFromPath, defaultResult, preoperation);
     }
 
-    public LessThanExpression(String path, Number value, PreOperation<?> preoperation) {
-        this(path, value, false, preoperation);
+    public LessThanExpression(String path, Object value, boolean extractValueFromPath, PreOperation<?> preoperation) {
+        this(path, value, extractValueFromPath, false, preoperation);
     }
 
     protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult) {

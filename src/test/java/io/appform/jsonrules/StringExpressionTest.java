@@ -286,7 +286,7 @@ public class StringExpressionTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"mathces\",\"path\":\"/string\",\"defaultResult\":false,\"value\":\".*WORLD\",\"ignoreCase\":true},{\"type\":\"starts_with\",\"path\":\"/string\",\"defaultResult\":false,\"value\":\"Hello\",\"ignoreCase\":false}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"mathces\",\"path\":\"/string\",\"defaultResult\":false,\"value\":\".*WORLD\",\"ignoreCase\":true,\"extractValueFromPath\":false},{\"type\":\"starts_with\",\"path\":\"/string\",\"defaultResult\":false,\"value\":\"Hello\",\"ignoreCase\":false,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 

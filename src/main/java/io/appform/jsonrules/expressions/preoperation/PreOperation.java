@@ -19,7 +19,6 @@ package io.appform.jsonrules.expressions.preoperation;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.date.DateTimeOperation;

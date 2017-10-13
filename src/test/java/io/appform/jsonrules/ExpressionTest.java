@@ -46,7 +46,7 @@ public class ExpressionTest {
     @Before
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
+        JsonNode node = mapper.readTree("{ \"v1\": 20, \"v2\": 30, \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
@@ -291,6 +291,42 @@ public class ExpressionTest {
                 .value(30)
                 .build()
                 .evaluate(context));
+
+        Assert.assertTrue(GreaterThanExpression.builder()
+                .path("/v2")
+                .value("/v1")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(GreaterThanEqualsExpression.builder()
+                .path("/v2")
+                .value("/v1")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(LessThanEqualsExpression.builder()
+                .path("/v1")
+                .value("/v2")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(LessThanExpression.builder()
+                .path("/v1")
+                .value("/v2")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        
+        try {
+        	Assert.assertTrue(LessThanExpression.builder()
+        			.path("/value")
+        			.extractValueFromPath(true)
+        			.build()
+        			.evaluate(context));
+        	Assert.fail("Should have thrown an exception");
+        } catch (IllegalArgumentException e) {
+        	Assert.assertTrue("Exception thrown", true);
+        }
     }
 
     @Test

@@ -17,10 +17,7 @@
 
 package io.appform.jsonrules.expressions.string;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
-import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
 import lombok.Data;
@@ -33,33 +30,26 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MatchesExpression extends JsonPathBasedExpression {
-	private String value;
-	private boolean ignoreCase;
+public class MatchesExpression extends StringJsonPathBasedExpression {
 
-    public MatchesExpression() {
-        super(ExpressionType.mathces);
-    }
+	public MatchesExpression() {
+		super(ExpressionType.mathces);
+	}
 
-    @Builder
-    public MatchesExpression(String path, boolean ignoreCase, String value, Boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.mathces, path, defaultResult, preoperation);
-        this.value = value;
-        this.ignoreCase = ignoreCase;
-    }
+	@Builder
+	public MatchesExpression(String path, String value, boolean ignoreCase, boolean extractValueFromPath,
+			Boolean defaultResult, PreOperation<?> preoperation) {
+		super(ExpressionType.mathces, path, value, ignoreCase, extractValueFromPath, defaultResult, preoperation);
+	}
 
-    @Override
-    protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        if(!evaluatedNode.isTextual()) {
-            return false;
-        }
-        final String data = evaluatedNode.asText();
-        if (null != data) {
-        	if (ignoreCase) {
-        		return data.toLowerCase().matches(value.toLowerCase());
-        	}
-        	return data.matches(value);
-        }
-        return false;
-    }
+	@Override
+	protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase) {
+		if (null != leftValue) {
+			if (ignoreCase) {
+				return leftValue.toLowerCase().matches(rightValue.toLowerCase());
+			}
+			return leftValue.matches(rightValue);
+		}
+		return false;
+	}
 }

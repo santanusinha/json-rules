@@ -17,10 +17,7 @@
 
 package io.appform.jsonrules.expressions.string;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
-import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
 import lombok.Data;
@@ -33,33 +30,27 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class EndsWithExpression extends JsonPathBasedExpression {
-	private String value;
-	private boolean ignoreCase;
+public class EndsWithExpression extends StringJsonPathBasedExpression {
 
-    public EndsWithExpression() {
-        super(ExpressionType.ends_with);
-    }
+	public EndsWithExpression() {
+		super(ExpressionType.ends_with);
+	}
 
-    @Builder
-    public EndsWithExpression(String path, boolean ignoreCase, String value, Boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.ends_with, path, defaultResult, preoperation);
-        this.value = value;
-        this.ignoreCase = ignoreCase;
-    }
+	@Builder
+	public EndsWithExpression(String path, String value, boolean ignoreCase, boolean extractValueFromPath,
+			Boolean defaultResult, PreOperation<?> preoperation) {
+		super(ExpressionType.ends_with, path, value, ignoreCase, extractValueFromPath, defaultResult, preoperation);
+	}
 
-    @Override
-    protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        if(!evaluatedNode.isTextual()) {
-            return false;
-        }
-        final String data = evaluatedNode.asText();
-        if (null != data) {
-        	if (ignoreCase) {
-        		return data.toLowerCase().endsWith(value.toLowerCase());
-        	}
-        	return data.endsWith(value);
-        }
-        return false;
-    }
+	@Override
+	protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase) {
+		if (null != leftValue) {
+			if (ignoreCase) {
+				return leftValue.toLowerCase().endsWith(rightValue.toLowerCase());
+			}
+			return leftValue.endsWith(rightValue);
+		}
+		return false;
+	}
+
 }

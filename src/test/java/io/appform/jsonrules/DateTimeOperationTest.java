@@ -460,7 +460,7 @@ public class DateTimeOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/unixTime\",\"preoperation\":{\"operation\":\"date_time\",\"operand\":\"hour_of_day\"},\"defaultResult\":false,\"value\":11},{\"type\":\"greater_than\",\"path\":\"/unixTime\",\"preoperation\":{\"operation\":\"date_time\",\"operand\":\"week_of_month\"},\"defaultResult\":false,\"value\":30}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/unixTime\",\"preoperation\":{\"operation\":\"date_time\",\"operand\":\"hour_of_day\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"/unixTime\",\"preoperation\":{\"operation\":\"date_time\",\"operand\":\"week_of_month\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 }
