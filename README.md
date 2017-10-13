@@ -1,3 +1,5 @@
+# Json Rules [![Build Status](https://travis-ci.org/santanusinha/json-rules.svg?branch=master)](https://travis-ci.org/santanusinha/json-rules)
+
 JSON serializable rules to match Jackson JsonNodes using JSON Pointers.
 
 ###### Rule
