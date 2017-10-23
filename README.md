@@ -30,7 +30,7 @@ Maven repo
   <dependency>
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>0.3.5</version>
   </dependency>
 ```
 
@@ -107,12 +107,27 @@ Maven repo
 ```
 
 ###### Strings
-     * empty
-     * not_empty
+ * empty
+ * not_empty
+ * starts_with
+ * ends_with
+ * matches
+
+The string operations of `starts_with`, `ends_with` and `matches` support case insensitive comparison also. Default comparison is case sensitive.
+
+```json
+    {
+        "type": "matches",
+        "path": "/s1",
+        "value": ".* WORLD",
+        "ignoreCase" : true
+    }
+```
+
 
 ###### Path validations
-     * exists
-     * not_exists
+ * exists
+ * not_exists
  
 
 ##### Default results
@@ -159,3 +174,15 @@ Pre-operations are pre-evaluation mutations that can be applied to payload.
     }
 ```
   
+##### Path based comparisons
+
+These allow comparison of dynamic values. Using `"extractValueFromPath" : true`, indicates the value to be used for comparison has to be extracted from `value` json path.
+
+``` json
+    {
+        "type": "matches",
+        "path": "/s1",
+        "value": "/s2",
+        "extractValueFromPath" : true
+    }
+```
