@@ -38,6 +38,7 @@ public class NotInExpression extends JsonPathBasedExpression {
 
     public NotInExpression() {
         super(ExpressionType.not_in);
+        setDefaultResult(true);
     }
 
     @Builder

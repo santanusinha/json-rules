@@ -1,0 +1,4 @@
+{
+    "type":"not_exists",
+    "path":"/random_non_existent_key"
+}
