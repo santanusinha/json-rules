@@ -3,14 +3,14 @@
     "children": [
         {
             "type": "greater_than_equals",
-            "path": "/dateTime",
+            "path": "$.dateTime",
             "value": 11,
             "preoperation": {"operation" : "date_time", "operand" : "hour_of_day", "zoneOffSet":"+05:30"}
             
         },
         {
             "type": "less_than_equals",
-            "path": "/dateTime",
+            "path": "$.dateTime",
             "value": 3,
             "preoperation": {"operation" : "date_time", "operand" : "day_of_week", "zoneOffSet":"+05:30"}
         }

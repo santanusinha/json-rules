@@ -3,14 +3,14 @@
     "children": [
         {
             "type": "matches",
-            "path": "/s1",
+            "path": "$.s1",
             "value": ".* WORLD",
             "ignoreCase" : true
         },
         {
             "type": "matches",
-            "path": "/s1",
-            "value": "/s2",
+            "path": "$.s1",
+            "value": "$.s2",
             "extractValueFromPath" : true
         }
     ]

@@ -1,6 +1,6 @@
 {
   "type" : "equals",
-  "path" : "/string",
+  "path" : "$.string",
   "value" : "Hello",
   "defaultResult": true
 }

@@ -34,7 +34,7 @@ public class DiffFromCurrentEpochOperationTest {
 
     @Test
     public void testWithEquals() {
-        Expression expression = EqualsExpression.builder().path("/setEpoch")
+        Expression expression = EqualsExpression.builder().path("$.setEpoch")
                 .preoperation(DiffFromCurrentEpochOperation.builder()
                                 .build()).value(0).build();
         Assert.assertTrue(expression.evaluate(context.getNode(), Collections.singletonMap(OptionKeys.SYSTEM_TIME,new Long(1500000000000L))));
@@ -43,7 +43,7 @@ public class DiffFromCurrentEpochOperationTest {
     @Test
     public void testWithIntegerSystemTime()  throws Exception{
         try {
-            Expression expression = EqualsExpression.builder().path("/setEpoch")
+            Expression expression = EqualsExpression.builder().path("$.setEpoch")
                     .preoperation(DiffFromCurrentEpochOperation.builder()
                             .build()).value(0).build();
             expression.evaluate(context.getNode(), Collections.singletonMap(OptionKeys.SYSTEM_TIME,1500000000));
@@ -55,7 +55,7 @@ public class DiffFromCurrentEpochOperationTest {
 
     @Test
     public void testWithEqualsWithoutOptions() {
-        Expression expression = GreaterThanExpression.builder().path("/setEpoch")
+        Expression expression = GreaterThanExpression.builder().path("$.setEpoch")
                 .preoperation(DiffFromCurrentEpochOperation.builder()
                         .build()).value(0).build();
         Assert.assertTrue(expression.evaluate(context.getNode()));
@@ -75,12 +75,12 @@ public class DiffFromCurrentEpochOperationTest {
                 .child(
                         OrExpression.builder()
                                 .child(LessThanExpression.builder()
-                                        .path("/value")
+                                        .path("$.value")
                                         .value(11)
                                         .preoperation(DiffFromCurrentEpochOperation.builder().build())
                                         .build())
                                 .child(GreaterThanExpression.builder()
-                                        .path("/value")
+                                        .path("$.value")
                                         .value(30)
                                         .preoperation(DiffFromCurrentEpochOperation.builder().build())
                                         .build())
@@ -90,6 +90,6 @@ public class DiffFromCurrentEpochOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"current_epoch_diff\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"current_epoch_diff\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"current_epoch_diff\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"current_epoch_diff\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
 }

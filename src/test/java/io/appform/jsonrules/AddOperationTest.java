@@ -25,13 +25,14 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 
+import io.appform.jsonrules.expressions.array.InExpression;
+import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.equality.EqualsExpression;
-import io.appform.jsonrules.expressions.equality.InExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
-import io.appform.jsonrules.expressions.equality.NotInExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.expressions.preoperation.numeric.AddOperation;
@@ -51,32 +52,32 @@ public class AddOperationTest {
         dateTime = Instant.now();
         long epoch = dateTime.getEpochSecond();
         String dateTimeStr = new StringBuilder().append("\"").append(dateTime.toString()).append("\"").toString();
-        JsonNode node = mapper.readTree("{ \"stringifiedValue\": \"9886098860\",\"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
+        JsonNode node = mapper.readTree("{ \"stringifiedValue\": \"9886098860\",\"value\": 20, \"abcd\" : \"Hello\", \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
     @Test
     public void testWithEqualsExpression() throws Exception {
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(2).build())
                 .value(22)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(-2).build())
                 .value(18)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/stringifiedValue")
+                .path("$.stringifiedValue")
                 .preoperation(AddOperation.builder().operand(-2).build())
                 .value(9886098858L)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/stringifiedValue")
+                .path("$.stringifiedValue")
                 .preoperation(AddOperation.builder().operand(10).build())
                 .value(9886098870L)
                 .build()
@@ -84,7 +85,7 @@ public class AddOperationTest {
 
         try {
         	EqualsExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(AddOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -96,7 +97,7 @@ public class AddOperationTest {
         
         try {
         	EqualsExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(AddOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -110,13 +111,13 @@ public class AddOperationTest {
     @Test
     public void testWithNotEqualsExpression() throws Exception {
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(2).build())
                 .value(22)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(-2).build())
                 .value(18)
                 .build()
@@ -124,7 +125,7 @@ public class AddOperationTest {
 
         try {
         	NotEqualsExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(AddOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -136,7 +137,7 @@ public class AddOperationTest {
         
         try {
         	NotEqualsExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(AddOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -150,23 +151,23 @@ public class AddOperationTest {
     @Test
     public void testWithInExpression() throws Exception {
         Assert.assertTrue(InExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(2).build())
-                .value(22)
+                .values(Sets.newHashSet(22))
                 .build()
                 .evaluate(context));
         Assert.assertTrue(InExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(-2).build())
-                .value(18)
+                .values(Sets.newHashSet(18))
                 .build()
                 .evaluate(context));
         
         try {
         	InExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(AddOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -176,9 +177,9 @@ public class AddOperationTest {
         
         try {
         	InExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(AddOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -191,23 +192,23 @@ public class AddOperationTest {
     public void testWithNotInExpression() throws Exception {
 
         Assert.assertFalse(NotInExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(2).build())
-                .value(22)
+                .values(Sets.newHashSet(22))
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotInExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(-2).build())
-                .value(18)
+                .values(Sets.newHashSet(18))
                 .build()
                 .evaluate(context));
         
         try {
         	NotInExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(AddOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -217,9 +218,9 @@ public class AddOperationTest {
         
         try {
         	NotInExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(AddOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -232,13 +233,13 @@ public class AddOperationTest {
     public void testWithNumbericExpression() throws Exception {
 
         Assert.assertTrue(GreaterThanExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(2).build())
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(LessThanExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(AddOperation.builder().operand(-2).build())
                 .value(20)
                 .build()
@@ -246,7 +247,7 @@ public class AddOperationTest {
         
         try {
         	GreaterThanExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(AddOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -258,7 +259,7 @@ public class AddOperationTest {
         
         try {
         	GreaterThanExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(AddOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -283,12 +284,12 @@ public class AddOperationTest {
                 .child(
                         OrExpression.builder()
                                 .child(LessThanExpression.builder()
-                                        .path("/value")
+                                        .path("$.value")
                                         .value(11)
                                         .preoperation(AddOperation.builder().operand(5).build())
                                         .build())
                                 .child(GreaterThanExpression.builder()
-                                        .path("/value")
+                                        .path("$.value")
                                         .value(30)
                                         .preoperation(AddOperation.builder().operand(-5).build())
                                         .build())
@@ -298,7 +299,7 @@ public class AddOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"add\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"add\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"add\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"add\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 }

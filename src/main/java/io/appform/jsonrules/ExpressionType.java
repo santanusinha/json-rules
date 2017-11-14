@@ -25,8 +25,6 @@ public enum ExpressionType {
     //Equality
     equals,
     not_equals,
-    in,
-    not_in,
 
     //Numeric
     greater_than,
@@ -48,5 +46,11 @@ public enum ExpressionType {
     //Joiner
     and,
     or,
-    not
+    not,
+
+    //Collection
+    in,
+    not_in,
+    contains_any,
+    contains_all
 }

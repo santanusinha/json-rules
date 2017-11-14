@@ -17,26 +17,28 @@
 
 package io.appform.jsonrules;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
+import com.jayway.jsonpath.PathNotFoundException;
+
+import io.appform.jsonrules.expressions.array.InExpression;
+import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.equality.EqualsExpression;
-import io.appform.jsonrules.expressions.equality.InExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
-import io.appform.jsonrules.expressions.equality.NotInExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
 
 public class ExpressionTest {
 
@@ -53,43 +55,43 @@ public class ExpressionTest {
     @Test
     public void testEqualsExpression() throws Exception {
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(EqualsExpression.builder()
-                .path("/abcd")
+                .path("$.abcd")
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(EqualsExpression.builder()
-                .path("/kid")
+                .path("$.kid")
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(EqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .value(10)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/string")
+                .path("$.string")
                 .value("Hello")
                 .build()
                 .evaluate(context));
         Assert.assertFalse(EqualsExpression.builder()
-                .path("/string")
+                .path("$.string")
                 .value("hello")
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/boolean")
+                .path("$.boolean")
                 .value(true)
                 .build()
                 .evaluate(context));
 
         Assert.assertFalse(EqualsExpression.builder()
-                .path("/boolean")
+                .path("$.boolean")
                 .value(false)
                 .build()
                 .evaluate(context));
@@ -99,39 +101,39 @@ public class ExpressionTest {
     @Test
     public void testNotEqualsExpression() throws Exception {
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(NotEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .value(10)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(NotEqualsExpression.builder()
-                .path("/kid")
+                .path("$.kid")
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(NotEqualsExpression.builder()
-                .path("/NON_EXISITING_KEY")
+                .path("$.NON_EXISITING_KEY")
                 .value(20)
                 .defaultResult(true)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/NON_EXISITING_KEY")
+                .path("$.NON_EXISITING_KEY")
                 .value(20)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/string")
+                .path("$.string")
                 .value("Hello")
                 .build()
                 .evaluate(context));
         Assert.assertTrue(NotEqualsExpression.builder()
-                .path("/string")
+                .path("$.string")
                 .value("hello")
                 .build()
                 .evaluate(context));
@@ -140,30 +142,26 @@ public class ExpressionTest {
     @Test
     public void testInExpression() throws Exception {
         Assert.assertTrue(InExpression.builder()
-                .path("/string")
-                .value("Hello")
-                .value("World")
+                .path("$.string")
+                .values(Sets.newHashSet("Hello","World"))
                 .build()
                 .evaluate(context));
 
         Assert.assertFalse(InExpression.builder()
-                .path("/kid")
-                .value("Hello")
-                .value("World")
+                .path("$.kid")
+                .values(Sets.newHashSet("Hello","World"))
                 .build()
                 .evaluate(context));
 
         Assert.assertFalse(InExpression.builder()
-                .path("/abcd")
-                .value("Hello")
-                .value("World")
+                .path("$.abcd")
+                .values(Sets.newHashSet("Hello","World"))
                 .build()
                 .evaluate(context));
 
         Assert.assertFalse(InExpression.builder()
-                .path("/string")
-                .value("hello")
-                .value("world")
+                .path("$.string")
+                .values(Sets.newHashSet("hello","world"))
                 .build()
                 .evaluate(context));
     }
@@ -171,61 +169,39 @@ public class ExpressionTest {
     @Test
     public void testNotInExpression() throws Exception {
         Assert.assertFalse(NotInExpression.builder()
-                .path("/string")
-                .value("Hello")
-                .value("World")
+                .path("$.string")
+                .values(Sets.newHashSet("Hello","World"))
                 .build()
                 .evaluate(context));
 
         Assert.assertTrue(NotInExpression.builder()
-                .path("/string")
-                .value("hello")
-                .value("world")
+                .path("$.string")
+                .values(Sets.newHashSet("hello","world"))
                 .build()
                 .evaluate(context));
 
         Assert.assertTrue(NotInExpression.builder()
-                .path("/string")
-                .values(new ArrayList<String>() {
-                    {
-                        add("abcd");
-                        add("efgh");
-                    }
-                })
+                .path("$.string")
+                .values(Sets.newHashSet("abcd","efgh"))
                 .build()
                 .evaluate(context));
 
         Assert.assertTrue(NotInExpression.builder()
-                .path("/kid")
-                .values(new ArrayList<String>() {
-                    {
-                        add("stupid");
-                        add("dumb");
-                    }
-                })
+                .path("$.kid")
+                .values(Sets.newHashSet("stupid","dumb"))
                 .build()
                 .evaluate(context));
 
         Assert.assertTrue(NotInExpression.builder()
-                .path("/NON_EXISITING_KEY")
-                .values(new ArrayList<String>() {
-                    {
-                        add("stupid");
-                        add("dumb");
-                    }
-                })
+                .path("$.NON_EXISITING_KEY")
+                .values(Sets.newHashSet("stupid","dumb"))
                 .build()
                 .evaluate(context));
 
         Assert.assertFalse(NotInExpression.builder()
-                .path("/NON_EXISITING_KEY")
+                .path("$.NON_EXISITING_KEY")
                 .defaultResult(false)
-                .values(new ArrayList<String>() {
-                    {
-                        add("stupid");
-                        add("dumb");
-                    }
-                })
+                .values(Sets.newHashSet("stupid","dumb"))
                 .build()
                 .evaluate(context));
     }
@@ -233,19 +209,19 @@ public class ExpressionTest {
     @Test
     public void testExistsExpression() throws Exception {
         Assert.assertFalse(ExistsExpression.builder()
-                .path("/somepath")
+                .path("$.somepath")
                 .build()
                 .evaluate(context));
         Assert.assertTrue(ExistsExpression.builder()
-                .path("/string")
+                .path("$.string")
                 .build()
                 .evaluate(context));
         Assert.assertFalse(ExistsExpression.builder()
-                .path("/kid")
+                .path("$.kid")
                 .build()
                 .evaluate(context));
         Assert.assertFalse(ExistsExpression.builder()
-                .path("/efgh")
+                .path("$.efgh")
                 .build()
                 .evaluate(context));
     }
@@ -253,19 +229,19 @@ public class ExpressionTest {
     @Test
     public void testNotExistsExpression() throws Exception {
         Assert.assertTrue(NotExistsExpression.builder()
-                .path("/somepath")
+                .path("$.somepath")
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotExistsExpression.builder()
-                .path("/string")
+                .path("$.string")
                 .build()
                 .evaluate(context));
         Assert.assertTrue(NotExistsExpression.builder()
-                .path("/kid")
+                .path("$.kid")
                 .build()
                 .evaluate(context));
         Assert.assertTrue(NotExistsExpression.builder()
-                .path("/efgh")
+                .path("$.efgh")
                 .build()
                 .evaluate(context));
     }
@@ -273,59 +249,59 @@ public class ExpressionTest {
     @Test
     public void testNumericExpression() {
         Assert.assertTrue(GreaterThanExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .value(5)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(GreaterThanEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(LessThanEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(LessThanExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .value(30)
                 .build()
                 .evaluate(context));
 
         Assert.assertTrue(GreaterThanExpression.builder()
-                .path("/v2")
-                .value("/v1")
+                .path("$.v2")
+                .value("$.v1")
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(GreaterThanEqualsExpression.builder()
-                .path("/v2")
-                .value("/v1")
+                .path("$.v2")
+                .value("$.v1")
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(LessThanEqualsExpression.builder()
-                .path("/v1")
-                .value("/v2")
+                .path("$.v1")
+                .value("$.v2")
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(LessThanExpression.builder()
-                .path("/v1")
-                .value("/v2")
+                .path("$.v1")
+                .value("$.v2")
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
         
         try {
         	Assert.assertTrue(LessThanExpression.builder()
-        			.path("/value")
+        			.path("$.value")
         			.extractValueFromPath(true)
         			.build()
         			.evaluate(context));
         	Assert.fail("Should have thrown an exception");
-        } catch (IllegalArgumentException e) {
+        } catch (PathNotFoundException e) {
         	Assert.assertTrue("Exception thrown", true);
         }
     }
@@ -335,11 +311,11 @@ public class ExpressionTest {
         Assert.assertTrue(
                 AndExpression.builder()
                         .child(LessThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(30)
                                 .build())
                         .child(GreaterThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(10)
                                 .build())
                         .build()
@@ -347,11 +323,11 @@ public class ExpressionTest {
         Assert.assertTrue(
                 AndExpression.builder()
                         .child(LessThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(30)
                                 .build())
                         .child(GreaterThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(10)
                                 .build())
                         .build()
@@ -363,11 +339,11 @@ public class ExpressionTest {
         Assert.assertTrue(
                 OrExpression.builder()
                         .child(LessThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(20)
                                 .build())
                         .child(GreaterThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(10)
                                 .build())
                         .build()
@@ -376,11 +352,11 @@ public class ExpressionTest {
         Assert.assertTrue(
                 OrExpression.builder()
                         .child(LessThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(21)
                                 .build())
                         .child(GreaterThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(30)
                                 .build())
                         .build()
@@ -388,11 +364,11 @@ public class ExpressionTest {
         Assert.assertFalse(
                 OrExpression.builder()
                         .child(LessThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(11)
                                 .build())
                         .child(GreaterThanExpression.builder()
-                                .path("/value")
+                                .path("$.value")
                                 .value(30)
                                 .build())
                         .build()
@@ -406,11 +382,11 @@ public class ExpressionTest {
                         .child(
                                 OrExpression.builder()
                                         .child(LessThanExpression.builder()
-                                                .path("/value")
+                                                .path("$.value")
                                                 .value(11)
                                                 .build())
                                         .child(GreaterThanExpression.builder()
-                                                .path("/value")
+                                                .path("$.value")
                                                 .value(30)
                                                 .build())
                                         .build())

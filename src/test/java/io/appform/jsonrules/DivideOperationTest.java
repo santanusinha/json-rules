@@ -25,13 +25,14 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 
+import io.appform.jsonrules.expressions.array.InExpression;
+import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.equality.EqualsExpression;
-import io.appform.jsonrules.expressions.equality.InExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
-import io.appform.jsonrules.expressions.equality.NotInExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.expressions.preoperation.numeric.DivideOperation;
@@ -49,38 +50,38 @@ public class DivideOperationTest {
         dateTime = Instant.now();
         long epoch = dateTime.getEpochSecond();
         String dateTimeStr = new StringBuilder().append("\"").append(dateTime.toString()).append("\"").toString();
-        JsonNode node = mapper.readTree("{ \"stringifiedDecimalValue\": \"98860.98860\", \"stringifiedValue\": \"9886098860\", \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
+        JsonNode node = mapper.readTree("{ \"stringifiedDecimalValue\": \"98860.98860\", \"stringifiedValue\": \"9886098860\", \"value\": 20,\"abcd\" : \"Hello\",\"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
     @Test
     public void testWithEqualsExpression() throws Exception {
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(2).build())
                 .value(10)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(-2).build())
                 .value(-10)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/stringifiedValue")
+                .path("$.stringifiedValue")
                 .preoperation(DivideOperation.builder().operand(-10).build())
                 .value(-988609886)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/stringifiedValue")
+                .path("$.stringifiedValue")
                 .preoperation(DivideOperation.builder().operand(1000).build())
                 .value(9886098.86)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/stringifiedDecimalValue")
+                .path("$.stringifiedDecimalValue")
                 .preoperation(DivideOperation.builder().operand(98860).build())
                 .value(1.00001)
                 .build()
@@ -88,7 +89,7 @@ public class DivideOperationTest {
 
         try {
         	Assert.assertTrue(EqualsExpression.builder()
-        			.path("/value")
+        			.path("$.value")
         			.preoperation(DivideOperation.builder().operand(0).build())
         			.value(0)
         			.build()
@@ -100,7 +101,7 @@ public class DivideOperationTest {
         
         try {
         	EqualsExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(DivideOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -112,7 +113,7 @@ public class DivideOperationTest {
         
         try {
         	EqualsExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(DivideOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -126,20 +127,20 @@ public class DivideOperationTest {
     @Test
     public void testWithNotEqualsExpression() throws Exception {
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(2).build())
                 .value(10)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(-2).build())
                 .value(-10)
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertTrue(NotEqualsExpression.builder()
-        			.path("/value")
+        			.path("$.value")
         			.preoperation(DivideOperation.builder().operand(0).build())
         			.value(0)
         			.build()
@@ -151,7 +152,7 @@ public class DivideOperationTest {
         
         try {
         	NotEqualsExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(DivideOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -163,7 +164,7 @@ public class DivideOperationTest {
         
         try {
         	NotEqualsExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(DivideOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -177,22 +178,22 @@ public class DivideOperationTest {
     @Test
     public void testWithInExpression() throws Exception {
         Assert.assertTrue(InExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(2).build())
-                .value(10)
+                .values(Sets.newHashSet(10))
                 .build()
                 .evaluate(context));
         Assert.assertTrue(InExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(-2).build())
-                .value(-10)
+                .values(Sets.newHashSet(-10))
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertTrue(InExpression.builder()
-        			.path("/value")
+        			.path("$.value")
         			.preoperation(DivideOperation.builder().operand(0).build())
-        			.value(0)
+        			.values(Sets.newHashSet(0))
         			.build()
         			.evaluate(context));
         	Assert.fail("Should have thrown an exception");
@@ -202,9 +203,9 @@ public class DivideOperationTest {
         
         try {
         	InExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(DivideOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -214,9 +215,9 @@ public class DivideOperationTest {
         
         try {
         	InExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(DivideOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -228,22 +229,22 @@ public class DivideOperationTest {
     @Test
     public void testWithNotInExpression() throws Exception {
         Assert.assertFalse(NotInExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(2).build())
-                .value(10)
+                .values(Sets.newHashSet(10))
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotInExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(-2).build())
-                .value(-10)
+                .values(Sets.newHashSet(-10))
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertTrue(NotInExpression.builder()
-        			.path("/value")
+        			.path("$.value")
         			.preoperation(DivideOperation.builder().operand(0).build())
-        			.value(0)
+        			.values(Sets.newHashSet(0))
         			.build()
         			.evaluate(context));
         	Assert.fail("Should have thrown an exception");
@@ -253,9 +254,9 @@ public class DivideOperationTest {
         
         try {
         	NotInExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(DivideOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -265,9 +266,9 @@ public class DivideOperationTest {
         
         try {
         	NotInExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(DivideOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -279,20 +280,20 @@ public class DivideOperationTest {
     @Test
     public void testWithNumbericExpression() throws Exception {
         Assert.assertTrue(LessThanExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(2).build())
                 .value(20)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(LessThanExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(DivideOperation.builder().operand(-2).build())
                 .value(20)
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertTrue(GreaterThanExpression.builder()
-        			.path("/value")
+        			.path("$.value")
         			.preoperation(DivideOperation.builder().operand(0).build())
         			.value(0)
         			.build()
@@ -304,7 +305,7 @@ public class DivideOperationTest {
         
         try {
         	GreaterThanExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(DivideOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -316,7 +317,7 @@ public class DivideOperationTest {
         
         try {
         	GreaterThanExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(DivideOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -341,12 +342,12 @@ public class DivideOperationTest {
                 .child(
                         OrExpression.builder()
                                 .child(LessThanExpression.builder()
-                                        .path("/value")
+                                        .path("$.value")
                                         .value(11)
                                         .preoperation(DivideOperation.builder().operand(5).build())
                                         .build())
                                 .child(GreaterThanExpression.builder()
-                                        .path("/value")
+                                        .path("$.value")
                                         .value(30)
                                         .preoperation(DivideOperation.builder().operand(-5).build())
                                         .build())
@@ -356,7 +357,7 @@ public class DivideOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"divide\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"divide\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"divide\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"divide\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
 
 }

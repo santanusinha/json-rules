@@ -3,13 +3,13 @@
     "children": [
         {
             "type": "greater_than",
-            "path": "/value",
+            "path": "$.value",
             "value": 11,
             "preoperation": {"operation" : "multiply", "operand" : 2}
         },
         {
             "type": "less_than",
-            "path": "/value",
+            "path": "$.value",
             "value": 30,
             "preoperation": {"operation" : "multiply", "operand" : 3}
         }

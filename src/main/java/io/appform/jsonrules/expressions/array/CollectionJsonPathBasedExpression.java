@@ -15,10 +15,11 @@
  *
  */
 
-package io.appform.jsonrules.expressions.string;
+package io.appform.jsonrules.expressions.array;
+
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.jayway.jsonpath.JsonPath;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
@@ -26,43 +27,36 @@ import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Singular;
 import lombok.ToString;
 
 /**
- * All string operable expressions
+ * All collection operable expressions
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class StringJsonPathBasedExpression extends JsonPathBasedExpression {
-    private String value;
-    private boolean ignoreCase;
-    private boolean extractValueFromPath;
+public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExpression {
+    private Set<Object> values;
 
-    protected StringJsonPathBasedExpression(ExpressionType type) {
+    protected CollectionJsonPathBasedExpression(ExpressionType type) {
         super(type);
     }
 
-    protected StringJsonPathBasedExpression(ExpressionType type, String path, String value, boolean ignoreCase,
-            boolean extractValueFromPath, boolean defaultResult, PreOperation<?> preoperation) {
+    protected CollectionJsonPathBasedExpression(ExpressionType type, String path, @Singular Set<Object> values,
+            boolean defaultResult, PreOperation<?> preoperation) {
         super(type, path, defaultResult, preoperation);
-        this.value = value;
-        this.ignoreCase = ignoreCase;
-        this.extractValueFromPath = extractValueFromPath;
+        this.values = values;
     }
 
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        if (!evaluatedNode.isTextual()) {
+        if (null == values || values.isEmpty()) {
             return false;
         }
-        if (extractValueFromPath) {
-            final String extractedValue = JsonPath.read(context.getNode().toString(), value).toString();
-            return evaluate(evaluatedNode.asText(), extractedValue, ignoreCase);
-        }
-        return evaluate(evaluatedNode.asText(), value, ignoreCase);
+        return evaluate(evaluatedNode, values);
     }
 
-    abstract protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase);
+    abstract protected boolean evaluate(JsonNode evaluatedNode, Set<Object> values);
 
 }

@@ -1,0 +1,17 @@
+{
+    "type": "and",
+    "children": [
+        {
+            "type": "contains_all",
+            "path": "$.felines",
+            "values": ["tiger","jaguar","lion","cheetah","leopard"],
+            "defaultResult": false
+        },
+        {
+            "type": "contains_all",
+            "path": "$.decimals",
+            "values": [10.01,20.22,30.33,40.55],
+            "defaultResult": false
+        }
+    ]
+}

@@ -7,7 +7,7 @@ JSON serializable rules to match Jackson JsonNodes using JSON Pointers.
    {
       "operator": "equals",
       "value": "happy",
-      "path": "/mood"
+      "path": "$.mood"
    }
 ```
 
@@ -30,7 +30,7 @@ Maven repo
   <dependency>
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>0.3.5</version>
+    <version>1.0.0</version>
   </dependency>
 ```
 
@@ -38,7 +38,7 @@ Maven repo
 ```java
     // Build expression with java objects
     Expression expression = LessThanExpression.builder()
-                                .path("/value")
+                                .path("/$.value")
                                 .value(30)
                                 .build();
     // Or read from serialized json sources
@@ -65,7 +65,7 @@ Maven repo
    {
       "operator": "equals",
       "value": "happy",
-      "path": "/mood"
+      "path": "$.mood"
    }
 ```
 
@@ -80,25 +80,27 @@ Maven repo
           {
              "operator": "equals",
              "value": "happy",
-             "path": "/mood"
+             "path": "$.mood"
           },
           {
              "operator": "less_than",
              "value": 1000,
-             "path": "/product.cost"
+             "path": "$.product.cost"
           }
       ]
    }
 ```
-###### Array Search
+###### Collection Search
 
  * not_in
  * in
+ * contains_any
+ * contains_all
 
 ```json
    {
       "operator": "in",
-      "path": "/mood",
+      "path": "$.mood",
       "values": [
         "happy",
         "sad"
@@ -118,12 +120,11 @@ The string operations of `starts_with`, `ends_with` and `matches` support case i
 ```json
     {
         "type": "matches",
-        "path": "/s1",
+        "path": "$.s1",
         "value": ".* WORLD",
         "ignoreCase" : true
     }
 ```
-
 
 ###### Path validations
  * exists
@@ -139,7 +140,7 @@ The default value would be the evaluation result if `path` doesn't exist in the 
    {
       "operator": "equals",
       "value": "happy",
-      "path": "/mood",
+      "path": "$.mood",
       "defaultResult": true
    }
 ```
@@ -161,7 +162,7 @@ Pre-operations are pre-evaluation mutations that can be applied to payload.
 ```json
     {
         "type": "in",
-        "path": "/time",
+        "path": "$.time",
         "preoperation": {
           "operation": "epoch",
           "operand": "week_of_month",
@@ -181,8 +182,8 @@ These allow comparison of dynamic values. Using `"extractValueFromPath" : true`,
 ``` json
     {
         "type": "matches",
-        "path": "/s1",
-        "value": "/s2",
+        "path": "$.s1",
+        "value": "$.s2",
         "extractValueFromPath" : true
     }
 ```

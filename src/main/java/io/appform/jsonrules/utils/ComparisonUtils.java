@@ -18,6 +18,8 @@
 package io.appform.jsonrules.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 
@@ -25,6 +27,7 @@ import io.appform.jsonrules.ExpressionEvaluationContext;
  * Created by santanu on 15/9/16.
  */
 public interface ComparisonUtils {
+    public static final ObjectMapper mapper = new ObjectMapper();
     static int compare(JsonNode evaluatedNode, Object value) {
         int comparisonResult = 0;
         if (evaluatedNode.isNumber()) {
@@ -83,7 +86,7 @@ public interface ComparisonUtils {
     public static boolean compareForEquality(ExpressionEvaluationContext context, JsonNode evaluatedNode,
             Object value) {
         final boolean nodeMissingOrNullCheck = isNodeMissingOrNull(evaluatedNode);
-        JsonNode jsonNode = context.getNode().at(String.valueOf(value));
+        JsonNode jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
         if (jsonNode.isNumber()) {
             if (jsonNode.isIntegralNumber()) {
                 return !nodeMissingOrNullCheck && compare(evaluatedNode, jsonNode.asLong()) == 0;
@@ -103,7 +106,7 @@ public interface ComparisonUtils {
     public static boolean compareForNotEquals(ExpressionEvaluationContext context, JsonNode evaluatedNode,
             Object value) {
         final boolean nodeMissingOrNullCheck = isNodeMissingOrNull(evaluatedNode);
-        JsonNode jsonNode = context.getNode().at(String.valueOf(value));
+        JsonNode jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
         if (jsonNode.isNumber()) {
             if (jsonNode.isIntegralNumber()) {
                 return nodeMissingOrNullCheck || compare(evaluatedNode, jsonNode.asLong()) != 0;
