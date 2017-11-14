@@ -25,13 +25,14 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 
+import io.appform.jsonrules.expressions.array.InExpression;
+import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.equality.EqualsExpression;
-import io.appform.jsonrules.expressions.equality.InExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
-import io.appform.jsonrules.expressions.equality.NotInExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
@@ -53,39 +54,39 @@ public class ModuloOperationTest {
         dateTime = Instant.now();
         long epoch = dateTime.getEpochSecond();
         String dateTimeStr = new StringBuilder().append("\"").append(dateTime.toString()).append("\"").toString();
-        JsonNode node = mapper.readTree("{ \"stringifiedValue\": \"9886098860\",\"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
+        JsonNode node = mapper.readTree("{ \"stringifiedValue\": \"9886098860\",\"value\": 20,\"abcd\" : \"Hello\",\"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
     @Test
     public void testWithEqualsExpression() throws Exception {
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
                 .value(2)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
                 .value(0)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/stringifiedValue")
+                .path("$.stringifiedValue")
                 .preoperation(ModuloOperation.builder().operand(100).build())
                 .value(60)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("/stringifiedValue")
+                .path("$.stringifiedValue")
                 .preoperation(ModuloOperation.builder().operand(100000).build())
                 .value(98860)
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertTrue(EqualsExpression.builder()
-                    .path("/value")
+                    .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
                     .value(0)
                     .build()
@@ -97,7 +98,7 @@ public class ModuloOperationTest {
         
         try {
         	EqualsExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(ModuloOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -109,7 +110,7 @@ public class ModuloOperationTest {
         
         try {
         	EqualsExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(ModuloOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -123,20 +124,20 @@ public class ModuloOperationTest {
     @Test
     public void testWithNotEqualsExpression() throws Exception {
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
                 .value(2)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
                 .value(0)
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertFalse(NotEqualsExpression.builder()
-                    .path("/value")
+                    .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
                     .value(0)
                     .build()
@@ -148,7 +149,7 @@ public class ModuloOperationTest {
         
         try {
         	NotEqualsExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(ModuloOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -160,7 +161,7 @@ public class ModuloOperationTest {
         
         try {
         	NotEqualsExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(ModuloOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -174,22 +175,22 @@ public class ModuloOperationTest {
     @Test
     public void testWithInExpression() throws Exception {
         Assert.assertTrue(InExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
-                .value(2)
+                .values(Sets.newHashSet(2))
                 .build()
                 .evaluate(context));
         Assert.assertTrue(InExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
-                .value(0)
+                .values(Sets.newHashSet(0))
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertTrue(InExpression.builder()
-                    .path("/value")
+                    .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
-                    .value(0)
+                    .values(Sets.newHashSet(0))
                     .build()
                     .evaluate(context));
         	Assert.fail("Should have thrown an exception");
@@ -199,9 +200,9 @@ public class ModuloOperationTest {
         
         try {
         	InExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(ModuloOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -211,9 +212,9 @@ public class ModuloOperationTest {
         
         try {
         	InExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(ModuloOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -225,22 +226,22 @@ public class ModuloOperationTest {
     @Test
     public void testWithNotInExpression() throws Exception {
         Assert.assertFalse(NotInExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
-                .value(2)
+                .values(Sets.newHashSet(2))
                 .build()
                 .evaluate(context));
         Assert.assertFalse(NotInExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
-                .value(0)
+                .values(Sets.newHashSet(0))
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertFalse(NotInExpression.builder()
-                    .path("/value")
+                    .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
-                    .value(0)
+                    .values(Sets.newHashSet(0))
                     .build()
                     .evaluate(context));
         	Assert.fail("Should have thrown an exception");
@@ -250,9 +251,9 @@ public class ModuloOperationTest {
         
         try {
         	NotInExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(ModuloOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -262,9 +263,9 @@ public class ModuloOperationTest {
         
         try {
         	NotInExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(ModuloOperation.builder().operand(2).build())
-            .value(20)
+            .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
         	Assert.fail("Should have thrown an exception");
@@ -276,20 +277,20 @@ public class ModuloOperationTest {
     @Test
     public void testWithNumbericExpression() throws Exception {
         Assert.assertTrue(GreaterThanEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
                 .value(2)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(LessThanEqualsExpression.builder()
-                .path("/value")
+                .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
                 .value(0)
                 .build()
                 .evaluate(context));
         try {
         	Assert.assertTrue(GreaterThanExpression.builder()
-                    .path("/value")
+                    .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
                     .value(0)
                     .build()
@@ -301,7 +302,7 @@ public class ModuloOperationTest {
         
         try {
         	GreaterThanExpression.builder()
-            .path("/abcd")
+            .path("$.abcd")
             .preoperation(ModuloOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -313,7 +314,7 @@ public class ModuloOperationTest {
         
         try {
         	GreaterThanExpression.builder()
-            .path("/kid")
+            .path("$.kid")
             .preoperation(ModuloOperation.builder().operand(2).build())
             .value(20)
             .build()
@@ -338,12 +339,12 @@ public class ModuloOperationTest {
                 .child(
                         OrExpression.builder()
                                 .child(LessThanExpression.builder()
-                                        .path("/value")
+                                        .path("$.value")
                                         .value(11)
                                         .preoperation(ModuloOperation.builder().operand(5).build())
                                         .build())
                                 .child(GreaterThanExpression.builder()
-                                        .path("/value")
+                                        .path("$.value")
                                         .value(30)
                                         .preoperation(ModuloOperation.builder().operand(-5).build())
                                         .build())
@@ -353,7 +354,7 @@ public class ModuloOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"modulo\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"/value\",\"preoperation\":{\"operation\":\"modulo\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"modulo\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"modulo\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 

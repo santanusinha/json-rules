@@ -3,14 +3,14 @@
     "children": [
         {
             "type": "greater_than_equals",
-            "path": "/unixTime",
+            "path": "$.unixTime",
             "value": 11,
             "preoperation": {"operation" : "epoch", "operand" : "hour_of_day", "zoneOffSet":"+05:30"}
             
         },
         {
             "type": "less_than_equals",
-            "path": "/unixTime",
+            "path": "$.unixTime",
             "value": 3,
             "preoperation": {"operation" : "epoch", "operand" : "day_of_week", "zoneOffSet":"+05:30"}
         }

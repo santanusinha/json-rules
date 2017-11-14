@@ -1,4 +1,4 @@
 {
   "type" : "empty",
-  "path" : "/string"
+  "path" : "$.string"
 }

@@ -15,45 +15,42 @@
  *
  */
 
-package io.appform.jsonrules.expressions.equality;
+package io.appform.jsonrules.expressions.array;
+
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.appform.jsonrules.ExpressionEvaluationContext;
+
 import io.appform.jsonrules.ExpressionType;
-import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
-import lombok.*;
-
-import java.util.List;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Singular;
+import lombok.ToString;
 
 /**
- * Compares objects
+ * Checks if an object is present in the defined collection
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class InExpression extends JsonPathBasedExpression {
-    private List<Object> values;
+public class InExpression extends CollectionJsonPathBasedExpression {
 
     public InExpression() {
         super(ExpressionType.in);
     }
 
     @Builder
-    public InExpression(String path, @Singular List<Object> values, boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.in, path, defaultResult, preoperation);
-        this.values = values;
-    }
-
-    public InExpression(String path, List<Object> values, PreOperation<?> preoperation) {
-        this(path, values, false, preoperation);
+    public InExpression(String path, @Singular Set<Object> values, boolean defaultResult,
+            PreOperation<?> preoperation) {
+        super(ExpressionType.in, path, values, defaultResult, preoperation);
     }
 
     @Override
-    protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        return null != values
-                && !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
+    protected boolean evaluate(JsonNode evaluatedNode, Set<Object> values) {
+        return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
                 && values.stream().anyMatch(value -> ComparisonUtils.compare(evaluatedNode, value) == 0);
     }
 }
