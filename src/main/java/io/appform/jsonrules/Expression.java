@@ -17,18 +17,23 @@
 
 package io.appform.jsonrules;
 
+import java.util.Collections;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.MissingNode;
 
+import io.appform.jsonrules.expressions.array.ContainsAllExpression;
+import io.appform.jsonrules.expressions.array.ContainsAnyExpression;
+import io.appform.jsonrules.expressions.array.InExpression;
+import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.equality.EqualsExpression;
-import io.appform.jsonrules.expressions.equality.InExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
-import io.appform.jsonrules.expressions.equality.NotInExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
@@ -44,9 +49,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.Collections;
-import java.util.Map;
-
 /**
  * A base expression
  */
@@ -57,8 +59,6 @@ import java.util.Map;
 @JsonSubTypes({
         @JsonSubTypes.Type(name = "equals", value = EqualsExpression.class),
         @JsonSubTypes.Type(name = "not_equals", value = NotEqualsExpression.class),
-        @JsonSubTypes.Type(name = "in", value = InExpression.class),
-        @JsonSubTypes.Type(name = "not_in", value = NotInExpression.class),
 
         @JsonSubTypes.Type(name = "greater_than", value = GreaterThanExpression.class),
         @JsonSubTypes.Type(name = "greater_than_equals", value = GreaterThanEqualsExpression.class),
@@ -77,6 +77,11 @@ import java.util.Map;
         @JsonSubTypes.Type(name = "starts_with", value = StartsWithExpression.class),
         @JsonSubTypes.Type(name = "ends_with", value = EndsWithExpression.class),
         @JsonSubTypes.Type(name = "matches", value = MatchesExpression.class),
+
+        @JsonSubTypes.Type(name = "in", value = InExpression.class),
+        @JsonSubTypes.Type(name = "not_in", value = NotInExpression.class),
+        @JsonSubTypes.Type(name = "contains_any", value = ContainsAnyExpression.class),
+        @JsonSubTypes.Type(name = "contains_all", value = ContainsAllExpression.class),
 })
 public abstract class Expression {
     private final ExpressionType type;
@@ -91,8 +96,8 @@ public abstract class Expression {
 
     public boolean evaluate(JsonNode node, Map<OptionKeys, Object> options) {
         if (null == node) {
-            // Fail safe check to make the node an empty node if its null.
-            node = new ObjectMapper().createObjectNode();
+            // Fail safe check, to replace null with missing node.
+            node = MissingNode.getInstance();
         }
         return evaluate(ExpressionEvaluationContext.builder().node(node).options(options).build());
     }

@@ -15,17 +15,20 @@
  *
  */
 
-package io.appform.jsonrules.expressions.equality;
+package io.appform.jsonrules.expressions.array;
+
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.appform.jsonrules.ExpressionEvaluationContext;
+
 import io.appform.jsonrules.ExpressionType;
-import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
-import lombok.*;
-
-import java.util.List;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Singular;
+import lombok.ToString;
 
 /**
  * Compares objects
@@ -33,25 +36,21 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class NotInExpression extends JsonPathBasedExpression {
-    private List<Object> values;
-
+public class NotInExpression extends CollectionJsonPathBasedExpression {
     public NotInExpression() {
         super(ExpressionType.not_in);
         setDefaultResult(true);
     }
 
     @Builder
-    public NotInExpression(String path, @Singular List<Object> values, Boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.not_in, path, ComparisonUtils.getDefaultResult(defaultResult, true), preoperation);
-        this.values = values;
+    public NotInExpression(String path, @Singular Set<Object> values, Boolean defaultResult,
+            PreOperation<?> preoperation) {
+        super(ExpressionType.not_in, path, values, ComparisonUtils.getDefaultResult(defaultResult, true), preoperation);
     }
 
     @Override
-    protected boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
-        return null != values
-                && (ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
-                || values.stream().allMatch(value -> ComparisonUtils.compare(evaluatedNode, value) != 0)
-        );
+    protected boolean evaluate(JsonNode evaluatedNode, Set<Object> values) {
+        return (ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
+                || values.stream().allMatch(value -> ComparisonUtils.compare(evaluatedNode, value) != 0));
     }
 }

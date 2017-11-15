@@ -3,7 +3,7 @@
     "children": [
         {
             "type": "greater_than_equals",
-            "path": "/value",
+            "path": "$.value",
             "value": 0,
             "preoperation": {"operation" : "current_epoch_diff"}
         }

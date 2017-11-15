@@ -3,13 +3,13 @@
     "children": [
         {
             "type": "ends_with",
-            "path": "/string",
+            "path": "$.string",
             "value": "WORLD",
             "ignoreCase" : true
         },
         {
             "type": "ends_with",
-            "path": "/string",
+            "path": "$.string",
             "value": "World"
         }
     ]

@@ -17,13 +17,25 @@
 
 package io.appform.jsonrules.expressions;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.MissingNode;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.PathNotFoundException;
+import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
+import com.jayway.jsonpath.spi.json.JsonProvider;
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+import com.jayway.jsonpath.spi.mapper.MappingProvider;
 
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
+import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -38,8 +50,11 @@ import lombok.val;
 public abstract class JsonPathBasedExpression extends Expression {
     private String path;
     private PreOperation<?> preoperation;
-    private static final ObjectMapper mapper = new ObjectMapper();
     private boolean defaultResult;
+
+    static {
+        Configuration.setDefaults(new JacksonConfiguration());
+    }
 
     protected JsonPathBasedExpression(ExpressionType type) {
         super(type);
@@ -55,30 +70,55 @@ public abstract class JsonPathBasedExpression extends Expression {
 
     @Override
     public final boolean evaluate(ExpressionEvaluationContext context) {
-        JsonNode evaluatedNode = applyPreoperation(context);
-
-        if (evaluatedNode.isMissingNode()) {
+        JsonNode nodeAtPath = null;
+        try {
+            val nodeValue = JsonPath.read(context.getNode().toString(), path);
+            if (nodeValue != null) {
+                nodeAtPath = mapper.valueToTree(nodeValue);
+            } else {
+                // Node exists; but value is null. Proceed as missing node.
+                nodeAtPath = MissingNode.getInstance();
+            }
+        } catch (PathNotFoundException exception) {
+            // Using default result when the 'path' doesn't exist
             return defaultResult;
         }
 
+        JsonNode evaluatedNode = applyPreoperation(context, nodeAtPath);
         return evaluate(context, path, evaluatedNode);
     }
 
-    private JsonNode applyPreoperation(ExpressionEvaluationContext globalContext) {
-        JsonNode payload = globalContext.getNode().at(path);
-
+    private JsonNode applyPreoperation(ExpressionEvaluationContext globalContext, JsonNode nodeAtPath) {
         if (null == preoperation) {
-            return payload;
+            return nodeAtPath;
         }
 
         ExpressionEvaluationContext nodeEvaluationContext = globalContext.deepCopy();
-        nodeEvaluationContext.setNode(payload);
+        nodeEvaluationContext.setNode(nodeAtPath);
 
         val computedValue = preoperation.compute(nodeEvaluationContext);
-        payload = mapper.valueToTree(computedValue);
-
-        return payload;
+        return mapper.valueToTree(computedValue);
     }
 
     abstract protected boolean evaluate(ExpressionEvaluationContext context, final String path, JsonNode evaluatedNode);
+
+    private static final class JacksonConfiguration implements Configuration.Defaults {
+        private final JsonProvider jsonProvider = new JacksonJsonProvider();
+        private final MappingProvider mappingProvider = new JacksonMappingProvider();
+
+        @Override
+        public JsonProvider jsonProvider() {
+            return jsonProvider;
+        }
+
+        @Override
+        public MappingProvider mappingProvider() {
+            return mappingProvider;
+        }
+
+        @Override
+        public Set<Option> options() {
+            return EnumSet.noneOf(Option.class);
+        }
+    }
 }

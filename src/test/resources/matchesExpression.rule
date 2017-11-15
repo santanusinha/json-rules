@@ -3,13 +3,13 @@
     "children": [
         {
             "type": "matches",
-            "path": "/string",
+            "path": "$.string",
             "value": ".* WORLD",
             "ignoreCase" : true
         },
         {
             "type": "matches",
-            "path": "/string",
+            "path": "$.string",
             "value": ".*"
         }
     ]

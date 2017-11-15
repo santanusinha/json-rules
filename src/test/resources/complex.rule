@@ -3,12 +3,12 @@
     "children": [
         {
             "type": "greater_than",
-            "path": "/value",
+            "path": "$.value",
             "value": 11
         },
         {
             "type": "less_than",
-            "path": "/value",
+            "path": "$.value",
             "value": 30
         }
     ]

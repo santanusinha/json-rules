@@ -18,10 +18,13 @@
 package io.appform.jsonrules.expressions.numeric;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.jayway.jsonpath.JsonPath;
+
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
+import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -55,7 +58,7 @@ public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpres
 
         Number numericalValue;
         if (extractValueFromPath) {
-            JsonNode jsonNode = context.getNode().at(String.valueOf(value));
+            JsonNode jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
             if (jsonNode.isIntegralNumber()) {
                 numericalValue = jsonNode.asLong();
             } else if (jsonNode.isFloatingPointNumber()) {
