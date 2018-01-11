@@ -28,9 +28,15 @@ public enum PreOperationType {
 	multiply,
 	divide,
 	modulo,
-	
+
+	//collection
+	size,
+
+	//string
+	length,
+
 	// Calendar
 	epoch,
-	current_epoch_diff,
-	date_time
+	date_time,
+	current_epoch_diff
 }

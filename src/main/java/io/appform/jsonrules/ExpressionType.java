@@ -31,6 +31,7 @@ public enum ExpressionType {
     less_than,
     greater_than_equals,
     less_than_equals,
+    between,
 
     //String
     empty,

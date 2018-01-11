@@ -10,6 +10,12 @@
             "type": "less_than",
             "path": "$.value",
             "value": 30
+        },
+        {
+            "type": "between",
+            "path": "$.value",
+            "lowerBound": 11,
+            "upperBound": 30
         }
     ]
 }
