@@ -60,6 +60,7 @@ Maven repo
  * greater_than
  * less_than_equals
  * greater_than_equals
+ * between
 
 ```json
    {
@@ -158,7 +159,11 @@ Pre-operations are pre-evaluation mutations that can be applied to payload.
      * Sum
      * Difference
      * modulo
-  
+ * Array
+     * size
+ * String
+     * length
+
 ```json
     {
         "type": "in",
