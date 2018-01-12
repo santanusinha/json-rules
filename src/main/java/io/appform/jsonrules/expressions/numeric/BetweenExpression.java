@@ -47,9 +47,9 @@ public class BetweenExpression extends JsonPathBasedExpression {
             return false;
         }
         if (evaluatedNode.isIntegralNumber()) {
-            return evaluatedNode.asInt() > lowerBound.intValue() && evaluatedNode.asInt() < upperBound.intValue();
+            return evaluatedNode.asInt() >= lowerBound.intValue() && evaluatedNode.asInt() < upperBound.intValue();
         } else if (evaluatedNode.isFloatingPointNumber()) {
-            return evaluatedNode.doubleValue() > lowerBound.doubleValue()
+            return evaluatedNode.doubleValue() >= lowerBound.doubleValue()
                     && evaluatedNode.asInt() < upperBound.doubleValue();
         }
         return false;

@@ -60,7 +60,7 @@ Maven repo
  * greater_than
  * less_than_equals
  * greater_than_equals
- * between
+ * between (half-closed with lower bound included)
 
 ```json
    {

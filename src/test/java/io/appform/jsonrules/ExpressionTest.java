@@ -300,9 +300,9 @@ public class ExpressionTest {
                 .upperBound(30)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(BetweenExpression.builder()
+        Assert.assertTrue(BetweenExpression.builder()
                 .path("$.v1")
-                .lowerbound(20) // lower bound excluded test
+                .lowerbound(20) // lower bound included test
                 .upperBound(30)
                 .build()
                 .evaluate(context));
