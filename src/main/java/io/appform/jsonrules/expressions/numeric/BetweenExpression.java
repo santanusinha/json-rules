@@ -24,21 +24,31 @@ import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class BetweenExpression extends JsonPathBasedExpression {
     private Number lowerBound;
     private Number upperBound;
+    private boolean includeLowerBound;
+    private boolean includeUpperBound;
 
     public BetweenExpression() {
         super(ExpressionType.between);
     }
 
     @Builder
-    public BetweenExpression(String path, Number lowerbound, Number upperBound, boolean defaultResult,
-            PreOperation<?> preoperation) {
+    public BetweenExpression(String path, Number lowerbound, Number upperBound, boolean includeLowerBound,
+            boolean includeUpperBound, boolean defaultResult, PreOperation<?> preoperation) {
         super(ExpressionType.between, path, defaultResult, preoperation);
         this.lowerBound = lowerbound;
         this.upperBound = upperBound;
+        this.includeLowerBound = includeLowerBound;
+        this.includeUpperBound = includeUpperBound;
     }
 
     @Override
@@ -46,13 +56,19 @@ public class BetweenExpression extends JsonPathBasedExpression {
         if (null == evaluatedNode || !evaluatedNode.isNumber()) {
             return false;
         }
+        boolean finalResult = false;
         if (evaluatedNode.isIntegralNumber()) {
-            return evaluatedNode.asInt() >= lowerBound.intValue() && evaluatedNode.asInt() < upperBound.intValue();
+            finalResult = includeLowerBound ? evaluatedNode.asInt() >= lowerBound.intValue()
+                    : evaluatedNode.asInt() > lowerBound.intValue();
+            finalResult &= includeUpperBound ? evaluatedNode.asInt() <= upperBound.intValue()
+                    : evaluatedNode.asInt() < upperBound.intValue();
         } else if (evaluatedNode.isFloatingPointNumber()) {
-            return evaluatedNode.doubleValue() >= lowerBound.doubleValue()
-                    && evaluatedNode.asInt() < upperBound.doubleValue();
+            finalResult = includeLowerBound ? evaluatedNode.doubleValue() >= lowerBound.doubleValue()
+                    : evaluatedNode.doubleValue() > lowerBound.doubleValue();
+            finalResult &= includeUpperBound ? evaluatedNode.doubleValue() <= upperBound.doubleValue()
+                    : evaluatedNode.doubleValue() < upperBound.doubleValue();
         }
-        return false;
+        return finalResult;
     }
 
 }

@@ -43,6 +43,10 @@ public class RuleTest {
         final String ruleRepr2 = TestUtils.read("/simple.rule");
         Rule rule2 = Rule.create(ruleRepr2, mapper);
         Assert.assertFalse(rule2.matches(nodeWithMissingOperandPath));
+
+        final String ruleRepr3 = TestUtils.read("/complex.rule");
+        Rule rule3 = Rule.create(ruleRepr3, mapper);
+        Assert.assertTrue(rule3.matches(nodeWithMissingOperandPath));
     }
 
     @Test

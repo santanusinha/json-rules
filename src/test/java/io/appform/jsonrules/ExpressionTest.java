@@ -302,16 +302,31 @@ public class ExpressionTest {
                 .evaluate(context));
         Assert.assertTrue(BetweenExpression.builder()
                 .path("$.v1")
-                .lowerbound(20) // lower bound included test
+                .lowerbound(19) // lower bound excluded test; default behaviour
                 .upperBound(30)
                 .build()
                 .evaluate(context));
         Assert.assertFalse(BetweenExpression.builder()
                 .path("$.v1")
                 .lowerbound(19)
-                .upperBound(20) // upper bound excluded test
+                .upperBound(20) // upper bound excluded test; default behaviour
                 .build()
                 .evaluate(context));
+        Assert.assertTrue(BetweenExpression.builder()
+                .path("$.v1")
+                .lowerbound(20) // override lower bound excluded test; default behaviour
+                .includeLowerBound(true)
+                .upperBound(30)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(BetweenExpression.builder()
+                .path("$.v1")
+                .lowerbound(19)
+                .upperBound(20) // upper bound excluded test; default behaviour
+                .includeUpperBound(true)
+                .build()
+                .evaluate(context));
+
         Assert.assertTrue(BetweenExpression.builder()
                 .path("$.v3")
                 .lowerbound(20.0001)
