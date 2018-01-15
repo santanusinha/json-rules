@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
+import io.appform.jsonrules.expressions.preoperation.array.SizeOperation;
 import io.appform.jsonrules.expressions.preoperation.date.DateTimeOperation;
 import io.appform.jsonrules.expressions.preoperation.date.DiffFromCurrentEpochOperation;
 import io.appform.jsonrules.expressions.preoperation.date.EpochOperation;
@@ -29,6 +30,7 @@ import io.appform.jsonrules.expressions.preoperation.numeric.DivideOperation;
 import io.appform.jsonrules.expressions.preoperation.numeric.ModuloOperation;
 import io.appform.jsonrules.expressions.preoperation.numeric.MultiplyOperation;
 import io.appform.jsonrules.expressions.preoperation.numeric.SubtractOperation;
+import io.appform.jsonrules.expressions.preoperation.string.LengthOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -46,6 +48,10 @@ import lombok.ToString;
         @JsonSubTypes.Type(name = "multiply", value = MultiplyOperation.class),
         @JsonSubTypes.Type(name = "divide", value = DivideOperation.class),
         @JsonSubTypes.Type(name = "modulo", value = ModuloOperation.class),
+
+        @JsonSubTypes.Type(name = "size", value = SizeOperation.class),
+
+        @JsonSubTypes.Type(name = "length", value = LengthOperation.class),
 
         @JsonSubTypes.Type(name = "epoch", value = EpochOperation.class),
         @JsonSubTypes.Type(name = "date_time", value = DateTimeOperation.class),

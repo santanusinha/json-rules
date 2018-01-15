@@ -36,6 +36,7 @@ import io.appform.jsonrules.expressions.equality.EqualsExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
+import io.appform.jsonrules.expressions.numeric.BetweenExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
@@ -64,6 +65,7 @@ import lombok.ToString;
         @JsonSubTypes.Type(name = "greater_than_equals", value = GreaterThanEqualsExpression.class),
         @JsonSubTypes.Type(name = "less_than", value = LessThanExpression.class),
         @JsonSubTypes.Type(name = "less_than_equals", value = LessThanEqualsExpression.class),
+        @JsonSubTypes.Type(name = "between", value = BetweenExpression.class),
 
         @JsonSubTypes.Type(name = "and", value = AndExpression.class),
         @JsonSubTypes.Type(name = "or", value = OrExpression.class),

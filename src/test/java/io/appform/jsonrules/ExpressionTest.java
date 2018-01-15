@@ -35,6 +35,7 @@ import io.appform.jsonrules.expressions.equality.EqualsExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
+import io.appform.jsonrules.expressions.numeric.BetweenExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
@@ -48,7 +49,7 @@ public class ExpressionTest {
     @Before
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree("{ \"v1\": 20, \"v2\": 30, \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
+        JsonNode node = mapper.readTree("{ \"v1\": 20, \"v2\": 30, \"v3\": 20.001, \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
@@ -293,7 +294,46 @@ public class ExpressionTest {
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
-        
+        Assert.assertTrue(BetweenExpression.builder()
+                .path("$.v1")
+                .lowerbound(10)
+                .upperBound(30)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(BetweenExpression.builder()
+                .path("$.v1")
+                .lowerbound(19) // lower bound excluded test; default behaviour
+                .upperBound(30)
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(BetweenExpression.builder()
+                .path("$.v1")
+                .lowerbound(19)
+                .upperBound(20) // upper bound excluded test; default behaviour
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(BetweenExpression.builder()
+                .path("$.v1")
+                .lowerbound(20) // override lower bound excluded test; default behaviour
+                .includeLowerBound(true)
+                .upperBound(30)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(BetweenExpression.builder()
+                .path("$.v1")
+                .lowerbound(19)
+                .upperBound(20) // upper bound excluded test; default behaviour
+                .includeUpperBound(true)
+                .build()
+                .evaluate(context));
+
+        Assert.assertTrue(BetweenExpression.builder()
+                .path("$.v3")
+                .lowerbound(20.0001)
+                .upperBound(20.01)
+                .build()
+                .evaluate(context));
+
         try {
         	Assert.assertTrue(LessThanExpression.builder()
         			.path("$.value")

@@ -1,0 +1,17 @@
+{
+    "type": "and",
+    "children": [
+        {
+            "type": "equals",
+            "path": "$.values",
+            "value": 3,
+            "preoperation": {"operation" : "size"}
+        },
+        {
+            "type": "greater_than",
+            "path": "$.values",
+            "value": 1,
+            "preoperation": {"operation" : "size"}
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 {
-    "type": "or",
+    "type": "and",
     "children": [
         {
             "type": "greater_than",
@@ -10,6 +10,26 @@
             "type": "less_than",
             "path": "$.value",
             "value": 30
+        },
+        {
+            "type": "between",
+            "path": "$.value",
+            "lowerBound": 19,
+            "upperBound": 21
+        },
+        {
+            "type": "between",
+            "path": "$.value",
+            "lowerBound": 20,
+            "includeLowerBound": true,
+            "upperBound": 21
+        },
+        {
+            "type": "between",
+            "path": "$.value",
+            "lowerBound": 11,
+            "upperBound": 20,
+            "includeUpperBound": true
         }
     ]
 }
