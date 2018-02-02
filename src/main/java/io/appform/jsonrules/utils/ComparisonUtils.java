@@ -87,7 +87,10 @@ public interface ComparisonUtils {
             Object value) {
         final boolean nodeMissingOrNullCheck = isNodeMissingOrNull(evaluatedNode);
         JsonNode jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
-        if (jsonNode.isNumber()) {
+
+        if (isNodeMissingOrNull(jsonNode)) {
+            return !isNodeMissingOrNull(evaluatedNode);
+        } else if (jsonNode.isNumber()) {
             if (jsonNode.isIntegralNumber()) {
                 return !nodeMissingOrNullCheck && compare(evaluatedNode, jsonNode.asLong()) == 0;
             } else {
@@ -95,11 +98,11 @@ public interface ComparisonUtils {
             }
         } else if (jsonNode.isBoolean()) {
             return !nodeMissingOrNullCheck
-                    && ComparisonUtils.compare(evaluatedNode, Boolean.parseBoolean(value.toString())) == 0;
+                    && ComparisonUtils.compare(evaluatedNode, jsonNode.asBoolean()) == 0;
         } else if (jsonNode.isTextual()) {
-            return !nodeMissingOrNullCheck && compare(evaluatedNode, String.valueOf(value)) == 0;
+            return !nodeMissingOrNullCheck && compare(evaluatedNode, jsonNode.asText()) == 0;
         } else {
-            return !nodeMissingOrNullCheck && compare(evaluatedNode, value) == 0;
+            return !nodeMissingOrNullCheck && compare(evaluatedNode, jsonNode) == 0;
         }
     }
 
@@ -107,23 +110,26 @@ public interface ComparisonUtils {
             Object value) {
         final boolean nodeMissingOrNullCheck = isNodeMissingOrNull(evaluatedNode);
         JsonNode jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
-        if (jsonNode.isNumber()) {
+
+        if (isNodeMissingOrNull(jsonNode)) {
+            return isNodeMissingOrNull(evaluatedNode);
+        } else if (jsonNode.isNumber()) {
             if (jsonNode.isIntegralNumber()) {
                 return nodeMissingOrNullCheck || compare(evaluatedNode, jsonNode.asLong()) != 0;
             } else {
                 return nodeMissingOrNullCheck || compare(evaluatedNode, jsonNode.asDouble()) != 0;
             }
         } else if (jsonNode.isBoolean()) {
-            return nodeMissingOrNullCheck || compare(evaluatedNode, Boolean.parseBoolean(value.toString())) != 0;
+            return nodeMissingOrNullCheck || compare(evaluatedNode, jsonNode.asBoolean()) != 0;
         } else if (jsonNode.isTextual()) {
-            return nodeMissingOrNullCheck || compare(evaluatedNode, String.valueOf(value)) != 0;
+            return nodeMissingOrNullCheck || compare(evaluatedNode, jsonNode.asText()) != 0;
         } else {
-            return value == null || isNodeMissingOrNull(evaluatedNode) || compare(evaluatedNode, value) != 0;
+            return isNodeMissingOrNull(evaluatedNode) || compare(evaluatedNode, jsonNode) != 0;
         }
     }
 
     public static boolean isNodeMissingOrNull(JsonNode node) {
-        return node.isMissingNode() || node.isNull();
+        return null == node || node.isMissingNode() || node.isNull();
     }
 
     public static boolean getDefaultResult(Boolean defaultResult, boolean resultIfNull) {
