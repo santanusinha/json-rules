@@ -92,6 +92,12 @@ public class ExpressionTest {
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("$.kid") // nulls on both side are equal
+                .value("$.kid")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
         Assert.assertFalse(EqualsExpression.builder()
                 .path("$.string")
                 .value("hello")
@@ -152,6 +158,12 @@ public class ExpressionTest {
         Assert.assertTrue(NotEqualsExpression.builder()
                 .path("$.string")
                 .value("$.string1")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(NotEqualsExpression.builder()
+                .path("$.kid") // nulls on both sides are equal
+                .value("$.kid")
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));

@@ -89,7 +89,7 @@ public interface ComparisonUtils {
         JsonNode jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
 
         if (isNodeMissingOrNull(jsonNode)) {
-            return !isNodeMissingOrNull(evaluatedNode);
+            return nodeMissingOrNullCheck;
         } else if (jsonNode.isNumber()) {
             if (jsonNode.isIntegralNumber()) {
                 return !nodeMissingOrNullCheck && compare(evaluatedNode, jsonNode.asLong()) == 0;
@@ -112,7 +112,7 @@ public interface ComparisonUtils {
         JsonNode jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
 
         if (isNodeMissingOrNull(jsonNode)) {
-            return isNodeMissingOrNull(evaluatedNode);
+            return !nodeMissingOrNullCheck;
         } else if (jsonNode.isNumber()) {
             if (jsonNode.isIntegralNumber()) {
                 return nodeMissingOrNullCheck || compare(evaluatedNode, jsonNode.asLong()) != 0;
@@ -124,7 +124,7 @@ public interface ComparisonUtils {
         } else if (jsonNode.isTextual()) {
             return nodeMissingOrNullCheck || compare(evaluatedNode, jsonNode.asText()) != 0;
         } else {
-            return isNodeMissingOrNull(evaluatedNode) || compare(evaluatedNode, jsonNode) != 0;
+            return nodeMissingOrNullCheck || compare(evaluatedNode, jsonNode) != 0;
         }
     }
 
