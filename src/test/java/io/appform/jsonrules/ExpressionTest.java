@@ -49,7 +49,7 @@ public class ExpressionTest {
     @Before
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree("{ \"v1\": 20, \"v2\": 30, \"v3\": 20.001, \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
+        JsonNode node = mapper.readTree("{ \"v1\": 20, \"v2\": 30, \"v3\": 20.001, \"value\": 20, \"string\" : \"Hello\", \"string1\" : \"Hello1\", \"kid\": null, \"boolean\" : true }");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
 
@@ -80,6 +80,24 @@ public class ExpressionTest {
                 .value("Hello")
                 .build()
                 .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("$.string")
+                .value("$.string")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("$.boolean")
+                .value("$.boolean")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("$.kid") // nulls on both side are equal
+                .value("$.kid")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
         Assert.assertFalse(EqualsExpression.builder()
                 .path("$.string")
                 .value("hello")
@@ -90,13 +108,11 @@ public class ExpressionTest {
                 .value(true)
                 .build()
                 .evaluate(context));
-
         Assert.assertFalse(EqualsExpression.builder()
                 .path("$.boolean")
                 .value(false)
                 .build()
                 .evaluate(context));
-
     }
 
     @Test
@@ -131,6 +147,30 @@ public class ExpressionTest {
         Assert.assertFalse(NotEqualsExpression.builder()
                 .path("$.string")
                 .value("Hello")
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(NotEqualsExpression.builder()
+                .path("$.string")
+                .value("$.string")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotEqualsExpression.builder()
+                .path("$.string")
+                .value("$.string1")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(NotEqualsExpression.builder()
+                .path("$.kid") // nulls on both sides are equal
+                .value("$.kid")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(NotEqualsExpression.builder()
+                .path("$.boolean")
+                .value("$.boolean")
+                .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
         Assert.assertTrue(NotEqualsExpression.builder()
