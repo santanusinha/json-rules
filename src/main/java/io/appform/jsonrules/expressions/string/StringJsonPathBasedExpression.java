@@ -17,8 +17,12 @@
 
 package io.appform.jsonrules.expressions.string;
 
+import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
+
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.MissingNode;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
@@ -57,8 +61,16 @@ public abstract class StringJsonPathBasedExpression extends JsonPathBasedExpress
             return false;
         }
         if (extractValueFromPath) {
-            final String extractedValue = JsonPath.read(context.getNode().toString(), value).toString();
-            return evaluate(evaluatedNode.asText(), extractedValue, ignoreCase);
+            JsonNode jsonNode = MissingNode.getInstance();
+            try {
+                jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), value));
+                if (jsonNode == null || !jsonNode.isTextual()) {
+                    return false;
+                }
+            } catch (PathNotFoundException e) {
+                // consume silently; indicates path denoted by @value doesn't exist
+            }
+            return evaluate(evaluatedNode.asText(), jsonNode.asText(), ignoreCase);
         }
         return evaluate(evaluatedNode.asText(), value, ignoreCase);
     }

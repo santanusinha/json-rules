@@ -17,9 +17,15 @@
 
 package io.appform.jsonrules.expressions.array;
 
+import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
+
+import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.MissingNode;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
@@ -38,19 +44,39 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExpression {
     private Set<Object> values;
+    private boolean extractValues;
+    private String valuesPath;
 
     protected CollectionJsonPathBasedExpression(ExpressionType type) {
         super(type);
     }
 
     protected CollectionJsonPathBasedExpression(ExpressionType type, String path, @Singular Set<Object> values,
-            boolean defaultResult, PreOperation<?> preoperation) {
+            boolean extractValues, String valuesPath, boolean defaultResult, PreOperation<?> preoperation) {
         super(type, path, defaultResult, preoperation);
         this.values = values;
+        this.extractValues = extractValues;
+        this.valuesPath = valuesPath;
     }
 
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
+        if (extractValues) {
+            JsonNode jsonNode = MissingNode.getInstance();
+            try {
+                jsonNode = mapper
+                        .valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(valuesPath)));
+            } catch (PathNotFoundException e) {
+                // consume silently; indicates path denoted by @valuesPath doesn't exist.
+            }
+            if (jsonNode == null || !jsonNode.isArray()) {
+                return false;
+            }
+            // fetch values from @values path as a set.
+            final HashSet<Object> extractedPathVaues = new HashSet<Object>(JsonPath.read(jsonNode.toString(), "$"));
+            return evaluate(evaluatedNode, extractedPathVaues);
+        }
+
         if (null == values || values.isEmpty()) {
             return false;
         }

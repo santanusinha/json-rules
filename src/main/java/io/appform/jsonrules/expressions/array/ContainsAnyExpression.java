@@ -45,10 +45,10 @@ public class ContainsAnyExpression extends CollectionJsonPathBasedExpression {
     }
 
     @Builder
-    public ContainsAnyExpression(String path, @Singular Set<Object> values, boolean defaultResult,
-            PreOperation<?> preoperation) {
+    public ContainsAnyExpression(String path, @Singular Set<Object> values, boolean extractValues, String valuesPath,
+            boolean defaultResult, PreOperation<?> preoperation) {
         // No pre-operations supported on this expression.
-        super(ExpressionType.contains_any, path, values, defaultResult, null);
+        super(ExpressionType.contains_any, path, values, extractValues, valuesPath, defaultResult, null);
     }
 
     @Override

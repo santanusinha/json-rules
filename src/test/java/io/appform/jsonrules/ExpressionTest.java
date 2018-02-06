@@ -377,11 +377,12 @@ public class ExpressionTest {
         try {
         	Assert.assertTrue(LessThanExpression.builder()
         			.path("$.value")
+                    .value("$.value1")
         			.extractValueFromPath(true)
         			.build()
         			.evaluate(context));
         	Assert.fail("Should have thrown an exception");
-        } catch (PathNotFoundException e) {
+        } catch (IllegalArgumentException e) {
         	Assert.assertTrue("Exception thrown", true);
         }
     }
