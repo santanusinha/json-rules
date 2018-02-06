@@ -43,9 +43,9 @@ public class InExpression extends CollectionJsonPathBasedExpression {
     }
 
     @Builder
-    public InExpression(String path, @Singular Set<Object> values, boolean defaultResult,
-            PreOperation<?> preoperation) {
-        super(ExpressionType.in, path, values, defaultResult, preoperation);
+    public InExpression(String path, @Singular Set<Object> values, boolean extractValues, String valuesPath,
+            boolean defaultResult, PreOperation<?> preoperation) {
+        super(ExpressionType.in, path, values, extractValues, valuesPath, defaultResult, preoperation);
     }
 
     @Override

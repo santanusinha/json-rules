@@ -18,7 +18,9 @@
 package io.appform.jsonrules.expressions.numeric;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.MissingNode;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
@@ -58,7 +60,16 @@ public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpres
 
         Number numericalValue;
         if (extractValueFromPath) {
-            JsonNode jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
+            JsonNode jsonNode = MissingNode.getInstance();
+            try {
+                jsonNode = mapper
+                        .valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
+                if (jsonNode == null) {
+                    return false;
+                }
+            } catch (PathNotFoundException e) {
+                // consume silently; indicates path denoted by @value doesn't exist.
+            }
             if (jsonNode.isIntegralNumber()) {
                 numericalValue = jsonNode.asLong();
             } else if (jsonNode.isFloatingPointNumber()) {

@@ -12,6 +12,20 @@
             "path": "$.decimals",
             "values": [10.01,20.22,20.235],
             "defaultResult": false
+        },
+        {
+            "type": "contains_any",
+            "path": "$.felines",
+            "valuesPath": "$.felines",
+            "extractValues": true,
+            "defaultResult": false
+        },
+        {
+            "type": "contains_any",
+            "path": "$.decimals",
+            "valuesPath": "$.decimals",
+            "extractValues": true,
+            "defaultResult": false
         }
     ]
 }
