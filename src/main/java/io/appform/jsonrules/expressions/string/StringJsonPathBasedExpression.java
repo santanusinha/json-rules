@@ -20,14 +20,13 @@ package io.appform.jsonrules.expressions.string;
 import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.MissingNode;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.PathNotFoundException;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
+import io.appform.jsonrules.utils.ComparisonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -61,14 +60,10 @@ public abstract class StringJsonPathBasedExpression extends JsonPathBasedExpress
             return false;
         }
         if (extractValueFromPath) {
-            JsonNode jsonNode = MissingNode.getInstance();
-            try {
-                jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), value));
-                if (jsonNode == null || !jsonNode.isTextual()) {
-                    return false;
-                }
-            } catch (PathNotFoundException e) {
-                // consume silently; indicates path denoted by @value doesn't exist
+            JsonNode jsonNode = mapper.valueToTree(JsonPath.using(ComparisonUtils.SUPPRESS_EXCEPTION_CONFIG)
+                    .parse(context.getNode().toString()).read(value));
+            if (jsonNode == null || !jsonNode.isTextual()) {
+                return false;
             }
             return evaluate(evaluatedNode.asText(), jsonNode.asText(), ignoreCase);
         }

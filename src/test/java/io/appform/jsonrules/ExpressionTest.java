@@ -24,7 +24,6 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import com.jayway.jsonpath.PathNotFoundException;
 
 import io.appform.jsonrules.expressions.array.InExpression;
 import io.appform.jsonrules.expressions.array.NotInExpression;
@@ -113,6 +112,25 @@ public class ExpressionTest {
                 .value(false)
                 .build()
                 .evaluate(context));
+
+        Assert.assertTrue(EqualsExpression.builder()
+                .path("$.v1")
+                .value("$.value")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(EqualsExpression.builder()
+                .path("$.v1")
+                .value("$.string")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(EqualsExpression.builder()
+                .path("$.v1")
+                .value("$.v4") // path doesn't exist
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
     }
 
     @Test
@@ -176,6 +194,24 @@ public class ExpressionTest {
         Assert.assertTrue(NotEqualsExpression.builder()
                 .path("$.string")
                 .value("hello")
+                .build()
+                .evaluate(context));
+        Assert.assertFalse(NotEqualsExpression.builder()
+                .path("$.v1")
+                .value("$.value")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotEqualsExpression.builder()
+                .path("$.v1")
+                .value("$.string")
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
+        Assert.assertTrue(NotEqualsExpression.builder()
+                .path("$.v1")
+                .value("$.v4") // path doesn't exist
+                .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
     }
@@ -374,17 +410,12 @@ public class ExpressionTest {
                 .build()
                 .evaluate(context));
 
-        try {
-        	Assert.assertTrue(LessThanExpression.builder()
-        			.path("$.value")
-                    .value("$.value1")
-        			.extractValueFromPath(true)
-        			.build()
-        			.evaluate(context));
-        	Assert.fail("Should have thrown an exception");
-        } catch (IllegalArgumentException e) {
-        	Assert.assertTrue("Exception thrown", true);
-        }
+        Assert.assertFalse(LessThanExpression.builder()
+                .path("$.value")
+                .value("$.value1") // path doesn't exist
+                .extractValueFromPath(true)
+                .build()
+                .evaluate(context));
     }
 
     @Test

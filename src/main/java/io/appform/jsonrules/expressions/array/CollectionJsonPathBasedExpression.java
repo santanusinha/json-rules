@@ -31,6 +31,7 @@ import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
+import io.appform.jsonrules.utils.ComparisonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
@@ -62,13 +63,8 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
         if (extractValues) {
-            JsonNode jsonNode = MissingNode.getInstance();
-            try {
-                jsonNode = mapper
-                        .valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(valuesPath)));
-            } catch (PathNotFoundException e) {
-                // consume silently; indicates path denoted by @valuesPath doesn't exist.
-            }
+            JsonNode jsonNode = mapper.valueToTree(JsonPath.using(ComparisonUtils.SUPPRESS_EXCEPTION_CONFIG)
+                    .parse(context.getNode().toString()).read(String.valueOf(valuesPath)));
             if (jsonNode == null || !jsonNode.isArray()) {
                 return false;
             }
