@@ -19,9 +19,9 @@ package io.appform.jsonrules.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.MissingNode;
+import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.PathNotFoundException;
+import com.jayway.jsonpath.Option;
 
 import io.appform.jsonrules.ExpressionEvaluationContext;
 
@@ -29,7 +29,10 @@ import io.appform.jsonrules.ExpressionEvaluationContext;
  * Created by santanu on 15/9/16.
  */
 public interface ComparisonUtils {
+    public static final Configuration SUPPRESS_EXCEPTION_CONFIG = Configuration.defaultConfiguration()
+            .addOptions(Option.SUPPRESS_EXCEPTIONS);
     public static final ObjectMapper mapper = new ObjectMapper();
+
     static int compare(JsonNode evaluatedNode, Object value) {
         int comparisonResult = 0;
         if (evaluatedNode.isNumber()) {
@@ -74,7 +77,7 @@ public interface ComparisonUtils {
     }
 
     static int compare(JsonNode evaluatedNode, String value) {
-        int comparisonResult = 0;
+        int comparisonResult = -1;
         if (evaluatedNode.isTextual()) {
             if (String.class.isAssignableFrom(value.getClass())) {
                 comparisonResult = evaluatedNode.asText().compareTo(String.valueOf(value));
@@ -88,12 +91,8 @@ public interface ComparisonUtils {
     public static boolean compareForEquality(ExpressionEvaluationContext context, JsonNode evaluatedNode,
             Object value) {
         final boolean nodeMissingOrNullCheck = isNodeMissingOrNull(evaluatedNode);
-        JsonNode jsonNode = MissingNode.getInstance();
-        try {
-            jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
-        } catch (PathNotFoundException e) {
-            // consume silently; indicates path @value doesn't exist.
-        }
+        final JsonNode jsonNode = mapper.valueToTree(JsonPath.using(SUPPRESS_EXCEPTION_CONFIG)
+                .parse(context.getNode().toString()).read(String.valueOf(value)));
 
         if (isNodeMissingOrNull(jsonNode)) {
             return nodeMissingOrNullCheck;
@@ -116,12 +115,8 @@ public interface ComparisonUtils {
     public static boolean compareForNotEquals(ExpressionEvaluationContext context, JsonNode evaluatedNode,
             Object value) {
         final boolean nodeMissingOrNullCheck = isNodeMissingOrNull(evaluatedNode);
-        JsonNode jsonNode = MissingNode.getInstance();
-        try {
-            jsonNode = mapper.valueToTree(JsonPath.read(context.getNode().toString(), String.valueOf(value)));
-        } catch (PathNotFoundException e) {
-            // consume silently; indicates path @value doesn't exist.
-        }
+        final JsonNode jsonNode = mapper.valueToTree(JsonPath.using(SUPPRESS_EXCEPTION_CONFIG)
+                .parse(context.getNode().toString()).read(String.valueOf(value)));
 
         if (isNodeMissingOrNull(jsonNode)) {
             return !nodeMissingOrNullCheck;
