@@ -163,6 +163,7 @@ Pre-operations are pre-evaluation mutations that can be applied to payload.
      * size
  * String
      * length
+     * sub_str
 
 ```json
     {
