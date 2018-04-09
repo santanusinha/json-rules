@@ -34,6 +34,7 @@ public enum PreOperationType {
 
 	//string
 	length,
+	sub_str,
 
 	// Calendar
 	epoch,

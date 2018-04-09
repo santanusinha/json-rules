@@ -1,0 +1,18 @@
+{
+    "type": "and",
+    "children": [
+        {
+            "type": "not_equals",
+            "path": "$.string",
+            "value": "Hello",
+            "preoperation": {"operation" : "sub_str", "beginIndex": 0, "endIndex": 1}
+        },
+        {
+            "type": "equals",
+            "path": "$.string",
+            "value": "$.string",
+            "preoperation": {"operation" : "sub_str", "beginIndex": 0},
+            "extractValueFromPath": true
+        }
+    ]
+}
