@@ -32,29 +32,43 @@ import lombok.ToString;
 public class SubStringOperation extends PreOperation<String> {
 
     private static final String EMPTY_STRING = "";
-    @Builder.Default private int beginIndex = -1;
-    @Builder.Default private int endIndex = -1;
+    @Builder.Default
+    private int beginIndex = -1;
+    @Builder.Default
+    private int endIndex = -1;
+    private boolean suppressExceptions;
 
     public SubStringOperation() {
         super(PreOperationType.sub_str);
     }
-    
-    public SubStringOperation(int beginIndex, int endIndex) {
+
+    public SubStringOperation(int beginIndex, int endIndex, boolean suppressExceptions) {
         this();
         this.beginIndex = beginIndex;
         this.endIndex = endIndex;
+        this.suppressExceptions = suppressExceptions;
     }
 
     @Override
     public String compute(ExpressionEvaluationContext context) {
-        JsonNode node = context.getNode();
-        if (node.isTextual() && beginIndex < node.asText(EMPTY_STRING).length()) {
-            if (beginIndex >= 0 && endIndex >= 0 && endIndex >= beginIndex) {
-                return node.asText().substring(beginIndex, endIndex);
-            } else if (beginIndex >= 0 && endIndex == -1 ) {
-                return node.asText().substring(beginIndex);
+        try {
+            final JsonNode node = context.getNode();
+            if (node.isTextual()) {
+                final String nodeText = node.asText(EMPTY_STRING);
+                if (beginIndex >= 0 && beginIndex < nodeText.length()) {
+                    if (endIndex == -1) {
+                        return nodeText.substring(beginIndex);
+                    } else if (endIndex >= 0 && endIndex >= beginIndex && endIndex <= nodeText.length()) {
+                        return nodeText.substring(beginIndex, endIndex);
+                    }
+                }
             }
+            throw new IllegalArgumentException("Sub-String operation is not supported");
+        } catch (Exception e) {
+            if (suppressExceptions) {
+                return EMPTY_STRING;
+            }
+            throw e;
         }
-        throw new IllegalArgumentException("Sub-String operation is not supported");
     }
 }

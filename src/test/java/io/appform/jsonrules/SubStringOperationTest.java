@@ -185,6 +185,27 @@ public class SubStringOperationTest {
         } catch(IllegalArgumentException e) {
             Assert.assertTrue("Sub string operation is not supported", true);
         }
+
+        try {
+            // On valid string, but endIndex is greater than string length
+            EqualsExpression.builder()
+                .path("$.abcd")
+                .preoperation(SubStringOperation.builder().endIndex(100).build())
+                .value(20)
+                .defaultResult(false)
+                .build()
+                .evaluate(context);
+            Assert.fail("Should have thrown an exception");
+        } catch(IllegalArgumentException e) {
+            Assert.assertTrue("Sub string operation is not supported", true);
+        }
+
+        Assert.assertTrue(EmptyExpression.builder()
+                .path("$.stringifiedValue")
+                .preoperation(SubStringOperation.builder().beginIndex(0).endIndex(100).suppressExceptions(true).build())
+                .defaultResult(false)
+                .build()
+                .evaluate(context));
     }
 
     @Test

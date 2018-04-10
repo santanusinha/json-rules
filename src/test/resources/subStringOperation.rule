@@ -13,6 +13,13 @@
             "value": "$.string",
             "preoperation": {"operation" : "sub_str", "beginIndex": 0},
             "extractValueFromPath": true
+        },
+        {
+            "type": "empty",
+            "path": "$.string",
+            "preoperation": {"operation" : "sub_str", "beginIndex": 0, "endIndex", 100},
+            "extractValueFromPath": false,
+            "suppressExceptions" : true
         }
     ]
 }
