@@ -63,6 +63,9 @@ public class SubStringOperation extends PreOperation<String> {
                     }
                 }
             }
+            if (suppressExceptions) {
+                return EMPTY_STRING;
+            }
             throw new IllegalArgumentException("Sub-String operation is not supported");
         } catch (Exception e) {
             if (suppressExceptions) {
