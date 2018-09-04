@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
@@ -45,6 +46,7 @@ public class SubStringOperationTest {
     @Before
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         JsonNode node = mapper.readTree("{ \"array_values\":[1,2,3,4,5],\"stringifiedValue\": \"9886098860\",\"value\": 20, \"abcd\" : \"Hello\", \"string\" : \"Hello\", \"kid\": null}");
         context = ExpressionEvaluationContext.builder().node(node).build();
     }
@@ -210,7 +212,7 @@ public class SubStringOperationTest {
 
     @Test
     public void testRule() throws Exception {
-        final String ruleRepr = TestUtils.read("/lengthOperation.rule");
+        final String ruleRepr = TestUtils.read("/subStringOperation.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": \"Hello World\", \"string\" : \"Hello\" }");
         Assert.assertTrue(rule.matches(node));
@@ -239,7 +241,7 @@ public class SubStringOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"equals\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"sub_str\"},\"defaultResult\":false,\"value\":\"$.value\",\"extractValueFromPath\":true},{\"type\":\"not_equals\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"sub_str\"},\"defaultResult\":true,\"value\":\"$.value\",\"extractValueFromPath\":true}]}]}", ruleRep);
+        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"equals\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"sub_str\",\"beginIndex\":0,\"endIndex\":-1,\"suppressExceptions\":false},\"defaultResult\":false,\"value\":\"$.value\",\"extractValueFromPath\":true},{\"type\":\"not_equals\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"sub_str\",\"beginIndex\":0,\"endIndex\":1,\"suppressExceptions\":false},\"defaultResult\":true,\"value\":\"$.value\",\"extractValueFromPath\":true}]}]}", ruleRep);
     }
     
 }
