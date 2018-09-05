@@ -17,9 +17,8 @@
         {
             "type": "empty",
             "path": "$.string",
-            "preoperation": {"operation" : "sub_str", "beginIndex": 0, "endIndex", 100},
-            "extractValueFromPath": false,
-            "suppressExceptions" : true
+            "preoperation": {"operation" : "sub_str", "beginIndex": 0, "endIndex": 100, "suppressExceptions" : true},
+            "extractValueFromPath": false
         }
     ]
 }

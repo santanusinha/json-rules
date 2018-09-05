@@ -23,9 +23,11 @@ import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.expressions.preoperation.PreOperationType;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+@Data
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -40,8 +42,12 @@ public class SubStringOperation extends PreOperation<String> {
 
     public SubStringOperation() {
         super(PreOperationType.sub_str);
+        // Work-around for https://github.com/rzwitserloot/lombok/issues/1347
+        this.beginIndex = -1;
+        this.endIndex = -1;
     }
 
+    @Builder
     public SubStringOperation(int beginIndex, int endIndex, boolean suppressExceptions) {
         this();
         this.beginIndex = beginIndex;
