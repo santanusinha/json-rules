@@ -5,7 +5,7 @@ JSON serializable rules to match Jackson JsonNodes using JSON Pointers.
 ###### Rule
 ```json
    {
-      "operator": "equals",
+      "type": "equals",
       "value": "happy",
       "path": "$.mood"
    }
@@ -30,7 +30,7 @@ Maven repo
   <dependency>
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
   </dependency>
 ```
 
@@ -64,7 +64,7 @@ Maven repo
 
 ```json
    {
-      "operator": "equals",
+      "type": "equals",
       "value": "happy",
       "path": "$.mood"
    }
@@ -76,15 +76,15 @@ Maven repo
  * or
 ```json
    {
-      "operator": "and",
+      "type": "and",
       "children": [
           {
-             "operator": "equals",
+             "type": "equals",
              "value": "happy",
              "path": "$.mood"
           },
           {
-             "operator": "less_than",
+             "type": "less_than",
              "value": 1000,
              "path": "$.product.cost"
           }
@@ -100,7 +100,7 @@ Maven repo
 
 ```json
    {
-      "operator": "in",
+      "type": "in",
       "path": "$.mood",
       "values": [
         "happy",
@@ -139,7 +139,7 @@ The default value would be the evaluation result if `path` doesn't exist in the 
 
 ```json
    {
-      "operator": "equals",
+      "type": "equals",
       "value": "happy",
       "path": "$.mood",
       "defaultResult": true
