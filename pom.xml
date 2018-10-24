@@ -6,7 +6,7 @@
 
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 
     <distributionManagement>
         <repository>
@@ -55,7 +55,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.7.4</jackson.version>
+        <jackson.version>[2.8.11.1,)</jackson.version>
         <lombok.version>1.16.16</lombok.version>
         <junit.version>4.12</junit.version>
         <guava.version>19.0</guava.version>

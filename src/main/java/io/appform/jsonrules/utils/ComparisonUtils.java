@@ -29,9 +29,9 @@ import io.appform.jsonrules.ExpressionEvaluationContext;
  * Created by santanu on 15/9/16.
  */
 public interface ComparisonUtils {
-    public static final Configuration SUPPRESS_EXCEPTION_CONFIG = Configuration.defaultConfiguration()
+    Configuration SUPPRESS_EXCEPTION_CONFIG = Configuration.defaultConfiguration()
             .addOptions(Option.SUPPRESS_EXCEPTIONS);
-    public static final ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = new ObjectMapper();
 
     static int compare(JsonNode evaluatedNode, Object value) {
         int comparisonResult = 0;
