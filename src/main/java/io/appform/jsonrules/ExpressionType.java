@@ -38,7 +38,7 @@ public enum ExpressionType {
     not_empty,
     starts_with,
     ends_with,
-    mathces,
+    matches,
 
     //Meta
     exists,
