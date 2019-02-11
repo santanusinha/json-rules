@@ -35,13 +35,13 @@ import lombok.ToString;
 public class MatchesExpression extends StringJsonPathBasedExpression {
 
     public MatchesExpression() {
-        super(ExpressionType.mathces);
+        super(ExpressionType.matches);
     }
 
     @Builder
     public MatchesExpression(String path, String value, boolean ignoreCase, boolean extractValueFromPath,
             Boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.mathces, path, value, ignoreCase, extractValueFromPath, defaultResult, preoperation);
+        super(ExpressionType.matches, path, value, ignoreCase, extractValueFromPath, defaultResult, preoperation);
     }
 
     @Override
