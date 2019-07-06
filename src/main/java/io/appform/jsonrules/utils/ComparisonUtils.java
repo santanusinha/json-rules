@@ -22,18 +22,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
-
 import io.appform.jsonrules.ExpressionEvaluationContext;
 
 /**
  * Created by santanu on 15/9/16.
  */
-public interface ComparisonUtils {
-    Configuration SUPPRESS_EXCEPTION_CONFIG = Configuration.defaultConfiguration()
+public class ComparisonUtils {
+    public static final Configuration SUPPRESS_EXCEPTION_CONFIG = Configuration.defaultConfiguration()
             .addOptions(Option.SUPPRESS_EXCEPTIONS);
-    ObjectMapper mapper = new ObjectMapper();
+    public static final ObjectMapper mapper = new ObjectMapper();
 
-    static int compare(JsonNode evaluatedNode, Object value) {
+    public static int compare(JsonNode evaluatedNode, Object value) {
         int comparisonResult = 0;
         if (evaluatedNode.isNumber()) {
             return compare(evaluatedNode, (Number) value);
@@ -47,43 +46,31 @@ public interface ComparisonUtils {
         return comparisonResult;
     }
 
-    static int compare(JsonNode evaluatedNode, Number value) {
+    public static int compare(JsonNode evaluatedNode, Number value) {
         int comparisonResult = 0;
         if (evaluatedNode.isNumber()) {
-            if (Number.class.isAssignableFrom(value.getClass())) {
-                if (evaluatedNode.isIntegralNumber()) {
-                    comparisonResult = Long.compare(evaluatedNode.asLong(), value.longValue());
-                } else if (evaluatedNode.isFloatingPointNumber()) {
-                    comparisonResult = Double.compare(evaluatedNode.asDouble(), value.doubleValue());
-                }
-            } else {
-                throw new IllegalArgumentException("Type mismatch between operator and operand");
+            if (evaluatedNode.isIntegralNumber()) {
+                comparisonResult = Long.compare(evaluatedNode.asLong(), value.longValue());
+            } else if (evaluatedNode.isFloatingPointNumber()) {
+                comparisonResult = Double.compare(evaluatedNode.asDouble(), value.doubleValue());
             }
         }
         return comparisonResult;
     }
 
-    static int compare(JsonNode evaluatedNode, Boolean value) {
+    public static int compare(JsonNode evaluatedNode, Boolean value) {
         int comparisonResult = 0;
         if (evaluatedNode.isBoolean()) {
-            if (Boolean.class.isAssignableFrom(value.getClass())) {
-                Boolean bValue = Boolean.parseBoolean(value.toString());
-                comparisonResult = Boolean.compare(evaluatedNode.asBoolean(), bValue);
-            } else {
-                throw new IllegalArgumentException("Type mismatch between operator and operand");
-            }
+            final boolean bValue = Boolean.parseBoolean(value.toString());
+            comparisonResult = Boolean.compare(evaluatedNode.asBoolean(), bValue);
         }
         return comparisonResult;
     }
 
-    static int compare(JsonNode evaluatedNode, String value) {
+    public static int compare(JsonNode evaluatedNode, String value) {
         int comparisonResult = -1;
         if (evaluatedNode.isTextual()) {
-            if (String.class.isAssignableFrom(value.getClass())) {
-                comparisonResult = evaluatedNode.asText().compareTo(String.valueOf(value));
-            } else {
-                throw new IllegalArgumentException("Type mismatch between operator and operand");
-            }
+            comparisonResult = evaluatedNode.asText().compareTo(value);
         }
         return comparisonResult;
     }
@@ -142,6 +129,8 @@ public interface ComparisonUtils {
     public static boolean getDefaultResult(Boolean defaultResult, boolean resultIfNull) {
         if (null == defaultResult)
             return resultIfNull;
-        return defaultResult.booleanValue();
+        return defaultResult;
     }
+
+    private ComparisonUtils() {}
 }

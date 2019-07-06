@@ -17,18 +17,13 @@
 
 package io.appform.jsonrules.expressions.array;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.JsonNode;
-
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Singular;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.Set;
 
 /**
  * Compares objects

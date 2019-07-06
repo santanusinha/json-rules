@@ -17,8 +17,8 @@
 
 package io.appform.jsonrules.expressions.composite;
 
-import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.Expression;
+import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import lombok.*;
 

@@ -19,7 +19,6 @@ package io.appform.jsonrules.expressions.preoperation.array;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.expressions.preoperation.PreOperationType;

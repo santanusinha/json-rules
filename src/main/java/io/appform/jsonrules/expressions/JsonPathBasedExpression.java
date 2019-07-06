@@ -17,9 +17,6 @@
 
 package io.appform.jsonrules.expressions;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.MissingNode;
 import com.jayway.jsonpath.Configuration;
@@ -30,16 +27,19 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.jayway.jsonpath.spi.mapper.MappingProvider;
-
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.val;
+
+import java.util.EnumSet;
+import java.util.Set;
+
+import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
  * All expressions that evaluate a json path uses this.
@@ -100,7 +100,7 @@ public abstract class JsonPathBasedExpression extends Expression {
         return mapper.valueToTree(computedValue);
     }
 
-    abstract protected boolean evaluate(ExpressionEvaluationContext context, final String path, JsonNode evaluatedNode);
+    protected abstract boolean evaluate(ExpressionEvaluationContext context, final String path, JsonNode evaluatedNode);
 
     private static final class JacksonConfiguration implements Configuration.Defaults {
         private final JsonProvider jsonProvider = new JacksonJsonProvider();

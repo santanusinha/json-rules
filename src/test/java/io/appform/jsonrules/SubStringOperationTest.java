@@ -17,15 +17,10 @@
 
 package io.appform.jsonrules;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-
 import io.appform.jsonrules.expressions.array.InExpression;
 import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
@@ -37,6 +32,9 @@ import io.appform.jsonrules.expressions.string.EmptyExpression;
 import io.appform.jsonrules.expressions.string.NotEmptyExpression;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class SubStringOperationTest {
 

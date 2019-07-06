@@ -17,14 +17,10 @@
 
 package io.appform.jsonrules;
 
-import java.util.Collections;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.MissingNode;
-
 import io.appform.jsonrules.expressions.array.ContainsAllExpression;
 import io.appform.jsonrules.expressions.array.ContainsAnyExpression;
 import io.appform.jsonrules.expressions.array.InExpression;
@@ -36,19 +32,14 @@ import io.appform.jsonrules.expressions.equality.EqualsExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
-import io.appform.jsonrules.expressions.numeric.BetweenExpression;
-import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
-import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
-import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
-import io.appform.jsonrules.expressions.numeric.LessThanExpression;
-import io.appform.jsonrules.expressions.string.EmptyExpression;
-import io.appform.jsonrules.expressions.string.EndsWithExpression;
-import io.appform.jsonrules.expressions.string.MatchesExpression;
-import io.appform.jsonrules.expressions.string.NotEmptyExpression;
-import io.appform.jsonrules.expressions.string.StartsWithExpression;
+import io.appform.jsonrules.expressions.numeric.*;
+import io.appform.jsonrules.expressions.string.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * A base expression
@@ -104,5 +95,5 @@ public abstract class Expression {
         return evaluate(ExpressionEvaluationContext.builder().node(node).options(options).build());
     }
 
-    abstract public boolean evaluate(ExpressionEvaluationContext context);
+    public abstract boolean evaluate(ExpressionEvaluationContext context);
 }

@@ -1,29 +1,28 @@
-/**
- * Copyright (c) 2017 Mohammed Irfanulla S <mohammed.irfanulla.s1@gmail.com>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+/*
+  Copyright (c) 2017 Mohammed Irfanulla S <mohammed.irfanulla.s1@gmail.com>
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
  */
 
 package io.appform.jsonrules.utils;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class PreOperationUtils {
 
@@ -40,7 +39,7 @@ public class PreOperationUtils {
 	private static final String HOUR_OF_DAY = "hour_of_day";
 	private static final String MINUTE_OF_HOUR = "minute_of_hour";
 
-	public static final int getFromDateTime(OffsetDateTime dateTime, String field) {
+	public static int getFromDateTime(OffsetDateTime dateTime, String field) {
 		switch (field) {
 		case MINUTE_OF_HOUR:
 			return dateTime.get(ChronoField.MINUTE_OF_HOUR);
@@ -63,7 +62,7 @@ public class PreOperationUtils {
 		throw new IllegalArgumentException("Operand doesnot represent a valid field");
 	}
 	
-	public static final OffsetDateTime getDateTime(long epoch, String zoneOffSet) {
+	public static OffsetDateTime getDateTime(long epoch, String zoneOffSet) {
 		try {
 			Instant instant;
 			if (isEpochInMillis(epoch)) {
@@ -76,11 +75,15 @@ public class PreOperationUtils {
 			}
 			return instant.atOffset(ZoneOffset.UTC);
 		} catch(Exception e) {
-			throw new IllegalArgumentException("Operand doesnot represent a valid date");
+			return throwInvalidDate();
 		}
 	}
-	
-	public static final OffsetDateTime getDateTime(String dateTimeStr, String zoneOffSet) {
+
+	private static OffsetDateTime throwInvalidDate() {
+		throw new IllegalArgumentException("Operand doesnot represent a valid date");
+	}
+
+	public static OffsetDateTime getDateTime(String dateTimeStr, String zoneOffSet) {
 		try {
 			Instant instant = Instant.parse(dateTimeStr);
 			if (zoneOffSet != null && !zoneOffSet.trim().isEmpty()) {
@@ -88,31 +91,30 @@ public class PreOperationUtils {
 			}
 			return instant.atOffset(ZoneOffset.UTC);
 		} catch(Exception e) {
-			throw new IllegalArgumentException("Operand doesnot represent a valid date");
+			throwInvalidDate();
 		}
-	
+		throw new IllegalStateException();
 	}
 	
 	private static boolean isEpochInMillis(long epoch) {
 		// Safe check to know if epoch is in milli seconds for all dates between 1973 to 5138
-		if (String.valueOf(epoch).length() >= 12) {
-			return true;
-		}
-		return false;
+		return String.valueOf(epoch).length() >= 12;
 	}
 	
-	public static final LocalDateTime getLocalDateTime(long epoch, String timeZone) {
+	@SuppressWarnings("unused")
+	public static LocalDateTime getLocalDateTime(long epoch, String timeZone) {
 		try {
 			long epochSecond = Long.divideUnsigned(epoch, 1000);
 			long nanoOfSecond = Long.remainderUnsigned(epoch, 1000) * 1_000_000;
 			final ZoneOffset zoneOffSet = (timeZone == null) ? ZoneOffset.UTC : ZoneOffset.of(timeZone);
 			return LocalDateTime.ofEpochSecond(epochSecond, (int) nanoOfSecond, zoneOffSet);
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Operand doesnot represent a valid date");
+			throwInvalidDate();
 		}
+		throw new IllegalStateException();
 	}
 
-	public static final boolean isNumericRepresentation(JsonNode evaluatedNode) {
+	public static boolean isNumericRepresentation(JsonNode evaluatedNode) {
 		try {
 			Double.parseDouble(evaluatedNode.asText());
 		} catch (NumberFormatException exception) {

@@ -19,17 +19,16 @@ package io.appform.jsonrules.expressions.numeric;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;
-
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
-
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
  * All numeric binary expressions
@@ -87,5 +86,5 @@ public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpres
         return evaluate(context, comparisonResult);
     }
 
-    abstract protected boolean evaluate(ExpressionEvaluationContext context, int comparisonResult);
+    protected abstract boolean evaluate(ExpressionEvaluationContext context, int comparisonResult);
 }

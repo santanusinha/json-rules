@@ -17,20 +17,15 @@
 
 package io.appform.jsonrules.expressions.array;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Sets;
 import com.jayway.jsonpath.JsonPath;
-
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Singular;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Compares collections - partial match
@@ -56,7 +51,7 @@ public class ContainsAnyExpression extends CollectionJsonPathBasedExpression {
         if (null == values || values.isEmpty() || !evaluatedNode.isArray()) {
             return false;
         }
-        final Set<Object> pathValues = new HashSet<Object>(JsonPath.read(evaluatedNode.toString(), "$"));
+        final Set<Object> pathValues = new HashSet<>(JsonPath.read(evaluatedNode.toString(), "$"));
         return !Sets.intersection(values, pathValues).isEmpty();
 
     }

@@ -17,14 +17,9 @@
 
 package io.appform.jsonrules;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-
 import io.appform.jsonrules.expressions.array.ContainsAllExpression;
 import io.appform.jsonrules.expressions.array.ContainsAnyExpression;
 import io.appform.jsonrules.expressions.array.InExpression;
@@ -33,6 +28,9 @@ import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class CollectionExpressionTest {
 

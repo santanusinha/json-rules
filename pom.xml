@@ -56,7 +56,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackson.version>2.9.6</jackson.version>
-        <lombok.version>1.16.16</lombok.version>
+        <lombok.version>1.18.8</lombok.version>
         <junit.version>4.12</junit.version>
         <guava.version>19.0</guava.version>
         <json-path.version>2.3.0</json-path.version>
@@ -109,32 +109,6 @@
     </dependencies>
 
     <profiles>
-        <profile>
-            <id>lombok-needs-tools-jar</id>
-            <activation>
-                <file>
-                    <exists>${java.home}/../lib/tools.jar</exists>
-                </file>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok-maven-plugin</artifactId>
-                        <version>1.16.4.1</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>sun.jdk</groupId>
-                                <artifactId>tools</artifactId>
-                                <version>1.6</version>
-                                <scope>system</scope>
-                                <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 
 

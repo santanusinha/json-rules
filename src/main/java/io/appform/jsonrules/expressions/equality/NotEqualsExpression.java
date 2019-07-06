@@ -23,7 +23,10 @@ import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Compares objects

@@ -17,16 +17,8 @@
 
 package io.appform.jsonrules.expressions.array;
 
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
-
-import java.util.HashSet;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.MissingNode;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.PathNotFoundException;
-
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
@@ -36,6 +28,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.ToString;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
  * All collection operable expressions
@@ -69,7 +66,7 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
                 return false;
             }
             // fetch values from @values path as a set.
-            final HashSet<Object> extractedPathVaues = new HashSet<Object>(JsonPath.read(jsonNode.toString(), "$"));
+            final HashSet<Object> extractedPathVaues = new HashSet<>(JsonPath.read(jsonNode.toString(), "$"));
             return evaluate(evaluatedNode, extractedPathVaues);
         }
 
@@ -79,6 +76,6 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
         return evaluate(evaluatedNode, values);
     }
 
-    abstract protected boolean evaluate(JsonNode evaluatedNode, Set<Object> values);
+    protected abstract boolean evaluate(JsonNode evaluatedNode, Set<Object> values);
 
 }

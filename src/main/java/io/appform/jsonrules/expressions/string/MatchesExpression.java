@@ -18,7 +18,6 @@
 package io.appform.jsonrules.expressions.string;
 
 import com.google.common.base.Strings;
-
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Builder;

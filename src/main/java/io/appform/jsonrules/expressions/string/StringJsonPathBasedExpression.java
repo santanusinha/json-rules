@@ -17,11 +17,8 @@
 
 package io.appform.jsonrules.expressions.string;
 
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;
-
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
@@ -30,6 +27,8 @@ import io.appform.jsonrules.utils.ComparisonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
  * All string operable expressions
@@ -70,6 +69,6 @@ public abstract class StringJsonPathBasedExpression extends JsonPathBasedExpress
         return evaluate(evaluatedNode.asText(), value, ignoreCase);
     }
 
-    abstract protected boolean evaluate(String leftValue, String rightValue, boolean ignoreCase);
+    protected abstract boolean evaluate(String leftValue, String rightValue, boolean ignoreCase);
 
 }

@@ -19,17 +19,12 @@ package io.appform.jsonrules.expressions.preoperation;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.array.SizeOperation;
 import io.appform.jsonrules.expressions.preoperation.date.DateTimeOperation;
 import io.appform.jsonrules.expressions.preoperation.date.DiffFromCurrentEpochOperation;
 import io.appform.jsonrules.expressions.preoperation.date.EpochOperation;
-import io.appform.jsonrules.expressions.preoperation.numeric.AddOperation;
-import io.appform.jsonrules.expressions.preoperation.numeric.DivideOperation;
-import io.appform.jsonrules.expressions.preoperation.numeric.ModuloOperation;
-import io.appform.jsonrules.expressions.preoperation.numeric.MultiplyOperation;
-import io.appform.jsonrules.expressions.preoperation.numeric.SubtractOperation;
+import io.appform.jsonrules.expressions.preoperation.numeric.*;
 import io.appform.jsonrules.expressions.preoperation.string.LengthOperation;
 import io.appform.jsonrules.expressions.preoperation.string.SubStringOperation;
 import lombok.Data;
