@@ -17,9 +17,11 @@
 
 package io.appform.jsonrules.expressions.composite;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
+import io.appform.jsonrules.ExpressionVisitor;
 import lombok.*;
 
 import java.util.List;
@@ -46,5 +48,10 @@ public class NotExpression extends CompositeExpression {
         return children.stream()
                 .map(expression -> expression.evaluate(context))
                 .noneMatch(Predicate.isEqual(true));
+    }
+
+    @Override
+    public <T> T accept(ExpressionVisitor<T> visitor, JsonNode jsonNode) {
+        return visitor.visit(this, jsonNode);
     }
 }

@@ -66,8 +66,8 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
                 return false;
             }
             // fetch values from @values path as a set.
-            final HashSet<Object> extractedPathVaues = new HashSet<>(JsonPath.read(jsonNode.toString(), "$"));
-            return evaluate(evaluatedNode, extractedPathVaues);
+            final HashSet<Object> extractedPathValues = new HashSet<>(JsonPath.read(jsonNode.toString(), "$"));
+            return evaluate(evaluatedNode, extractedPathValues);
         }
 
         if (null == values || values.isEmpty()) {
