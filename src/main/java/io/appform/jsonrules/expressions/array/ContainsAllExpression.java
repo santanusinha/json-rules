@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Sets;
 import com.jayway.jsonpath.JsonPath;
 import io.appform.jsonrules.ExpressionType;
+import io.appform.jsonrules.ExpressionVisitor;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.*;
 
@@ -56,4 +57,8 @@ public class ContainsAllExpression extends CollectionJsonPathBasedExpression {
         return commonElementsSize == pathValues.size();
     }
 
+    @Override
+    public <T> T accept(ExpressionVisitor<T> visitor, JsonNode jsonNode) {
+        return visitor.visit(this, jsonNode);
+    }
 }

@@ -19,6 +19,7 @@ package io.appform.jsonrules.expressions.array;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.ExpressionType;
+import io.appform.jsonrules.ExpressionVisitor;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
 import lombok.*;
@@ -47,5 +48,10 @@ public class InExpression extends CollectionJsonPathBasedExpression {
     protected boolean evaluate(JsonNode evaluatedNode, Set<Object> values) {
         return !ComparisonUtils.isNodeMissingOrNull(evaluatedNode)
                 && values.stream().anyMatch(value -> ComparisonUtils.compare(evaluatedNode, value) == 0);
+    }
+
+    @Override
+    public <T> T accept(ExpressionVisitor<T> visitor, JsonNode jsonNode) {
+        return visitor.visit(this, jsonNode);
     }
 }

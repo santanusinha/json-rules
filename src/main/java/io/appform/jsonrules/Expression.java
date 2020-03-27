@@ -96,4 +96,6 @@ public abstract class Expression {
     }
 
     public abstract boolean evaluate(ExpressionEvaluationContext context);
+
+    public abstract <T> T accept(ExpressionVisitor<T> visitor, JsonNode node);
 }
