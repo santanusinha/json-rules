@@ -61,3 +61,7 @@ crashlytics.properties
 crashlytics-build.properties
 
 target
+
+.classpath
+.project
+.settings/
