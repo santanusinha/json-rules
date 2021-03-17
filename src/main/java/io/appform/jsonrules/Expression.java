@@ -28,6 +28,8 @@ import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
+import io.appform.jsonrules.expressions.debug.DenialDetail;
+import io.appform.jsonrules.expressions.debug.ExpressionDebugger;
 import io.appform.jsonrules.expressions.equality.EqualsExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
@@ -48,8 +50,7 @@ import java.util.Map;
 @EqualsAndHashCode
 @ToString
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(name = "equals", value = EqualsExpression.class),
+@JsonSubTypes({ @JsonSubTypes.Type(name = "equals", value = EqualsExpression.class),
         @JsonSubTypes.Type(name = "not_equals", value = NotEqualsExpression.class),
 
         @JsonSubTypes.Type(name = "greater_than", value = GreaterThanExpression.class),
@@ -74,8 +75,7 @@ import java.util.Map;
         @JsonSubTypes.Type(name = "in", value = InExpression.class),
         @JsonSubTypes.Type(name = "not_in", value = NotInExpression.class),
         @JsonSubTypes.Type(name = "contains_any", value = ContainsAnyExpression.class),
-        @JsonSubTypes.Type(name = "contains_all", value = ContainsAllExpression.class),
-})
+        @JsonSubTypes.Type(name = "contains_all", value = ContainsAllExpression.class), })
 public abstract class Expression {
     private final ExpressionType type;
 
@@ -92,7 +92,18 @@ public abstract class Expression {
             // Fail safe check, to replace null with missing node.
             node = MissingNode.getInstance();
         }
-        return evaluate(ExpressionEvaluationContext.builder().node(node).options(options).build());
+        return evaluate(ExpressionEvaluationContext.builder()
+                .node(node)
+                .options(options)
+                .build());
+    }
+
+    public DenialDetail debug(JsonNode node) {
+        return ExpressionDebugger.builder()
+                .expression(this)
+                .node(node)
+                .build()
+                .debug();
     }
 
     public abstract boolean evaluate(ExpressionEvaluationContext context);
