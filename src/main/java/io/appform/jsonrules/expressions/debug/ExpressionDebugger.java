@@ -54,6 +54,9 @@ import lombok.val;
 @Data
 @Builder
 public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
+    private static final DenialDetail DEFAULT_SUCCESS_RESPONSE = DenialDetail.builder()
+            .denied(false)
+            .build();
     private final Expression expression;
     private final JsonNode node;
 
@@ -69,9 +72,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .filter(debugResult -> debugResult.isDenied())
                 .collect(Collectors.toList());
         if (details.isEmpty()) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -91,9 +92,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .collect(Collectors.toList());
         if (details.size() < expression.getChildren()
                 .size()) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -113,9 +112,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .collect(Collectors.toList());
         if (details.size() == expression.getChildren()
                 .size()) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -131,9 +128,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -149,9 +144,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -167,9 +160,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -188,9 +179,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -209,9 +198,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -230,9 +217,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -251,9 +236,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -272,9 +255,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -293,9 +274,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -311,9 +290,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -329,9 +306,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -350,9 +325,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -371,9 +344,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -392,9 +363,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -412,9 +381,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -431,9 +398,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -450,9 +415,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
@@ -469,9 +432,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
         final val value = fetchValue(node, expression.getPath());
         final boolean result = expression.evaluate(node);
         if (result) {
-            return DenialDetail.builder()
-                    .denied(false)
-                    .build();
+            return DEFAULT_SUCCESS_RESPONSE;
         }
         return DenialDetail.builder()
                 .expressionType(expression.getType())
