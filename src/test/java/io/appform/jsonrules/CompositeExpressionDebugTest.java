@@ -77,7 +77,11 @@ public class CompositeExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("{\nValue of [20] at path [$.value] is not less than [5]\n}", debugNegative.getReason());
+        Assert.assertTrue(debugNegative.getReason()
+                .size() == 1);
+        Assert.assertEquals("Value of [20] at path [$.value] is not less than [5]",
+                debugNegative.getReason()
+                        .get(0));
     }
 
     @Test
@@ -110,10 +114,14 @@ public class CompositeExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals(
-                "{\nValue of [20] at path [$.value] is not less than [11]\n"
-                        + "Value of [20] at path [$.value] is not greater than [30]\n" + "}",
-                debugNegative.getReason());
+        Assert.assertTrue(debugNegative.getReason()
+                .size() == 2);
+        Assert.assertEquals("Value of [20] at path [$.value] is not less than [11]",
+                debugNegative.getReason()
+                        .get(0));
+        Assert.assertEquals("Value of [20] at path [$.value] is not greater than [30]",
+                debugNegative.getReason()
+                        .get(1));
 
     }
 
@@ -134,7 +142,8 @@ public class CompositeExpressionDebugTest {
         Assert.assertFalse(positiveCase.evaluate(context));
         final DenialDetail debugPositive = positiveCase.debug(context.getNode());
         Assert.assertTrue(debugPositive.isDenied());
-        Assert.assertEquals("{\n\n}", debugPositive.getReason());
+        Assert.assertTrue(debugPositive.getReason()
+                .size() == 0);
 
         final NotExpression negativeCase = NotExpression.builder()
                 .child(OrExpression.builder()

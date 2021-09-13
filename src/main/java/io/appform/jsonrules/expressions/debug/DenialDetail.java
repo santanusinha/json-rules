@@ -17,6 +17,8 @@
 
 package io.appform.jsonrules.expressions.debug;
 
+import java.util.List;
+
 import io.appform.jsonrules.ExpressionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,5 +32,5 @@ public class DenialDetail {
     private String path;
     private Object value;
     private boolean denied;
-    private String reason;
+    private List<String> reason;
 }

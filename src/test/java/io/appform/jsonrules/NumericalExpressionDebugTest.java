@@ -72,7 +72,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [null] at path [$.abcd] is not equals to [20]", debugNegative.getReason());
+        Assert.assertEquals("Value of [null] at path [$.abcd] is not equals to [20]", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [20] at path [$.value] is equal to [20]", debugNegative.getReason());
+        Assert.assertEquals("Value of [20] at path [$.value] is equal to [20]", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -114,8 +114,8 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [null] at path [$.kid] is not among shorlisted values",
-                debugNegative.getReason());
+        Assert.assertEquals("Value of [null] at path [$.kid] is not allowed",
+                debugNegative.getReason().get(0));
 
     }
 
@@ -137,8 +137,8 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [Hello] at path [$.string] is among shortlisted values",
-                debugNegative.getReason());
+        Assert.assertEquals("Value of [Hello] at path [$.string] is blocked",
+                debugNegative.getReason().get(0));
     }
 
     @Test
@@ -157,7 +157,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Path [$.somepath] doesn't exist", debugNegative.getReason());
+        Assert.assertEquals("Path [$.somepath] doesn't exist", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -176,7 +176,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Path [$.string] exists", debugNegative.getReason());
+        Assert.assertEquals("Path [$.string] exists", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -197,7 +197,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [20] at path [$.value] is not greater than [50]", debugNegative.getReason());
+        Assert.assertEquals("Value of [20] at path [$.value] is not greater than [50]", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -218,7 +218,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [20] at path [$.value] is less than [21]", debugNegative.getReason());
+        Assert.assertEquals("Value of [20] at path [$.value] is less than [21]", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -239,7 +239,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [20] at path [$.value] is not less than [10]", debugNegative.getReason());
+        Assert.assertEquals("Value of [20] at path [$.value] is not less than [10]", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -260,7 +260,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [20] at path [$.value] is greater than [19]", debugNegative.getReason());
+        Assert.assertEquals("Value of [20] at path [$.value] is greater than [19]", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -283,7 +283,7 @@ public class NumericalExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [20] at path [$.v1] is not between [10] & [19]", debugNegative.getReason());
+        Assert.assertEquals("Value of [20] at path [$.v1] is not between [10] & [19]", debugNegative.getReason().get(0));
     }
 
 }

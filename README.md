@@ -193,3 +193,10 @@ These allow comparison of dynamic values. Using `"extractValueFromPath" : true`,
         "extractValueFromPath" : true
     }
 ```
+
+### Debuggability
+
+Debuggability support is provided to understand exact reasons of rule failures for any given context. This support is extended across all the available operators.
+
+
+

@@ -17,6 +17,8 @@
 
 package io.appform.jsonrules.expressions.debug;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,7 +81,8 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .denied(true)
                 .reason(details.stream()
                         .map(DenialDetail::getReason)
-                        .collect(Collectors.joining("\n", "{\n", "\n}")))
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -99,7 +102,8 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .denied(true)
                 .reason(details.stream()
                         .map(DenialDetail::getReason)
-                        .collect(Collectors.joining("\n", "{\n", "\n}")))
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -119,7 +123,8 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .denied(true)
                 .reason(details.stream()
                         .map(DenialDetail::getReason)
-                        .collect(Collectors.joining("\n", "{\n", "\n}")))
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -135,7 +140,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Path [%s] doesn't exist", expression.getPath()))
+                .reason(Collections.singletonList(String.format("Path [%s] doesn't exist", expression.getPath())))
                 .build();
     }
 
@@ -151,7 +156,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Path [%s] exists", expression.getPath()))
+                .reason(Collections.singletonList(String.format("Path [%s] exists", expression.getPath())))
                 .build();
     }
 
@@ -167,10 +172,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] is not greater than [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is not greater than [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -186,10 +191,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] is less than [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is less than [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -205,10 +210,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] is not less than [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is not less than [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -224,10 +229,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] is greater than [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is greater than [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -243,10 +248,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] is not equals to [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is not equals to [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -262,10 +267,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] is equal to [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is equal to [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -281,7 +286,8 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value at path [%s] is not empty", expression.getPath()))
+                .reason(Collections
+                        .singletonList(String.format("Value at path [%s] is not empty", expression.getPath())))
                 .build();
     }
 
@@ -297,7 +303,7 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value at path [%s] is empty", expression.getPath()))
+                .reason(Collections.singletonList(String.format("Value at path [%s] is empty", expression.getPath())))
                 .build();
     }
 
@@ -313,10 +319,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] doesn't start with [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] doesn't start with [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -332,10 +338,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] doesn't end with [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] doesn't end with [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -351,10 +357,10 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] doesn't match with [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] doesn't match with [%s]",
                         value,
                         expression.getPath(),
-                        expression.getValue()))
+                        expression.getValue())))
                 .build();
     }
 
@@ -370,9 +376,8 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] is not among shorlisted values",
-                        value,
-                        expression.getPath()))
+                .reason(Collections.singletonList(
+                        String.format("Value of [%s] at path [%s] is not allowed", value, expression.getPath())))
                 .build();
     }
 
@@ -388,8 +393,8 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String
-                        .format("Value of [%s] at path [%s] is among shortlisted values", value, expression.getPath()))
+                .reason(Collections.singletonList(
+                        String.format("Value of [%s] at path [%s] is blocked", value, expression.getPath())))
                 .build();
     }
 
@@ -405,8 +410,8 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("None of the values at path [%s] are among shortlisted values",
-                        expression.getPath()))
+                .reason(Collections.singletonList(
+                        String.format("None of the values at path [%s] are allowed", expression.getPath())))
                 .build();
     }
 
@@ -422,8 +427,8 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Not all of the values at path [%s] are among shortlisted values",
-                        expression.getPath()))
+                .reason(Collections.singletonList(
+                        String.format("Not all of the expected values at path [%s] are present", expression.getPath())))
                 .build();
     }
 
@@ -439,11 +444,11 @@ public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
                 .path(expression.getPath())
                 .value(value)
                 .denied(true)
-                .reason(String.format("Value of [%s] at path [%s] is not between [%s] & [%s]",
+                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is not between [%s] & [%s]",
                         value,
                         expression.getPath(),
                         expression.getLowerBound(),
-                        expression.getUpperBound()))
+                        expression.getUpperBound())))
                 .build();
     }
 

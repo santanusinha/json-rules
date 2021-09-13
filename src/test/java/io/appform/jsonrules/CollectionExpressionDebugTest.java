@@ -68,8 +68,8 @@ public class CollectionExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("None of the values at path [$.felines] are among shortlisted values",
-                debugNegative.getReason());
+        Assert.assertEquals("None of the values at path [$.felines] are allowed",
+                debugNegative.getReason().get(0));
     }
 
     @Test
@@ -92,8 +92,8 @@ public class CollectionExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Not all of the values at path [$.felines] are among shortlisted values",
-                debugNegative.getReason());
+        Assert.assertEquals("Not all of the expected values at path [$.felines] are present",
+                debugNegative.getReason().get(0));
     }
 
     @Test
@@ -118,8 +118,8 @@ public class CollectionExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [leopard] at path [$.felines[0]] is not among shorlisted values",
-                debugNegative.getReason());
+        Assert.assertEquals("Value of [leopard] at path [$.felines[0]] is not allowed",
+                debugNegative.getReason().get(0));
     }
 
     @Test
@@ -144,8 +144,8 @@ public class CollectionExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [leopard] at path [$.felines[0]] is among shortlisted values",
-                debugNegative.getReason());
+        Assert.assertEquals("Value of [leopard] at path [$.felines[0]] is blocked",
+                debugNegative.getReason().get(0));
     }
 
 }

@@ -49,7 +49,7 @@ public class StringBasedExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value at path [$.string] is not empty", debugNegative.getReason());
+        Assert.assertEquals("Value at path [$.string] is not empty", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class StringBasedExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value at path [$.emptyString] is empty", debugNegative.getReason());
+        Assert.assertEquals("Value at path [$.emptyString] is empty", debugNegative.getReason().get(0));
 
     }
 
@@ -94,7 +94,7 @@ public class StringBasedExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [Hello] at path [$.string] doesn't start with [he]", debugNegative.getReason());
+        Assert.assertEquals("Value of [Hello] at path [$.string] doesn't start with [he]", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class StringBasedExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [Hello] at path [$.string] doesn't end with [LO]", debugNegative.getReason());
+        Assert.assertEquals("Value of [Hello] at path [$.string] doesn't end with [LO]", debugNegative.getReason().get(0));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class StringBasedExpressionDebugTest {
         Assert.assertFalse(negativeCase.evaluate(context));
         final DenialDetail debugNegative = negativeCase.debug(context.getNode());
         Assert.assertTrue(debugNegative.isDenied());
-        Assert.assertEquals("Value of [Hello] at path [$.string] doesn't match with [.*LO]", debugNegative.getReason());
+        Assert.assertEquals("Value of [Hello] at path [$.string] doesn't match with [.*LO]", debugNegative.getReason().get(0));
     }
 
 }
