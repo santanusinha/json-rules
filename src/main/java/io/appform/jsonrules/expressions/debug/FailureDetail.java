@@ -22,15 +22,15 @@ import java.util.List;
 import io.appform.jsonrules.ExpressionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 @Builder
 @AllArgsConstructor
-public class DenialDetail {
+public class FailureDetail {
     private ExpressionType expressionType;
     private String path;
     private Object value;
-    private boolean denied;
+    private boolean failed;
     private List<String> reason;
 }

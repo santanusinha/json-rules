@@ -28,7 +28,7 @@ import com.google.common.collect.Sets;
 
 import io.appform.jsonrules.expressions.array.InExpression;
 import io.appform.jsonrules.expressions.array.NotInExpression;
-import io.appform.jsonrules.expressions.debug.DenialDetail;
+import io.appform.jsonrules.expressions.debug.FailureDetail;
 import io.appform.jsonrules.expressions.equality.EqualsExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
@@ -61,8 +61,8 @@ public class NumericalExpressionDebugTest {
                 .value(20)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final EqualsExpression negativeCase = EqualsExpression.builder()
@@ -70,8 +70,8 @@ public class NumericalExpressionDebugTest {
                 .value(20)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [null] at path [$.abcd] is not equals to [20]", debugNegative.getReason().get(0));
     }
 
@@ -82,8 +82,8 @@ public class NumericalExpressionDebugTest {
                 .value(10)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final NotEqualsExpression negativeCase = NotEqualsExpression.builder()
@@ -91,8 +91,8 @@ public class NumericalExpressionDebugTest {
                 .value(20)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [20] at path [$.value] is equal to [20]", debugNegative.getReason().get(0));
     }
 
@@ -103,8 +103,8 @@ public class NumericalExpressionDebugTest {
                 .values(Sets.newHashSet("Hello", "World"))
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final InExpression negativeCase = InExpression.builder()
@@ -112,8 +112,8 @@ public class NumericalExpressionDebugTest {
                 .values(Sets.newHashSet("Hello", "World"))
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [null] at path [$.kid] is not allowed",
                 debugNegative.getReason().get(0));
 
@@ -126,8 +126,8 @@ public class NumericalExpressionDebugTest {
                 .values(Sets.newHashSet("hello", "world"))
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final NotInExpression negativeCase = NotInExpression.builder()
@@ -135,8 +135,8 @@ public class NumericalExpressionDebugTest {
                 .values(Sets.newHashSet("Hello", "World"))
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [Hello] at path [$.string] is blocked",
                 debugNegative.getReason().get(0));
     }
@@ -147,16 +147,16 @@ public class NumericalExpressionDebugTest {
                 .path("$.string")
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final ExistsExpression negativeCase = ExistsExpression.builder()
                 .path("$.somepath")
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Path [$.somepath] doesn't exist", debugNegative.getReason().get(0));
     }
 
@@ -166,16 +166,16 @@ public class NumericalExpressionDebugTest {
                 .path("$.somepath")
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final NotExistsExpression negativeCase = NotExistsExpression.builder()
                 .path("$.string")
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Path [$.string] exists", debugNegative.getReason().get(0));
     }
 
@@ -186,8 +186,8 @@ public class NumericalExpressionDebugTest {
                 .value(5)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final GreaterThanExpression negativeCase = GreaterThanExpression.builder()
@@ -195,8 +195,8 @@ public class NumericalExpressionDebugTest {
                 .value(50)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [20] at path [$.value] is not greater than [50]", debugNegative.getReason().get(0));
     }
 
@@ -207,8 +207,8 @@ public class NumericalExpressionDebugTest {
                 .value(20)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final GreaterThanEqualsExpression negativeCase = GreaterThanEqualsExpression.builder()
@@ -216,8 +216,8 @@ public class NumericalExpressionDebugTest {
                 .value(21)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [20] at path [$.value] is less than [21]", debugNegative.getReason().get(0));
     }
 
@@ -228,8 +228,8 @@ public class NumericalExpressionDebugTest {
                 .value(30)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final LessThanExpression negativeCase = LessThanExpression.builder()
@@ -237,8 +237,8 @@ public class NumericalExpressionDebugTest {
                 .value(10)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [20] at path [$.value] is not less than [10]", debugNegative.getReason().get(0));
     }
 
@@ -249,8 +249,8 @@ public class NumericalExpressionDebugTest {
                 .value(20)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final LessThanEqualsExpression negativeCase = LessThanEqualsExpression.builder()
@@ -258,8 +258,8 @@ public class NumericalExpressionDebugTest {
                 .value(19)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [20] at path [$.value] is greater than [19]", debugNegative.getReason().get(0));
     }
 
@@ -271,8 +271,8 @@ public class NumericalExpressionDebugTest {
                 .upperBound(30)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final BetweenExpression negativeCase = BetweenExpression.builder()
@@ -281,8 +281,8 @@ public class NumericalExpressionDebugTest {
                 .upperBound(19)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [20] at path [$.v1] is not between [10] & [19]", debugNegative.getReason().get(0));
     }
 

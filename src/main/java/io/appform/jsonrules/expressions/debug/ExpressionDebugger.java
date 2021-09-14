@@ -27,6 +27,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 
 import io.appform.jsonrules.Expression;
+import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.ExpressionVisitor;
 import io.appform.jsonrules.expressions.array.ContainsAllExpression;
 import io.appform.jsonrules.expressions.array.ContainsAnyExpression;
@@ -55,400 +56,290 @@ import lombok.val;
 
 @Data
 @Builder
-public class ExpressionDebugger implements ExpressionVisitor<DenialDetail> {
-    private static final DenialDetail DEFAULT_SUCCESS_RESPONSE = DenialDetail.builder()
-            .denied(false)
+public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
+    private static final FailureDetail DEFAULT_SUCCESS_RESPONSE = FailureDetail.builder()
+            .failed(false)
             .build();
     private final Expression expression;
     private final JsonNode node;
 
-    public DenialDetail debug() {
+    public FailureDetail debug() {
         return expression.accept(this, node);
     }
 
     @Override
-    public DenialDetail visit(AndExpression expression, JsonNode node) {
-        final List<DenialDetail> details = expression.getChildren()
-                .stream()
-                .map(e -> e.accept(this, node))
-                .filter(debugResult -> debugResult.isDenied())
-                .collect(Collectors.toList());
+    public FailureDetail visit(AndExpression expression, JsonNode node) {
+        final List<FailureDetail> details = evaluteChildren(expression.getChildren(), node);
         if (details.isEmpty()) {
             return DEFAULT_SUCCESS_RESPONSE;
         }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .denied(true)
-                .reason(details.stream()
-                        .map(DenialDetail::getReason)
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toList()))
-                .build();
+        return generateDetails(expression.getType(), details);
     }
 
     @Override
-    public DenialDetail visit(OrExpression expression, JsonNode node) {
-        final List<DenialDetail> details = expression.getChildren()
-                .stream()
-                .map(e -> e.accept(this, node))
-                .filter(debugResult -> debugResult.isDenied())
-                .collect(Collectors.toList());
+    public FailureDetail visit(OrExpression expression, JsonNode node) {
+        final List<FailureDetail> details = evaluteChildren(expression.getChildren(), node);
         if (details.size() < expression.getChildren()
                 .size()) {
             return DEFAULT_SUCCESS_RESPONSE;
         }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .denied(true)
-                .reason(details.stream()
-                        .map(DenialDetail::getReason)
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toList()))
-                .build();
+        return generateDetails(expression.getType(), details);
     }
 
     @Override
-    public DenialDetail visit(NotExpression expression, JsonNode node) {
-        final List<DenialDetail> details = expression.getChildren()
-                .stream()
-                .map(e -> e.accept(this, node))
-                .filter(debugResult -> debugResult.isDenied())
-                .collect(Collectors.toList());
+    public FailureDetail visit(NotExpression expression, JsonNode node) {
+        final List<FailureDetail> details = evaluteChildren(expression.getChildren(), node);
         if (details.size() == expression.getChildren()
                 .size()) {
             return DEFAULT_SUCCESS_RESPONSE;
         }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .denied(true)
+        return generateDetails(expression.getType(), details);
+    }
+
+    @Override
+    public FailureDetail visit(ExistsExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Path [%s] doesn't exist", expression.getPath()));
+    }
+
+    @Override
+    public FailureDetail visit(NotExistsExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Path [%s] exists", expression.getPath()));
+    }
+
+    @Override
+    public FailureDetail visit(GreaterThanExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is not greater than [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(GreaterThanEqualsExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is less than [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(LessThanExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is not less than [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(LessThanEqualsExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is greater than [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(EqualsExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is not equals to [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(NotEqualsExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is equal to [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(EmptyExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value at path [%s] is not empty", expression.getPath()));
+    }
+
+    @Override
+    public FailureDetail visit(NotEmptyExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value at path [%s] is empty", expression.getPath()));
+    }
+
+    @Override
+    public FailureDetail visit(StartsWithExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] doesn't start with [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(EndsWithExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] doesn't end with [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(MatchesExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] doesn't match with [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getValue()));
+    }
+
+    @Override
+    public FailureDetail visit(InExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is not allowed", value, expression.getPath()));
+    }
+
+    @Override
+    public FailureDetail visit(NotInExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is blocked", value, expression.getPath()));
+    }
+
+    @Override
+    public FailureDetail visit(ContainsAnyExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("None of the values at path [%s] are allowed", expression.getPath()));
+    }
+
+    @Override
+    public FailureDetail visit(ContainsAllExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Not all of the expected values at path [%s] are present", expression.getPath()));
+    }
+
+    @Override
+    public FailureDetail visit(BetweenExpression expression, JsonNode node) {
+        final val value = fetchValue(node, expression.getPath());
+        return generateDetails(expression.getType(),
+                expression.getPath(),
+                value,
+                expression.evaluate(node),
+                String.format("Value of [%s] at path [%s] is not between [%s] & [%s]",
+                        value,
+                        expression.getPath(),
+                        expression.getLowerBound(),
+                        expression.getUpperBound()));
+    }
+
+    private List<FailureDetail> evaluteChildren(List<Expression> expressions, JsonNode node) {
+        final List<FailureDetail> details = expressions.stream()
+                .map(e -> e.accept(this, node))
+                .filter(debugResult -> debugResult.isFailed())
+                .collect(Collectors.toList());
+        return details;
+    }
+
+    private FailureDetail generateDetails(final ExpressionType type, final List<FailureDetail> details) {
+        return FailureDetail.builder()
+                .expressionType(type)
+                .failed(true)
                 .reason(details.stream()
-                        .map(DenialDetail::getReason)
+                        .map(FailureDetail::getReason)
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList()))
                 .build();
     }
 
-    @Override
-    public DenialDetail visit(ExistsExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
+    private FailureDetail generateDetails(final ExpressionType type,
+            final String expressionPath,
+            final Object value,
+            final boolean result,
+            final String reason) {
         if (result) {
             return DEFAULT_SUCCESS_RESPONSE;
         }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
+        return FailureDetail.builder()
+                .expressionType(type)
+                .path(expressionPath)
                 .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Path [%s] doesn't exist", expression.getPath())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(NotExistsExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Path [%s] exists", expression.getPath())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(GreaterThanExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is not greater than [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(GreaterThanEqualsExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is less than [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(LessThanExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is not less than [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(LessThanEqualsExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is greater than [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(EqualsExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is not equals to [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(NotEqualsExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is equal to [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(EmptyExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections
-                        .singletonList(String.format("Value at path [%s] is not empty", expression.getPath())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(NotEmptyExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value at path [%s] is empty", expression.getPath())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(StartsWithExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] doesn't start with [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(EndsWithExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] doesn't end with [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(MatchesExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] doesn't match with [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getValue())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(InExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(
-                        String.format("Value of [%s] at path [%s] is not allowed", value, expression.getPath())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(NotInExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(
-                        String.format("Value of [%s] at path [%s] is blocked", value, expression.getPath())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(ContainsAnyExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(
-                        String.format("None of the values at path [%s] are allowed", expression.getPath())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(ContainsAllExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(
-                        String.format("Not all of the expected values at path [%s] are present", expression.getPath())))
-                .build();
-    }
-
-    @Override
-    public DenialDetail visit(BetweenExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
-        final boolean result = expression.evaluate(node);
-        if (result) {
-            return DEFAULT_SUCCESS_RESPONSE;
-        }
-        return DenialDetail.builder()
-                .expressionType(expression.getType())
-                .path(expression.getPath())
-                .value(value)
-                .denied(true)
-                .reason(Collections.singletonList(String.format("Value of [%s] at path [%s] is not between [%s] & [%s]",
-                        value,
-                        expression.getPath(),
-                        expression.getLowerBound(),
-                        expression.getUpperBound())))
+                .failed(true)
+                .reason(Collections.singletonList(reason))
                 .build();
     }
 

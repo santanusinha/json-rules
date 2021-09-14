@@ -24,10 +24,9 @@ import java.time.temporal.ChronoField;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class PreOperationUtils {
     private static final String MONTH_OF_YEAR = "month_of_year";
     private static final String WEEK_OF_YEAR = "week_of_year";
@@ -58,7 +57,7 @@ public class PreOperationUtils {
             return dateTime.get(ChronoField.MONTH_OF_YEAR);
         default:
         }
-        throw new IllegalArgumentException("Operand doesnot represent a valid field");
+        throw new IllegalArgumentException("Operand does not represent a valid field");
     }
 
     public static OffsetDateTime getDateTime(long epoch, String zoneOffSet) {

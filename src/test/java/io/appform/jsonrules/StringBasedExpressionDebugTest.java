@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.appform.jsonrules.expressions.debug.DenialDetail;
+import io.appform.jsonrules.expressions.debug.FailureDetail;
 import io.appform.jsonrules.expressions.string.EmptyExpression;
 import io.appform.jsonrules.expressions.string.EndsWithExpression;
 import io.appform.jsonrules.expressions.string.MatchesExpression;
@@ -38,8 +38,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(true)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final Expression negativeCase = EmptyExpression.builder()
@@ -47,8 +47,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value at path [$.string] is not empty", debugNegative.getReason().get(0));
     }
 
@@ -60,8 +60,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(true)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final NotEmptyExpression negativeCase = NotEmptyExpression.builder()
@@ -69,8 +69,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value at path [$.emptyString] is empty", debugNegative.getReason().get(0));
 
     }
@@ -82,8 +82,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(true)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final StartsWithExpression negativeCase = StartsWithExpression.builder()
@@ -92,8 +92,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [Hello] at path [$.string] doesn't start with [he]", debugNegative.getReason().get(0));
     }
 
@@ -104,8 +104,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(true)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final EndsWithExpression negativeCase = EndsWithExpression.builder()
@@ -114,8 +114,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [Hello] at path [$.string] doesn't end with [LO]", debugNegative.getReason().get(0));
     }
 
@@ -126,8 +126,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(true)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final MatchesExpression negativeCase = MatchesExpression.builder()
@@ -136,8 +136,8 @@ public class StringBasedExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [Hello] at path [$.string] doesn't match with [.*LO]", debugNegative.getReason().get(0));
     }
 

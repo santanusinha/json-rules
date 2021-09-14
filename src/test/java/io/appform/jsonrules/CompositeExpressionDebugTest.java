@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
-import io.appform.jsonrules.expressions.debug.DenialDetail;
+import io.appform.jsonrules.expressions.debug.FailureDetail;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 
@@ -60,8 +60,8 @@ public class CompositeExpressionDebugTest {
                         .build())
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final AndExpression negativeCase = AndExpression.builder()
@@ -75,8 +75,8 @@ public class CompositeExpressionDebugTest {
                         .build())
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertTrue(debugNegative.getReason()
                 .size() == 1);
         Assert.assertEquals("Value of [20] at path [$.value] is not less than [5]",
@@ -97,8 +97,8 @@ public class CompositeExpressionDebugTest {
                         .build())
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final OrExpression negativeCase = OrExpression.builder()
@@ -112,8 +112,8 @@ public class CompositeExpressionDebugTest {
                         .build())
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertTrue(debugNegative.getReason()
                 .size() == 2);
         Assert.assertEquals("Value of [20] at path [$.value] is not less than [11]",
@@ -140,8 +140,8 @@ public class CompositeExpressionDebugTest {
                         .build())
                 .build();
         Assert.assertFalse(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertTrue(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertTrue(debugPositive.isFailed());
         Assert.assertTrue(debugPositive.getReason()
                 .size() == 0);
 
@@ -158,8 +158,8 @@ public class CompositeExpressionDebugTest {
                         .build())
                 .build();
         Assert.assertTrue(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertFalse(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertFalse(debugNegative.isFailed());
         Assert.assertTrue(Objects.isNull(debugNegative.getReason()));
     }
 

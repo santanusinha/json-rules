@@ -31,7 +31,7 @@ import io.appform.jsonrules.expressions.array.ContainsAllExpression;
 import io.appform.jsonrules.expressions.array.ContainsAnyExpression;
 import io.appform.jsonrules.expressions.array.InExpression;
 import io.appform.jsonrules.expressions.array.NotInExpression;
-import io.appform.jsonrules.expressions.debug.DenialDetail;
+import io.appform.jsonrules.expressions.debug.FailureDetail;
 
 public class CollectionExpressionDebugTest {
 
@@ -56,8 +56,8 @@ public class CollectionExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final ContainsAnyExpression negativeCase = ContainsAnyExpression.builder()
@@ -66,8 +66,8 @@ public class CollectionExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("None of the values at path [$.felines] are allowed",
                 debugNegative.getReason().get(0));
     }
@@ -80,8 +80,8 @@ public class CollectionExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final ContainsAllExpression negativeCase = ContainsAllExpression.builder()
@@ -90,8 +90,8 @@ public class CollectionExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Not all of the expected values at path [$.felines] are present",
                 debugNegative.getReason().get(0));
     }
@@ -105,8 +105,8 @@ public class CollectionExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final InExpression negativeCase = InExpression.builder()
@@ -116,8 +116,8 @@ public class CollectionExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [leopard] at path [$.felines[0]] is not allowed",
                 debugNegative.getReason().get(0));
     }
@@ -131,8 +131,8 @@ public class CollectionExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertTrue(positiveCase.evaluate(context));
-        final DenialDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isDenied());
+        final FailureDetail debugPositive = positiveCase.debug(context.getNode());
+        Assert.assertFalse(debugPositive.isFailed());
         Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final NotInExpression negativeCase = NotInExpression.builder()
@@ -142,8 +142,8 @@ public class CollectionExpressionDebugTest {
                 .defaultResult(false)
                 .build();
         Assert.assertFalse(negativeCase.evaluate(context));
-        final DenialDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isDenied());
+        final FailureDetail debugNegative = negativeCase.debug(context.getNode());
+        Assert.assertTrue(debugNegative.isFailed());
         Assert.assertEquals("Value of [leopard] at path [$.felines[0]] is blocked",
                 debugNegative.getReason().get(0));
     }
