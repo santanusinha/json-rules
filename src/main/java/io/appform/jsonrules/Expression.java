@@ -51,7 +51,7 @@ import java.util.Map;
 @ToString
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
 @JsonSubTypes({
-    @JsonSubTypes.Type(name = "equals", value = EqualsExpression.class),
+        @JsonSubTypes.Type(name = "equals", value = EqualsExpression.class),
         @JsonSubTypes.Type(name = "not_equals", value = NotEqualsExpression.class),
 
         @JsonSubTypes.Type(name = "greater_than", value = GreaterThanExpression.class),
