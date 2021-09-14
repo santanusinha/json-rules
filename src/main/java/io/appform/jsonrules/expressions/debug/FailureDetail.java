@@ -20,17 +20,15 @@ package io.appform.jsonrules.expressions.debug;
 import java.util.List;
 
 import io.appform.jsonrules.ExpressionType;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-@AllArgsConstructor
 public class FailureDetail {
-    private ExpressionType expressionType;
-    private String path;
-    private Object value;
-    private boolean failed;
-    private List<String> reason;
+    ExpressionType expressionType;
+    String path;
+    Object value;
+    boolean failed;
+    List<String> reason;
 }
