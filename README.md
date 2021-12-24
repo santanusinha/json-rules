@@ -30,7 +30,7 @@ Maven repo
   <dependency>
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
   </dependency>
 ```
 
