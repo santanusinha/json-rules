@@ -71,7 +71,7 @@ public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpres
             } else {
                 // If node @value path is missing or not a number, exception
                 // would be thrown.
-                throw new IllegalArgumentException("Operand is not a number");
+                return false;
             }
         } else {
             numericalValue = (Number) value;
