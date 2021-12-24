@@ -30,7 +30,7 @@ Maven repo
   <dependency>
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>1.0.10</version>
+    <version>1.0.11</version>
   </dependency>
 ```
 
@@ -193,3 +193,10 @@ These allow comparison of dynamic values. Using `"extractValueFromPath" : true`,
         "extractValueFromPath" : true
     }
 ```
+
+### Debuggability
+
+Debuggability support is provided to understand exact reasons of rule failures for any given context. This support is extended across all the available operators.
+
+
+

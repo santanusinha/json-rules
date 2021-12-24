@@ -28,6 +28,8 @@ import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
+import io.appform.jsonrules.expressions.debug.FailureDetail;
+import io.appform.jsonrules.expressions.debug.ExpressionDebugger;
 import io.appform.jsonrules.expressions.equality.EqualsExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
@@ -92,7 +94,18 @@ public abstract class Expression {
             // Fail safe check, to replace null with missing node.
             node = MissingNode.getInstance();
         }
-        return evaluate(ExpressionEvaluationContext.builder().node(node).options(options).build());
+        return evaluate(ExpressionEvaluationContext.builder()
+                .node(node)
+                .options(options)
+                .build());
+    }
+
+    public FailureDetail debug(JsonNode node) {
+        return ExpressionDebugger.builder()
+                .expression(this)
+                .node(node)
+                .build()
+                .debug();
     }
 
     public abstract boolean evaluate(ExpressionEvaluationContext context);
