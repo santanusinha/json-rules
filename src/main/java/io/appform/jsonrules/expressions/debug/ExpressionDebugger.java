@@ -17,15 +17,9 @@
 
 package io.appform.jsonrules.expressions.debug;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
-
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.ExpressionVisitor;
@@ -40,19 +34,16 @@ import io.appform.jsonrules.expressions.equality.EqualsExpression;
 import io.appform.jsonrules.expressions.equality.NotEqualsExpression;
 import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
-import io.appform.jsonrules.expressions.numeric.BetweenExpression;
-import io.appform.jsonrules.expressions.numeric.GreaterThanEqualsExpression;
-import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
-import io.appform.jsonrules.expressions.numeric.LessThanEqualsExpression;
-import io.appform.jsonrules.expressions.numeric.LessThanExpression;
-import io.appform.jsonrules.expressions.string.EmptyExpression;
-import io.appform.jsonrules.expressions.string.EndsWithExpression;
-import io.appform.jsonrules.expressions.string.MatchesExpression;
-import io.appform.jsonrules.expressions.string.NotEmptyExpression;
-import io.appform.jsonrules.expressions.string.StartsWithExpression;
+import io.appform.jsonrules.expressions.numeric.*;
+import io.appform.jsonrules.expressions.string.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.val;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -295,7 +286,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
 
     @Override
     public FailureDetail visit(BetweenExpression expression, JsonNode node) {
-        final val value = fetchValue(node, expression.getPath());
+        val value = fetchValue(node, expression.getPath());
         return generateDetails(expression.getType(),
                 expression.getPath(),
                 value,
@@ -308,11 +299,10 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
     }
 
     private List<FailureDetail> evaluteChildren(List<Expression> expressions, JsonNode node) {
-        final List<FailureDetail> details = expressions.stream()
+        return expressions.stream()
                 .map(e -> e.accept(this, node))
-                .filter(debugResult -> debugResult.isFailed())
+                .filter(FailureDetail::isFailed)
                 .collect(Collectors.toList());
-        return details;
     }
 
     private FailureDetail generateDetails(final ExpressionType type, final List<FailureDetail> details) {
