@@ -16,11 +16,13 @@
 
 package io.appform.jsonrules.utils;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
+import java.util.Date;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -36,6 +38,8 @@ public class PreOperationUtils {
     private static final String DAY_OF_WEEK = "day_of_week";
     private static final String HOUR_OF_DAY = "hour_of_day";
     private static final String MINUTE_OF_HOUR = "minute_of_hour";
+    public static final String YEAR = "year";
+    public static final String DEFAULT_PATTERN = "yyyy-MM-dd";
 
     public static int getFromDateTime(OffsetDateTime dateTime, String field) {
         switch (field) {
@@ -55,6 +59,8 @@ public class PreOperationUtils {
             return dateTime.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
         case MONTH_OF_YEAR:
             return dateTime.get(ChronoField.MONTH_OF_YEAR);
+        case YEAR:
+            return dateTime.get(ChronoField.YEAR);
         default:
         }
         throw new IllegalArgumentException("Operand does not represent a valid field");
@@ -81,6 +87,27 @@ public class PreOperationUtils {
     public static OffsetDateTime getDateTime(String dateTimeStr, String zoneOffSet) {
         try {
             Instant instant = Instant.parse(dateTimeStr);
+            if (zoneOffSet != null && !zoneOffSet.trim()
+                    .isEmpty()) {
+                return instant.atOffset(ZoneOffset.of(zoneOffSet));
+            }
+            return instant.atOffset(ZoneOffset.UTC);
+        } catch (Exception e) {
+            throwInvalidDate();
+        }
+        throw new IllegalStateException();
+    }
+
+    public static OffsetDateTime getDateTimeFromLocalTimeFormat(String dateTimeStr, String zoneOffset) {
+        return getDateTimeFromLocalTimeFormat(dateTimeStr, zoneOffset, DEFAULT_PATTERN);
+    }
+
+    public static OffsetDateTime getDateTimeFromLocalTimeFormat(String dateTimeStr, String zoneOffSet, String pattern) {
+        try {
+            SimpleDateFormat df = new SimpleDateFormat(pattern);
+            Date date = df.parse(dateTimeStr);
+            long epoch = date.getTime();
+            Instant instant = Instant.ofEpochMilli(epoch);
             if (zoneOffSet != null && !zoneOffSet.trim()
                     .isEmpty()) {
                 return instant.atOffset(ZoneOffset.of(zoneOffSet));

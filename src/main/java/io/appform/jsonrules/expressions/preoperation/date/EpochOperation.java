@@ -40,9 +40,18 @@ public class EpochOperation extends CalendarOperation {
 	public EpochOperation(String operand, String zoneOffSet) {
 		super(PreOperationType.epoch, operand, zoneOffSet);
 	}
+	@Builder
+	public EpochOperation(String operand, String zoneOffSet, String pattern) {
+		super(PreOperationType.epoch, operand, zoneOffSet, pattern);
+	}
 
 	@Override
 	public Number compute(JsonNode evaluatedNode, String operand, String zoneOffSet) {
+		final OffsetDateTime dateTime = PreOperationUtils.getDateTime(evaluatedNode.asLong(), zoneOffSet);
+		return PreOperationUtils.getFromDateTime(dateTime, operand);
+	}
+	@Override
+	protected Number compute(JsonNode evaluatedNode, String operand, String zoneOffSet, String pattern) {
 		final OffsetDateTime dateTime = PreOperationUtils.getDateTime(evaluatedNode.asLong(), zoneOffSet);
 		return PreOperationUtils.getFromDateTime(dateTime, operand);
 	}

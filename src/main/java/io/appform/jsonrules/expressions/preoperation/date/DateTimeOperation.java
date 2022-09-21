@@ -35,16 +35,29 @@ public class DateTimeOperation extends CalendarOperation {
 	protected DateTimeOperation() {
 		super(PreOperationType.date_time);
 	}
-	
-	@Builder
 	public DateTimeOperation(String operand, String zoneOffSet) {
 		super(PreOperationType.date_time, operand, zoneOffSet);
+	}
+
+	@Builder
+	public DateTimeOperation(String operand, String zoneOffSet, String pattern) {
+		super(PreOperationType.date_time, operand, zoneOffSet, pattern);
 	}
 
 	@Override
 	public Number compute(JsonNode evaluatedNode, String operand, String zoneOffset) {
 		try {
 			final OffsetDateTime dateTime = PreOperationUtils.getDateTime(evaluatedNode.asText(), zoneOffset);
+			return PreOperationUtils.getFromDateTime(dateTime, operand);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Operand doesnot represent a valid date");
+		}
+	}
+
+	@Override
+	public Number compute(JsonNode evaluatedNode, String operand, String zoneOffset, String pattern) {
+		try {
+			final OffsetDateTime dateTime = PreOperationUtils.getDateTimeFromLocalTimeFormat(evaluatedNode.asText(), zoneOffset, pattern);
 			return PreOperationUtils.getFromDateTime(dateTime, operand);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Operand doesnot represent a valid date");

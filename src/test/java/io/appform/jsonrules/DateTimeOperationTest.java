@@ -17,6 +17,7 @@
 
 package io.appform.jsonrules;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
@@ -461,5 +462,20 @@ public class DateTimeOperationTest {
         System.out.println(ruleRep);
         Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.unixTime\",\"preoperation\":{\"operation\":\"date_time\",\"operand\":\"hour_of_day\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.unixTime\",\"preoperation\":{\"operation\":\"date_time\",\"operand\":\"week_of_month\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
-    
+    @Test
+    public void testGreaterThanExpressionOnDateColumn() throws JsonProcessingException {
+        String dateTime = "2022-03-17 13:01:36.857";
+        Expression expression = GreaterThanExpression.builder()
+                .path("$.dateTime")
+                .preoperation(DateTimeOperation.builder()
+                        .operand("year")
+                        .pattern("yyyy-MM-dd HH:mm:ss.SSS")
+                        .build())
+                .value(2021).build();
+        long epoch = Instant.now().getEpochSecond();
+        String dateTimeStr = new StringBuilder().append("\"").append(dateTime).append("\"").toString();
+        JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\", \"kid\": null, \"epochTime\" : "+epoch+", \"dateTime\" : "+dateTimeStr+" }");
+        context.setNode(node);
+        Assert.assertTrue(expression.evaluate(context.getNode()));
+    }
 }

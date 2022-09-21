@@ -34,6 +34,7 @@ import lombok.ToString;
 public abstract class CalendarOperation extends PreOperation<Number> {
 	private String operand;
 	private String zoneOffSet;
+	private String pattern;
 
 	protected CalendarOperation(PreOperationType type) {
 		super(type);
@@ -44,10 +45,18 @@ public abstract class CalendarOperation extends PreOperation<Number> {
 		this.operand = operand;
 		this.zoneOffSet = zoneOffSet;
 	}
+	protected CalendarOperation(PreOperationType type, String operand, String zoneOffSet, String pattern) {
+		this(type);
+		this.operand = operand;
+		this.zoneOffSet = zoneOffSet;
+		this.pattern = pattern;
+	}
 
 	public Number compute(JsonNode evaluatedNode) {
-		if (operand != null && (evaluatedNode.isNumber() || evaluatedNode.isTextual())) {
+		if (operand != null && pattern == null && (evaluatedNode.isNumber() || evaluatedNode.isTextual())) {
 			return compute(evaluatedNode, operand, zoneOffSet);
+		} else if (operand != null && pattern != null && (evaluatedNode.isNumber() || evaluatedNode.isTextual())) {
+			return compute(evaluatedNode, operand, zoneOffSet, pattern);
 		} else {
 			throw new IllegalArgumentException("Operands do not represent valid values");
 		}
@@ -60,5 +69,6 @@ public abstract class CalendarOperation extends PreOperation<Number> {
 	}
 
 	protected abstract Number compute(JsonNode evaluatedNode, String operand, String zoneOffSet);
+	protected abstract Number compute(JsonNode evaluatedNode, String operand, String zoneOffSet, String pattern);
 
 }
