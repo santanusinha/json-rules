@@ -470,6 +470,7 @@ public class DateTimeOperationTest {
                 .preoperation(DateTimeOperation.builder()
                         .operand("year")
                         .pattern("yyyy-MM-dd HH:mm:ss.SSS")
+                        .zoneOffSet("+05:30")
                         .build())
                 .value(2021).build();
         long epoch = Instant.now().getEpochSecond();
