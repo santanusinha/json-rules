@@ -52,7 +52,9 @@ public class EpochOperation extends CalendarOperation {
 	}
 	@Override
 	protected Number compute(JsonNode evaluatedNode, String operand, String zoneOffSet, String pattern) {
-		final OffsetDateTime dateTime = PreOperationUtils.getDateTime(evaluatedNode.asLong(), zoneOffSet);
-		return PreOperationUtils.getFromDateTime(dateTime, operand);
+		/**
+		 * Patten cant be used with epoch
+		 */
+		return compute(evaluatedNode, operand, zoneOffSet);
 	}
 }

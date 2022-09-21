@@ -463,7 +463,7 @@ public class DateTimeOperationTest {
         Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.unixTime\",\"preoperation\":{\"operation\":\"date_time\",\"operand\":\"hour_of_day\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.unixTime\",\"preoperation\":{\"operation\":\"date_time\",\"operand\":\"week_of_month\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     @Test
-    public void testGreaterThanExpressionOnDateColumn() throws JsonProcessingException {
+    public void testGreaterThanExpressionOnDateColumn() throws Exception {
         String dateTime = "2022-03-17 13:01:36.857";
         Expression expression = GreaterThanExpression.builder()
                 .path("$.dateTime")

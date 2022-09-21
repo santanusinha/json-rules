@@ -46,9 +46,7 @@ public abstract class CalendarOperation extends PreOperation<Number> {
 		this.zoneOffSet = zoneOffSet;
 	}
 	protected CalendarOperation(PreOperationType type, String operand, String zoneOffSet, String pattern) {
-		this(type);
-		this.operand = operand;
-		this.zoneOffSet = zoneOffSet;
+		this(type, operand, zoneOffSet);
 		this.pattern = pattern;
 	}
 
