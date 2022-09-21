@@ -57,7 +57,7 @@ public class DateTimeOperation extends CalendarOperation {
 	@Override
 	public Number compute(JsonNode evaluatedNode, String operand, String zoneOffset, String pattern) {
 		try {
-			final OffsetDateTime dateTime = PreOperationUtils.getDateTimeFromLocalTimeFormat(evaluatedNode.asText(), zoneOffset, pattern);
+			final OffsetDateTime dateTime = PreOperationUtils.getDateTimeForPattern(evaluatedNode.asText(), zoneOffset, pattern);
 			return PreOperationUtils.getFromDateTime(dateTime, operand);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Operand doesnot represent a valid date");

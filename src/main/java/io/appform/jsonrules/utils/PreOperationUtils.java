@@ -98,11 +98,11 @@ public class PreOperationUtils {
         throw new IllegalStateException();
     }
 
-    public static OffsetDateTime getDateTimeFromLocalTimeFormat(String dateTimeStr, String zoneOffset) {
-        return getDateTimeFromLocalTimeFormat(dateTimeStr, zoneOffset, DEFAULT_PATTERN);
+    public static OffsetDateTime getDateTimeForPattern(String dateTimeStr, String zoneOffset) {
+        return getDateTimeForPattern(dateTimeStr, zoneOffset, DEFAULT_PATTERN);
     }
 
-    public static OffsetDateTime getDateTimeFromLocalTimeFormat(String dateTimeStr, String zoneOffSet, String pattern) {
+    public static OffsetDateTime getDateTimeForPattern(String dateTimeStr, String zoneOffSet, String pattern) {
         try {
             SimpleDateFormat df = new SimpleDateFormat(pattern);
             Date date = df.parse(dateTimeStr);
