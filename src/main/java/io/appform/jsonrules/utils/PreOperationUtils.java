@@ -23,9 +23,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
 import java.util.Date;
-
 import com.fasterxml.jackson.databind.JsonNode;
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -39,7 +37,6 @@ public class PreOperationUtils {
     private static final String HOUR_OF_DAY = "hour_of_day";
     private static final String MINUTE_OF_HOUR = "minute_of_hour";
     public static final String YEAR = "year";
-    public static final String DEFAULT_PATTERN = "yyyy-MM-dd";
 
     public static int getFromDateTime(OffsetDateTime dateTime, String field) {
         switch (field) {
@@ -84,30 +81,18 @@ public class PreOperationUtils {
         }
     }
 
-    public static OffsetDateTime getDateTime(String dateTimeStr, String zoneOffSet) {
+    public static OffsetDateTime getDateTime(String dateTimeStr, String zoneOffSet, String pattern) {
         try {
-            Instant instant = Instant.parse(dateTimeStr);
-            if (zoneOffSet != null && !zoneOffSet.trim()
-                    .isEmpty()) {
-                return instant.atOffset(ZoneOffset.of(zoneOffSet));
+            Instant instant;
+            if(pattern != null) {
+                SimpleDateFormat df = new SimpleDateFormat(pattern);
+                Date date = df.parse(dateTimeStr);
+                long epoch = date.getTime();
+                instant = Instant.ofEpochMilli(epoch);
             }
-            return instant.atOffset(ZoneOffset.UTC);
-        } catch (Exception e) {
-            throwInvalidDate();
-        }
-        throw new IllegalStateException();
-    }
-
-    public static OffsetDateTime getDateTimeForPattern(String dateTimeStr, String zoneOffset) {
-        return getDateTimeForPattern(dateTimeStr, zoneOffset, DEFAULT_PATTERN);
-    }
-
-    public static OffsetDateTime getDateTimeForPattern(String dateTimeStr, String zoneOffSet, String pattern) {
-        try {
-            SimpleDateFormat df = new SimpleDateFormat(pattern);
-            Date date = df.parse(dateTimeStr);
-            long epoch = date.getTime();
-            Instant instant = Instant.ofEpochMilli(epoch);
+            else {
+                instant = Instant.parse(dateTimeStr);
+            }
             if (zoneOffSet != null && !zoneOffSet.trim()
                     .isEmpty()) {
                 return instant.atOffset(ZoneOffset.of(zoneOffSet));
