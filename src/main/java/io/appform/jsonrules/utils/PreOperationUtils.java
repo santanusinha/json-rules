@@ -16,14 +16,14 @@
 
 package io.appform.jsonrules.utils;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
-
+import java.util.Date;
 import com.fasterxml.jackson.databind.JsonNode;
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -36,6 +36,7 @@ public class PreOperationUtils {
     private static final String DAY_OF_WEEK = "day_of_week";
     private static final String HOUR_OF_DAY = "hour_of_day";
     private static final String MINUTE_OF_HOUR = "minute_of_hour";
+    public static final String YEAR = "year";
 
     public static int getFromDateTime(OffsetDateTime dateTime, String field) {
         switch (field) {
@@ -55,6 +56,8 @@ public class PreOperationUtils {
             return dateTime.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
         case MONTH_OF_YEAR:
             return dateTime.get(ChronoField.MONTH_OF_YEAR);
+        case YEAR:
+            return dateTime.get(ChronoField.YEAR);
         default:
         }
         throw new IllegalArgumentException("Operand does not represent a valid field");
@@ -78,9 +81,18 @@ public class PreOperationUtils {
         }
     }
 
-    public static OffsetDateTime getDateTime(String dateTimeStr, String zoneOffSet) {
+    public static OffsetDateTime getDateTime(String dateTimeStr, String zoneOffSet, String pattern) {
         try {
-            Instant instant = Instant.parse(dateTimeStr);
+            Instant instant;
+            if(pattern != null) {
+                SimpleDateFormat df = new SimpleDateFormat(pattern);
+                Date date = df.parse(dateTimeStr);
+                long epoch = date.getTime();
+                instant = Instant.ofEpochMilli(epoch);
+            }
+            else {
+                instant = Instant.parse(dateTimeStr);
+            }
             if (zoneOffSet != null && !zoneOffSet.trim()
                     .isEmpty()) {
                 return instant.atOffset(ZoneOffset.of(zoneOffSet));
