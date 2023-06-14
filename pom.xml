@@ -68,7 +68,7 @@
         <jackson.version>2.13.1</jackson.version>
         <lombok.version>1.18.22</lombok.version>
         <junit.version>4.13.2</junit.version>
-        <guava.version>31.0.1-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <json-path.version>2.6.0</json-path.version>
         <sonar.organization>santanusinha</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
