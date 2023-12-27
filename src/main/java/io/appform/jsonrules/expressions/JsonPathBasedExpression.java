@@ -52,8 +52,14 @@ public abstract class JsonPathBasedExpression extends Expression {
     private PreOperation<?> preoperation;
     private boolean defaultResult;
 
+    private static final Configuration configuration;
+
     static {
-        Configuration.setDefaults(new JacksonConfiguration());
+        configuration = Configuration.builder()
+                .jsonProvider(new JacksonJsonProvider())
+                .mappingProvider(new JacksonMappingProvider())
+                .options(EnumSet.noneOf(Option.class))
+                .build();
     }
 
     protected JsonPathBasedExpression(ExpressionType type) {
@@ -72,7 +78,9 @@ public abstract class JsonPathBasedExpression extends Expression {
     public final boolean evaluate(ExpressionEvaluationContext context) {
         JsonNode nodeAtPath = null;
         try {
-            val nodeValue = JsonPath.read(context.getNode().toString(), path);
+            val nodeValue = JsonPath.using(configuration)
+                    .parse(context.getNode().toString())
+                    .read(path);
             if (nodeValue != null) {
                 nodeAtPath = mapper.valueToTree(nodeValue);
             } else {
@@ -102,23 +110,4 @@ public abstract class JsonPathBasedExpression extends Expression {
 
     protected abstract boolean evaluate(ExpressionEvaluationContext context, final String path, JsonNode evaluatedNode);
 
-    private static final class JacksonConfiguration implements Configuration.Defaults {
-        private final JsonProvider jsonProvider = new JacksonJsonProvider();
-        private final MappingProvider mappingProvider = new JacksonMappingProvider();
-
-        @Override
-        public JsonProvider jsonProvider() {
-            return jsonProvider;
-        }
-
-        @Override
-        public MappingProvider mappingProvider() {
-            return mappingProvider;
-        }
-
-        @Override
-        public Set<Option> options() {
-            return EnumSet.noneOf(Option.class);
-        }
-    }
 }
