@@ -110,23 +110,4 @@ public abstract class JsonPathBasedExpression extends Expression {
 
     protected abstract boolean evaluate(ExpressionEvaluationContext context, final String path, JsonNode evaluatedNode);
 
-    private static final class JacksonConfiguration implements Configuration.Defaults {
-        private final JsonProvider jsonProvider = new JacksonJsonProvider();
-        private final MappingProvider mappingProvider = new JacksonMappingProvider();
-
-        @Override
-        public JsonProvider jsonProvider() {
-            return jsonProvider;
-        }
-
-        @Override
-        public MappingProvider mappingProvider() {
-            return mappingProvider;
-        }
-
-        @Override
-        public Set<Option> options() {
-            return EnumSet.noneOf(Option.class);
-        }
-    }
 }
