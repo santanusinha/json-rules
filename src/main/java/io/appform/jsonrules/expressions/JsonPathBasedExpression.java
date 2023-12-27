@@ -52,8 +52,14 @@ public abstract class JsonPathBasedExpression extends Expression {
     private PreOperation<?> preoperation;
     private boolean defaultResult;
 
+    private static final Configuration configuration;
+
     static {
-        Configuration.setDefaults(new JacksonConfiguration());
+        configuration = Configuration.builder()
+                .jsonProvider(new JacksonJsonProvider())
+                .mappingProvider(new JacksonMappingProvider())
+                .options(EnumSet.noneOf(Option.class))
+                .build();
     }
 
     protected JsonPathBasedExpression(ExpressionType type) {
@@ -72,7 +78,9 @@ public abstract class JsonPathBasedExpression extends Expression {
     public final boolean evaluate(ExpressionEvaluationContext context) {
         JsonNode nodeAtPath = null;
         try {
-            val nodeValue = JsonPath.read(context.getNode().toString(), path);
+            val nodeValue = JsonPath.using(configuration)
+                    .parse(context.getNode().toString())
+                    .read(path);
             if (nodeValue != null) {
                 nodeAtPath = mapper.valueToTree(nodeValue);
             } else {
