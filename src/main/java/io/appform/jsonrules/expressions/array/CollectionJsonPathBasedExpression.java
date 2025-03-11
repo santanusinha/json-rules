@@ -17,22 +17,24 @@
 
 package io.appform.jsonrules.expressions.array;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
-import io.appform.jsonrules.utils.ComparisonUtils;
+import io.appform.jsonrules.utils.JsonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.ToString;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
+import static io.appform.jsonrules.utils.JsonUtils.mapper;
 
 /**
  * All collection operable expressions
@@ -60,13 +62,13 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
         if (extractValues) {
-            JsonNode jsonNode = mapper.valueToTree(JsonPath.using(ComparisonUtils.SUPPRESS_EXCEPTION_CONFIG)
-                    .parse(context.getNode().toString()).read(String.valueOf(valuesPath)));
+            JsonNode jsonNode = JsonPath.using(JsonUtils.SUPPRESS_EXCEPTION_CONFIG)
+                    .parse(context.getNode()).read(String.valueOf(valuesPath));
             if (jsonNode == null || !jsonNode.isArray()) {
                 return false;
             }
             // fetch values from @values path as a set.
-            final HashSet<Object> extractedPathValues = new HashSet<>(JsonPath.read(jsonNode.toString(), "$"));
+            final Set<Object> extractedPathValues = new HashSet<>(mapper.convertValue(jsonNode, new TypeReference<Collection<Object>>() {}));
             return evaluate(evaluatedNode, extractedPathValues);
         }
 

@@ -18,15 +18,12 @@
 package io.appform.jsonrules.expressions;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.MissingNode;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.PathNotFoundException;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import com.jayway.jsonpath.spi.json.JsonProvider;
+import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
-import com.jayway.jsonpath.spi.mapper.MappingProvider;
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
@@ -37,9 +34,8 @@ import lombok.ToString;
 import lombok.val;
 
 import java.util.EnumSet;
-import java.util.Set;
 
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
+import static io.appform.jsonrules.utils.JsonUtils.mapper;
 
 /**
  * All expressions that evaluate a json path uses this.
@@ -51,9 +47,14 @@ public abstract class JsonPathBasedExpression extends Expression {
     private String path;
     private PreOperation<?> preoperation;
     private boolean defaultResult;
+    private static final Configuration config;
 
     static {
-        Configuration.setDefaults(new JacksonConfiguration());
+        config = Configuration.builder()
+                .jsonProvider(new JacksonJsonNodeJsonProvider())
+                .mappingProvider(new JacksonMappingProvider())
+                .options(EnumSet.noneOf(Option.class))
+                .build();
     }
 
     protected JsonPathBasedExpression(ExpressionType type) {
@@ -72,13 +73,7 @@ public abstract class JsonPathBasedExpression extends Expression {
     public final boolean evaluate(ExpressionEvaluationContext context) {
         JsonNode nodeAtPath = null;
         try {
-            val nodeValue = JsonPath.read(context.getNode().toString(), path);
-            if (nodeValue != null) {
-                nodeAtPath = mapper.valueToTree(nodeValue);
-            } else {
-                // Node exists; but value is null. Proceed as missing node.
-                nodeAtPath = MissingNode.getInstance();
-            }
+            nodeAtPath = JsonPath.using(config).parse(context.getNode()).read(path);
         } catch (PathNotFoundException exception) {
             // Using default result when the 'path' doesn't exist
             return defaultResult;
@@ -102,23 +97,4 @@ public abstract class JsonPathBasedExpression extends Expression {
 
     protected abstract boolean evaluate(ExpressionEvaluationContext context, final String path, JsonNode evaluatedNode);
 
-    private static final class JacksonConfiguration implements Configuration.Defaults {
-        private final JsonProvider jsonProvider = new JacksonJsonProvider();
-        private final MappingProvider mappingProvider = new JacksonMappingProvider();
-
-        @Override
-        public JsonProvider jsonProvider() {
-            return jsonProvider;
-        }
-
-        @Override
-        public MappingProvider mappingProvider() {
-            return mappingProvider;
-        }
-
-        @Override
-        public Set<Option> options() {
-            return EnumSet.noneOf(Option.class);
-        }
-    }
 }

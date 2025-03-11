@@ -18,19 +18,13 @@
 package io.appform.jsonrules.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 
 /**
  * Created by santanu on 15/9/16.
  */
 public class ComparisonUtils {
-    public static final Configuration SUPPRESS_EXCEPTION_CONFIG = Configuration.defaultConfiguration()
-            .addOptions(Option.SUPPRESS_EXCEPTIONS);
-    public static final ObjectMapper mapper = new ObjectMapper();
 
     public static int compare(JsonNode evaluatedNode, Object value) {
         int comparisonResult = 0;
@@ -78,8 +72,7 @@ public class ComparisonUtils {
     public static boolean compareForEquality(ExpressionEvaluationContext context, JsonNode evaluatedNode,
             Object value) {
         final boolean nodeMissingOrNullCheck = isNodeMissingOrNull(evaluatedNode);
-        final JsonNode jsonNode = mapper.valueToTree(JsonPath.using(SUPPRESS_EXCEPTION_CONFIG)
-                .parse(context.getNode().toString()).read(String.valueOf(value)));
+        final JsonNode jsonNode = JsonPath.using(JsonUtils.SUPPRESS_EXCEPTION_CONFIG).parse(context.getNode()).read(String.valueOf(value));
 
         if (isNodeMissingOrNull(jsonNode)) {
             return nodeMissingOrNullCheck;
@@ -102,8 +95,8 @@ public class ComparisonUtils {
     public static boolean compareForNotEquals(ExpressionEvaluationContext context, JsonNode evaluatedNode,
             Object value) {
         final boolean nodeMissingOrNullCheck = isNodeMissingOrNull(evaluatedNode);
-        final JsonNode jsonNode = mapper.valueToTree(JsonPath.using(SUPPRESS_EXCEPTION_CONFIG)
-                .parse(context.getNode().toString()).read(String.valueOf(value)));
+        final JsonNode jsonNode = JsonPath.using(JsonUtils.SUPPRESS_EXCEPTION_CONFIG)
+                .parse(context.getNode()).read(String.valueOf(value));
 
         if (isNodeMissingOrNull(jsonNode)) {
             return !nodeMissingOrNullCheck;

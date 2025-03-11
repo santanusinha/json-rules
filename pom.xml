@@ -6,7 +6,7 @@
 
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>1.0.14</version>
+    <version>1.0.15</version>
     <name>JSON Rules</name>
     <description>Json serializable rule engine</description>
     <url>https://github.com/santanusinha/json-rules</url>

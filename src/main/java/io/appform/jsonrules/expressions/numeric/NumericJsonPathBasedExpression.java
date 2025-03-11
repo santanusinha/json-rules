@@ -23,12 +23,10 @@ import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
-import io.appform.jsonrules.utils.ComparisonUtils;
+import io.appform.jsonrules.utils.JsonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
  * All numeric binary expressions
@@ -59,8 +57,8 @@ public abstract class NumericJsonPathBasedExpression extends JsonPathBasedExpres
 
         Number numericalValue;
         if (extractValueFromPath) {
-            JsonNode jsonNode = mapper.valueToTree(JsonPath.using(ComparisonUtils.SUPPRESS_EXCEPTION_CONFIG)
-                    .parse(context.getNode().toString()).read(String.valueOf(value)));
+            JsonNode jsonNode = JsonPath.using(JsonUtils.SUPPRESS_EXCEPTION_CONFIG)
+                    .parse(context.getNode()).read(String.valueOf(value));
             if (jsonNode == null) {
                 return false;
             }
