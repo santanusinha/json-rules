@@ -23,6 +23,7 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.PathNotFoundException;
+import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
@@ -30,6 +31,7 @@ import com.jayway.jsonpath.spi.mapper.MappingProvider;
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
+import io.appform.jsonrules.config.JacksonConfiguration;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,7 +55,7 @@ public abstract class JsonPathBasedExpression extends Expression {
     private boolean defaultResult;
 
     static {
-        Configuration.setDefaults(new JacksonConfiguration());
+        Configuration.setDefaults(JacksonConfiguration.getInstance());
     }
 
     protected JsonPathBasedExpression(ExpressionType type) {
@@ -72,9 +74,9 @@ public abstract class JsonPathBasedExpression extends Expression {
     public final boolean evaluate(ExpressionEvaluationContext context) {
         JsonNode nodeAtPath = null;
         try {
-            val nodeValue = JsonPath.read(context.getNode().toString(), path);
+            JsonNode nodeValue = JsonPath.read(context.getNode(), path);
             if (nodeValue != null) {
-                nodeAtPath = mapper.valueToTree(nodeValue);
+                nodeAtPath = nodeValue;
             } else {
                 // Node exists; but value is null. Proceed as missing node.
                 nodeAtPath = MissingNode.getInstance();
@@ -93,32 +95,14 @@ public abstract class JsonPathBasedExpression extends Expression {
             return nodeAtPath;
         }
 
-        ExpressionEvaluationContext nodeEvaluationContext = globalContext.deepCopy();
-        nodeEvaluationContext.setNode(nodeAtPath);
+        val newContext = ExpressionEvaluationContext.builder()
+                .node(nodeAtPath)
+                .options(globalContext.getOptions())
+                .build();
 
-        val computedValue = preoperation.compute(nodeEvaluationContext);
+        val computedValue = preoperation.compute(newContext);
         return mapper.valueToTree(computedValue);
     }
 
     protected abstract boolean evaluate(ExpressionEvaluationContext context, final String path, JsonNode evaluatedNode);
-
-    private static final class JacksonConfiguration implements Configuration.Defaults {
-        private final JsonProvider jsonProvider = new JacksonJsonProvider();
-        private final MappingProvider mappingProvider = new JacksonMappingProvider();
-
-        @Override
-        public JsonProvider jsonProvider() {
-            return jsonProvider;
-        }
-
-        @Override
-        public MappingProvider mappingProvider() {
-            return mappingProvider;
-        }
-
-        @Override
-        public Set<Option> options() {
-            return EnumSet.noneOf(Option.class);
-        }
-    }
 }

@@ -228,7 +228,7 @@ public class AddOperationTest {
     }
     
     @Test
-    public void testWithNumbericExpression() throws Exception {
+    public void testWithNumericExpression() throws Exception {
 
         Assert.assertTrue(GreaterThanExpression.builder()
                 .path("$.value")

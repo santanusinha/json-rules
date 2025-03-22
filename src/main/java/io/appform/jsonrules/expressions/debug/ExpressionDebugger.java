@@ -18,6 +18,7 @@
 package io.appform.jsonrules.expressions.debug;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import io.appform.jsonrules.Expression;
@@ -36,6 +37,7 @@ import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
 import io.appform.jsonrules.expressions.numeric.*;
 import io.appform.jsonrules.expressions.string.*;
+import io.appform.jsonrules.utils.JsonUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.val;
@@ -115,7 +117,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] is not greater than [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -128,7 +130,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] is less than [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -141,7 +143,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] is not less than [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -154,7 +156,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] is greater than [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -167,7 +169,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] is not equals to [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -180,7 +182,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] is equal to [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -213,7 +215,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] doesn't start with [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -226,7 +228,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] doesn't end with [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -239,7 +241,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] doesn't match with [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getValue()));
     }
@@ -251,7 +253,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 expression.getPath(),
                 value,
                 expression.evaluate(node),
-                String.format("Value of [%s] at path [%s] is not allowed", value, expression.getPath()));
+                String.format("Value of [%s] at path [%s] is not allowed", JsonUtils.convertToString(value), expression.getPath()));
     }
 
     @Override
@@ -261,7 +263,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 expression.getPath(),
                 value,
                 expression.evaluate(node),
-                String.format("Value of [%s] at path [%s] is blocked", value, expression.getPath()));
+                String.format("Value of [%s] at path [%s] is blocked", JsonUtils.convertToString(value), expression.getPath()));
     }
 
     @Override
@@ -292,7 +294,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
                 value,
                 expression.evaluate(node),
                 String.format("Value of [%s] at path [%s] is not between [%s] & [%s]",
-                        value,
+                        JsonUtils.convertToString(value),
                         expression.getPath(),
                         expression.getLowerBound(),
                         expression.getUpperBound()));

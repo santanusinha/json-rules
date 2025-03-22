@@ -42,8 +42,13 @@ public class BetweenExpression extends JsonPathBasedExpression {
     }
 
     @Builder
-    public BetweenExpression(String path, Number lowerbound, Number upperBound, boolean includeLowerBound,
-            boolean includeUpperBound, boolean defaultResult, PreOperation<?> preoperation) {
+    public BetweenExpression(String path,
+                             Number lowerbound,
+                             Number upperBound,
+                             boolean includeLowerBound,
+                             boolean includeUpperBound,
+                             boolean defaultResult,
+                             PreOperation<?> preoperation) {
         super(ExpressionType.between, path, defaultResult, preoperation);
         this.lowerBound = lowerbound;
         this.upperBound = upperBound;

@@ -22,6 +22,7 @@ import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.ExpressionVisitor;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
+import io.appform.jsonrules.utils.JsonUtils;
 import lombok.*;
 
 import java.util.Set;
@@ -39,9 +40,13 @@ public class NotInExpression extends CollectionJsonPathBasedExpression {
     }
 
     @Builder
-    public NotInExpression(String path, @Singular Set<Object> values, boolean extractValues, String valuesPath,
-            Boolean defaultResult, PreOperation<?> preoperation) {
-        super(ExpressionType.not_in, path, values, extractValues, valuesPath,
+    public NotInExpression(String path,
+                           @Singular Set<Object> values,
+                           boolean extractValues,
+                           String valuesPath,
+                           Boolean defaultResult,
+                           PreOperation<?> preoperation) {
+        super(ExpressionType.not_in, path, JsonUtils.convertToJsonNode(values), extractValues, valuesPath,
                 ComparisonUtils.getDefaultResult(defaultResult, true), preoperation);
     }
 

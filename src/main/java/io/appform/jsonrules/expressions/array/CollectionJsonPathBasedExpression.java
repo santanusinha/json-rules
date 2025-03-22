@@ -18,6 +18,7 @@
 package io.appform.jsonrules.expressions.array;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.jayway.jsonpath.JsonPath;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
@@ -49,8 +50,13 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
         super(type);
     }
 
-    protected CollectionJsonPathBasedExpression(ExpressionType type, String path, @Singular Set<Object> values,
-            boolean extractValues, String valuesPath, boolean defaultResult, PreOperation<?> preoperation) {
+    protected CollectionJsonPathBasedExpression(ExpressionType type,
+                                                String path,
+                                                @Singular Set<Object> values,
+                                                boolean extractValues,
+                                                String valuesPath,
+                                                boolean defaultResult,
+                                                PreOperation<?> preoperation) {
         super(type, path, defaultResult, preoperation);
         this.values = values;
         this.extractValues = extractValues;
@@ -60,14 +66,16 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
         if (extractValues) {
-            JsonNode jsonNode = mapper.valueToTree(JsonPath.using(ComparisonUtils.SUPPRESS_EXCEPTION_CONFIG)
-                    .parse(context.getNode().toString()).read(String.valueOf(valuesPath)));
+            JsonNode jsonNode = JsonPath.using(ComparisonUtils.SUPPRESS_EXCEPTION_CONFIG)
+                    .parse(context.getNode()).read(String.valueOf(valuesPath));
             if (jsonNode == null || !jsonNode.isArray()) {
                 return false;
             }
+            ArrayNode arrayNode = (ArrayNode) jsonNode;
             // fetch values from @values path as a set.
-            final HashSet<Object> extractedPathValues = new HashSet<>(JsonPath.read(jsonNode.toString(), "$"));
-            return evaluate(evaluatedNode, extractedPathValues);
+            Set<Object> pathValues = new HashSet<>();
+            arrayNode.forEach(pathValues::add);
+            return evaluate(evaluatedNode, pathValues);
         }
 
         if (null == values || values.isEmpty()) {

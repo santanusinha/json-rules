@@ -19,9 +19,13 @@ package io.appform.jsonrules.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.NumericNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.internal.filter.ValueNodes;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 
 /**
@@ -35,10 +39,16 @@ public class ComparisonUtils {
     public static int compare(JsonNode evaluatedNode, Object value) {
         int comparisonResult = 0;
         if (evaluatedNode.isNumber()) {
+            if (value instanceof NumericNode) {
+                return compare(evaluatedNode, ((NumericNode) value).numberValue());
+            }
             return compare(evaluatedNode, (Number) value);
         } else if (evaluatedNode.isBoolean()) {
             return compare(evaluatedNode, Boolean.parseBoolean(value.toString()));
         } else if (evaluatedNode.isTextual()) {
+            if (value instanceof TextNode) {
+                return compare(evaluatedNode, ((TextNode) value).asText());
+            }
             return compare(evaluatedNode, String.valueOf(value));
         } else if (evaluatedNode.isObject()) {
             throw new IllegalArgumentException("Object comparisons not supported");

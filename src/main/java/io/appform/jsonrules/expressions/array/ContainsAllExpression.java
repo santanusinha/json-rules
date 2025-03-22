@@ -18,11 +18,13 @@
 package io.appform.jsonrules.expressions.array;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Sets;
 import com.jayway.jsonpath.JsonPath;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.ExpressionVisitor;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
+import io.appform.jsonrules.utils.JsonUtils;
 import lombok.*;
 
 import java.util.HashSet;
@@ -41,10 +43,14 @@ public class ContainsAllExpression extends CollectionJsonPathBasedExpression {
     }
 
     @Builder
-    public ContainsAllExpression(String path, @Singular Set<Object> values, boolean extractValues, String valuesPath,
-            boolean defaultResult, PreOperation<?> preoperation) {
+    public ContainsAllExpression(String path,
+                                 @Singular Set<Object> values,
+                                 boolean extractValues,
+                                 String valuesPath,
+                                 boolean defaultResult,
+                                 PreOperation<?> preoperation) {
         // No pre-operations supported on this expression.
-        super(ExpressionType.contains_all, path, values, extractValues, valuesPath, defaultResult, null);
+        super(ExpressionType.contains_all, path, JsonUtils.convertToJsonNode(values), extractValues, valuesPath, defaultResult, null);
     }
 
     @Override
@@ -52,8 +58,10 @@ public class ContainsAllExpression extends CollectionJsonPathBasedExpression {
         if (!evaluatedNode.isArray()) {
             return false;
         }
-        final Set<Object> pathValues = new HashSet<>(JsonPath.read(evaluatedNode.toString(), "$"));
-        final int commonElementsSize = Sets.intersection(values, pathValues).size();
+        ArrayNode arrayNode = (ArrayNode) evaluatedNode;
+        Set<Object> pathValues = new HashSet<>();
+        arrayNode.forEach(pathValues::add);
+        final int commonElementsSize = Sets.intersection(JsonUtils.convertToJsonNode(values), pathValues).size();
         return commonElementsSize == pathValues.size();
     }
 
