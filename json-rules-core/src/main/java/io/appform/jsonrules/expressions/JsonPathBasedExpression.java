@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.node.MissingNode;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
+import com.jayway.jsonpath.spi.cache.Cache;
+import com.jayway.jsonpath.spi.cache.CacheProvider;
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
@@ -31,6 +33,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.val;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
@@ -47,6 +52,20 @@ public abstract class JsonPathBasedExpression extends Expression {
 
     static {
         Configuration.setDefaults(JacksonConfiguration.getInstance());
+        CacheProvider.setCache(new Cache() {
+            private final Map<String, JsonPath> map = new ConcurrentHashMap<>();
+
+            @Override
+            public JsonPath get(final String s) {
+                return map.get(s);
+            }
+
+            @Override
+            public void put(final String s,
+                            final JsonPath jsonPath) {
+                map.computeIfAbsent(s, k -> jsonPath);
+            }
+        });
     }
 
     protected JsonPathBasedExpression(ExpressionType type) {

@@ -66,11 +66,11 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.13.1</jackson.version>
+        <jackson.version>2.18.3</jackson.version>
         <lombok.version>1.18.22</lombok.version>
         <junit.version>4.13.2</junit.version>
         <guava.version>31.0.1-jre</guava.version>
-        <json-path.version>2.6.0</json-path.version>
+        <json-path.version>2.9.0</json-path.version>
         <sonar.organization>santanusinha</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
