@@ -36,7 +36,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
     <parent>
         <groupId>io.appform.rules</groupId>
         <artifactId>json-rules</artifactId>
-        <version>1.0.14</version>
+        <version>1.0.16</version>
     </parent>
 
     <artifactId>json-rules-benchmarks</artifactId>
