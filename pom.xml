@@ -8,6 +8,7 @@
     <artifactId>json-rules</artifactId>
     <version>1.0.14</version>
     <name>JSON Rules</name>
+    <packaging>pom</packaging>
     <description>Json serializable rule engine</description>
     <url>https://github.com/santanusinha/json-rules</url>
     <inceptionYear>2016</inceptionYear>
@@ -74,12 +75,27 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
+    <modules>
+        <module>json-rules-core</module>
+        <module>json-rules-benchmarks</module>
+    </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>1.37</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>1.37</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

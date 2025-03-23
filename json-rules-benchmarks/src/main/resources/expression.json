@@ -1,0 +1,35 @@
+{
+  "type": "and",
+  "children": [
+    {
+      "type": "greater_than",
+      "path": "$.fees.totalAmount",
+      "value": 11
+    },
+    {
+      "type": "less_than",
+      "path": "$.fees.totalAmount",
+      "value": 30
+    },
+    {
+      "type": "between",
+      "path": "$.fees.totalAmount",
+      "lowerBound": 19,
+      "upperBound": 21
+    },
+    {
+      "type": "between",
+      "path": "$.fees.totalAmount",
+      "lowerBound": 20,
+      "includeLowerBound": true,
+      "upperBound": 21
+    },
+    {
+      "type": "between",
+      "path": "$.fees.totalAmount",
+      "lowerBound": 11,
+      "upperBound": 20,
+      "includeUpperBound": true
+    }
+  ]
+}

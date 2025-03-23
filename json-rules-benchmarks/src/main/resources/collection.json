@@ -1,0 +1,106 @@
+{
+  "type": "SOMETHING_LIKE_THIS",
+  "payerId": "BLAHBLAHBLAHBLAHBLAH",
+  "globalReferenceId": "BLAHBLAHBLAHBLAHBLAH",
+  "fees": {
+      "payerId": "BLAHBLAHBLAHBLAHBLAH",
+      "feeId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+      "type": "ONE_TIME",
+      "state": "COMPLETED",
+      "pricingPlanId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+      "pricingPlanVersion": 4,
+      "globalReferenceId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+      "paymentId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+      "pricingPlanDescription": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+      "planType": "CATEGORY",
+      "target": "USER",
+      "dimension": "INTRADAY",
+      "totalAmount": 20,
+      "considerationAmount": 231231,
+      "initialFeeAmount": 115,
+      "finalFeeAmount": 115,
+      "cgst": 0,
+      "sgst": 0,
+      "igst": 17.5424,
+      "feeContext": {
+        "context": {
+          "paymentSources": [],
+          "ref": {
+            "profileViews": {
+              "USER": {
+                "viewId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+                "profileType": "USER"
+              }
+            },
+            "resolvedPaths": {
+              "payerId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+              "INTRADAY": {
+                "count": 10,
+                "amount": 231231
+              }
+            }
+          },
+          "pricingContext": {
+            "amount": 231231,
+            "executionContext": {
+              "orderId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+              "orderCategory": "REGULAR",
+              "orderType": "MARKET",
+              "orderTransactionType": "BUY",
+              "exchange": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+              "segment": {
+                "settlementType": "NORMAL",
+                "settlementCycle": "T1",
+                "segmentType": "CASH"
+              },
+              "subOrders": [
+                {
+                  "subOrderId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+                  "quantity": 10,
+                  "amount": 231231,
+                  "tradeMode": "INTRADAY"
+                }
+              ],
+              "wealthBasketOrder": false,
+              "afterMarketOrder": false,
+              "executionType": "BROKING_ORDER"
+            },
+            "mode": "STOCK_BROKING"
+          }
+        },
+        "pricingContext": {
+          "amount": 231231,
+          "executionContext": {
+            "orderId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH",
+            "orderCategory": "REGULAR",
+            "orderType": "MARKET",
+            "orderTransactionType": "BUY",
+            "exchange": "BLAHBLAHBLAHBLAHBLAH",
+            "segment": {
+              "settlementType": "NORMAL",
+              "settlementCycle": "T1",
+              "segmentType": "CASH"
+            },
+            "subOrders": [
+              {
+                "subOrderId": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH7",
+                "quantity": 10,
+                "amount": 231231,
+                "tradeMode": "INTRADAY"
+              }
+            ],
+            "wealthBasketOrder": false,
+            "afterMarketOrder": false,
+            "executionType": "BROKING_ORDER"
+          },
+          "mode": "STOCK_BROKING"
+        }
+      },
+      "waivers": [],
+      "reconed": false,
+      "paymentInstrumentAgnostic": true,
+      "createdAt": 1742519148343,
+      "updatedAt": 1742519148343,
+      "pricingPlanTitle": "BLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAHBLAH"
+  }
+}

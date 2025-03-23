@@ -19,13 +19,12 @@ package io.appform.jsonrules.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
-import com.jayway.jsonpath.internal.filter.ValueNodes;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 
 /**
@@ -44,6 +43,9 @@ public class ComparisonUtils {
             }
             return compare(evaluatedNode, (Number) value);
         } else if (evaluatedNode.isBoolean()) {
+            if (value instanceof BooleanNode) {
+                return compare(evaluatedNode, ((BooleanNode) value).booleanValue());
+            }
             return compare(evaluatedNode, Boolean.parseBoolean(value.toString()));
         } else if (evaluatedNode.isTextual()) {
             if (value instanceof TextNode) {
