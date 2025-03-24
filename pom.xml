@@ -6,8 +6,9 @@
 
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>1.0.14</version>
+    <version>1.0.16-RC0</version>
     <name>JSON Rules</name>
+    <packaging>pom</packaging>
     <description>Json serializable rule engine</description>
     <url>https://github.com/santanusinha/json-rules</url>
     <inceptionYear>2016</inceptionYear>
@@ -41,7 +42,6 @@
         </developer>
     </developers>
 
-
     <issueManagement>
         <system>GitHub Issues</system>
         <url>https://github.com/santanusinha/json-rules/issues</url>
@@ -65,15 +65,19 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.13.1</jackson.version>
-        <lombok.version>1.18.22</lombok.version>
+        <jackson.version>2.18.3</jackson.version>
+        <lombok.version>1.18.36</lombok.version>
         <junit.version>4.13.2</junit.version>
         <guava.version>31.0.1-jre</guava.version>
-        <json-path.version>2.6.0</json-path.version>
+        <json-path.version>2.9.0</json-path.version>
         <sonar.organization>santanusinha</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
+    <modules>
+        <module>json-rules-core</module>
+        <module>json-rules-benchmarks</module>
+    </modules>
 
     <dependencies>
         <dependency>
