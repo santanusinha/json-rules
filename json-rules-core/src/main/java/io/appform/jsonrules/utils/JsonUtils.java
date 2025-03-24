@@ -2,10 +2,12 @@ package io.appform.jsonrules.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.appform.jsonrules.config.JacksonConfiguration;
 import lombok.experimental.UtilityClass;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -30,5 +32,11 @@ public class JsonUtils {
             return ((TextNode) obj).asText();
         }
         return obj.toString();
+    }
+
+    public static Set<Object> convertToSet(final ArrayNode arrayNode) {
+        Set<Object> result = new HashSet<>();
+        arrayNode.forEach(result::add);
+        return result;
     }
 }

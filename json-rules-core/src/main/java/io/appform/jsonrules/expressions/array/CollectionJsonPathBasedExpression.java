@@ -25,6 +25,7 @@ import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.expressions.JsonPathBasedExpression;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.ComparisonUtils;
+import io.appform.jsonrules.utils.JsonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Singular;
@@ -71,10 +72,7 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
             if (jsonNode == null || !jsonNode.isArray()) {
                 return false;
             }
-            ArrayNode arrayNode = (ArrayNode) jsonNode;
-            // fetch values from @values path as a set.
-            Set<Object> pathValues = new HashSet<>();
-            arrayNode.forEach(pathValues::add);
+            Set<Object> pathValues = JsonUtils.convertToSet((ArrayNode) jsonNode);
             return evaluate(evaluatedNode, pathValues);
         }
 

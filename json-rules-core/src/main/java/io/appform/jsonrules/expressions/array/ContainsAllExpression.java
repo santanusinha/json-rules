@@ -58,9 +58,7 @@ public class ContainsAllExpression extends CollectionJsonPathBasedExpression {
         if (!evaluatedNode.isArray()) {
             return false;
         }
-        ArrayNode arrayNode = (ArrayNode) evaluatedNode;
-        Set<Object> pathValues = new HashSet<>();
-        arrayNode.forEach(pathValues::add);
+        Set<Object> pathValues = JsonUtils.convertToSet((ArrayNode) evaluatedNode);
         final int commonElementsSize = Sets.intersection(JsonUtils.convertToJsonNode(values), pathValues).size();
         return commonElementsSize == pathValues.size();
     }

@@ -58,9 +58,7 @@ public class ContainsAnyExpression extends CollectionJsonPathBasedExpression {
         if (null == values || values.isEmpty() || !evaluatedNode.isArray()) {
             return false;
         }
-        ArrayNode arrayNode = (ArrayNode) evaluatedNode;
-        Set<Object> pathValues = new HashSet<>();
-        arrayNode.forEach(pathValues::add);
+        Set<Object> pathValues = JsonUtils.convertToSet((ArrayNode) evaluatedNode);
         return !Sets.intersection(JsonUtils.convertToJsonNode(values), pathValues).isEmpty();
     }
 
