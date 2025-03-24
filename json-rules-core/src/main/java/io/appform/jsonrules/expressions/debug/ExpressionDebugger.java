@@ -36,6 +36,7 @@ import io.appform.jsonrules.expressions.meta.ExistsExpression;
 import io.appform.jsonrules.expressions.meta.NotExistsExpression;
 import io.appform.jsonrules.expressions.numeric.*;
 import io.appform.jsonrules.expressions.string.*;
+import io.appform.jsonrules.utils.JsonPathUtils;
 import io.appform.jsonrules.utils.JsonUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -337,7 +338,7 @@ public class ExpressionDebugger implements ExpressionVisitor<FailureDetail> {
     private Object fetchValue(JsonNode jsonNode, String path) {
         if (jsonNode != null && path != null) {
             try {
-                return JsonPath.read(jsonNode.toString(), path);
+                return JsonPathUtils.read(jsonNode, path);
             } catch (PathNotFoundException e) {
                 // ignore
             }

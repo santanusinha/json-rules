@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
+import io.appform.jsonrules.config.JsonRulesConfiguration;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
@@ -33,6 +34,7 @@ public class ExpressionEvaluationBenchmark {
                         .node(jsonNode)
                         .options(new HashMap<>())
                         .build();
+                JsonRulesConfiguration.configure(JsonRulesConfiguration.PerformanceSafetyPreference.SPEED);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

@@ -37,4 +37,12 @@ public final class JacksonConfiguration implements Configuration.Defaults {
     public ObjectMapper getObjectMapper() {
         return jsonProvider.getObjectMapper();
     }
+
+    public Configuration getConfiguration() {
+        return Configuration.builder()
+                .jsonProvider(jsonProvider)
+                .mappingProvider(mappingProvider)
+                .options(options())
+                .build();
+    }
 }

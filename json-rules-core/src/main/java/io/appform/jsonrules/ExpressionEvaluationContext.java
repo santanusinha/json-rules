@@ -33,11 +33,4 @@ import java.util.Map;
 public class ExpressionEvaluationContext {
     private JsonNode node;
     private Map<OptionKeys, Object> options;
-
-    public ExpressionEvaluationContext deepCopy() {
-        return ExpressionEvaluationContext.builder()
-                .node(node.deepCopy())
-                .options(options)
-                .build();
-    }
 }

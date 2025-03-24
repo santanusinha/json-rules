@@ -29,6 +29,8 @@ import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.config.JacksonConfiguration;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
+import io.appform.jsonrules.jsonpath.caches.UnboundedCache;
+import io.appform.jsonrules.utils.JsonPathUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -50,24 +52,6 @@ public abstract class JsonPathBasedExpression extends Expression {
     private PreOperation<?> preoperation;
     private boolean defaultResult;
 
-    static {
-        Configuration.setDefaults(JacksonConfiguration.getInstance());
-        CacheProvider.setCache(new Cache() {
-            private final Map<String, JsonPath> map = new ConcurrentHashMap<>();
-
-            @Override
-            public JsonPath get(final String s) {
-                return map.get(s);
-            }
-
-            @Override
-            public void put(final String s,
-                            final JsonPath jsonPath) {
-                map.computeIfAbsent(s, k -> jsonPath);
-            }
-        });
-    }
-
     protected JsonPathBasedExpression(ExpressionType type) {
         super(type);
     }
@@ -84,7 +68,7 @@ public abstract class JsonPathBasedExpression extends Expression {
     public final boolean evaluate(ExpressionEvaluationContext context) {
         JsonNode nodeAtPath = null;
         try {
-            JsonNode nodeValue = JsonPath.read(context.getNode(), path);
+            JsonNode nodeValue = JsonPathUtils.read(context.getNode(), path);
             if (nodeValue != null) {
                 nodeAtPath = nodeValue;
             } else {

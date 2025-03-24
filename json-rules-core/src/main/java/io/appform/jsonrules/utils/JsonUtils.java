@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.appform.jsonrules.config.JacksonConfiguration;
+import lombok.experimental.UtilityClass;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@UtilityClass
 public class JsonUtils {
 
     public static Set<Object> convertToJsonNode(Set<Object> values) {
