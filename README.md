@@ -29,7 +29,7 @@ Maven repo
 ```
   <dependency>
     <groupId>io.appform.rules</groupId>
-    <artifactId>json-rules</artifactId>
+    <artifactId>json-rules-core</artifactId>
     <version>LATEST</version>
   </dependency>
 ```

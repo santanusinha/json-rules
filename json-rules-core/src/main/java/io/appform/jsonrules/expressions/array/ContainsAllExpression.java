@@ -19,16 +19,12 @@ package io.appform.jsonrules.expressions.array;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.google.common.collect.Sets;
-import com.jayway.jsonpath.JsonPath;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.ExpressionVisitor;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.JsonUtils;
 import lombok.*;
 
-import javax.naming.PartialResultException;
-import java.util.HashSet;
 import java.util.Set;
 
 /**

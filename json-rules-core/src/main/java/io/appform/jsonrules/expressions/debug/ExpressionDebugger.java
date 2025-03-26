@@ -18,7 +18,6 @@
 package io.appform.jsonrules.expressions.debug;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionType;

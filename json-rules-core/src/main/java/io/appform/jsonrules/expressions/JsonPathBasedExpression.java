@@ -19,25 +19,16 @@ package io.appform.jsonrules.expressions;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.MissingNode;
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
-import com.jayway.jsonpath.spi.cache.Cache;
-import com.jayway.jsonpath.spi.cache.CacheProvider;
 import io.appform.jsonrules.Expression;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.ExpressionType;
-import io.appform.jsonrules.config.JacksonConfiguration;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
-import io.appform.jsonrules.jsonpath.caches.UnboundedCache;
 import io.appform.jsonrules.utils.JsonPathUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.val;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 

@@ -31,10 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.ToString;
 
-import java.util.HashSet;
 import java.util.Set;
-
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
  * All collection operable expressions

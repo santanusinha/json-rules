@@ -17,11 +17,11 @@
 
 package io.appform.jsonrules.expressions.debug;
 
-import java.util.List;
-
 import io.appform.jsonrules.ExpressionType;
 import lombok.Builder;
 import lombok.Value;
+
+import java.util.List;
 
 @Value
 @Builder

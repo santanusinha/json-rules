@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.appform.jsonrules.config.JacksonConfiguration;
 import lombok.experimental.UtilityClass;
-import lombok.val;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

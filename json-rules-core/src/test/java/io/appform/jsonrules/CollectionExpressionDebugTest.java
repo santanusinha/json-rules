@@ -17,21 +17,19 @@
 
 package io.appform.jsonrules;
 
-import java.util.Objects;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-
 import io.appform.jsonrules.expressions.array.ContainsAllExpression;
 import io.appform.jsonrules.expressions.array.ContainsAnyExpression;
 import io.appform.jsonrules.expressions.array.InExpression;
 import io.appform.jsonrules.expressions.array.NotInExpression;
 import io.appform.jsonrules.expressions.debug.FailureDetail;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Objects;
 
 public class CollectionExpressionDebugTest {
 
