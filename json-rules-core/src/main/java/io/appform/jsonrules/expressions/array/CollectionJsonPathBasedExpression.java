@@ -64,11 +64,16 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
         this.valuesPath = valuesPath;
     }
 
+    public void setValues(final Set<Object> values) {
+        this.values = JsonUtils.convertToJsonNode(values);
+    }
+
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
         if (extractValues) {
             JsonNode jsonNode = JsonPath.using(ComparisonUtils.SUPPRESS_EXCEPTION_CONFIG)
-                    .parse(context.getNode()).read(String.valueOf(valuesPath));
+                    .parse(context.getNode())
+                    .read(String.valueOf(valuesPath));
             if (jsonNode == null || !jsonNode.isArray()) {
                 return false;
             }

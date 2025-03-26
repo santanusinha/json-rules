@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.appform.jsonrules.config.JacksonConfiguration;
 import lombok.experimental.UtilityClass;
+import lombok.val;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -38,5 +39,25 @@ public class JsonUtils {
         Set<Object> result = new HashSet<>();
         arrayNode.forEach(result::add);
         return result;
+    }
+
+    public static boolean checkAllMatch(final ArrayNode arrayNode,
+                                        final Set<Object> values) {
+        for (JsonNode elementNode: arrayNode) {
+            if (!values.contains(elementNode)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkAnyMatch(final ArrayNode arrayNode,
+                                        final Set<Object> values) {
+        for (JsonNode elementNode: arrayNode) {
+            if (values.contains(elementNode)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

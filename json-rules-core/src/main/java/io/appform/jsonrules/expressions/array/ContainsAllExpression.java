@@ -27,6 +27,7 @@ import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.JsonUtils;
 import lombok.*;
 
+import javax.naming.PartialResultException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,9 +59,7 @@ public class ContainsAllExpression extends CollectionJsonPathBasedExpression {
         if (!evaluatedNode.isArray()) {
             return false;
         }
-        Set<Object> pathValues = JsonUtils.convertToSet((ArrayNode) evaluatedNode);
-        final int commonElementsSize = Sets.intersection(JsonUtils.convertToJsonNode(values), pathValues).size();
-        return commonElementsSize == pathValues.size();
+        return JsonUtils.checkAllMatch((ArrayNode) evaluatedNode, values);
     }
 
     @Override
