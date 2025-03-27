@@ -16,21 +16,19 @@
  */
 package io.appform.jsonrules;
 
-import java.util.Objects;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.appform.jsonrules.expressions.composite.AndExpression;
 import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.debug.FailureDetail;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Objects;
 
 public class CompositeExpressionDebugTest {
 

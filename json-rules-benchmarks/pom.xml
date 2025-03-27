@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.appform.rules</groupId>
         <artifactId>json-rules</artifactId>
-        <version>1.0.16-RC0</version>
+        <version>1.0.16</version>
     </parent>
 
     <artifactId>json-rules-benchmarks</artifactId>
@@ -52,6 +52,8 @@
             Name of the benchmark Uber-JAR to generate.
           -->
         <uberjar.name>benchmarks</uberjar.name>
+
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <build>

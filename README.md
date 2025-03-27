@@ -1,6 +1,6 @@
 # Json Rules [![Build Status](https://travis-ci.org/santanusinha/json-rules.svg?branch=master)](https://travis-ci.org/santanusinha/json-rules)
 
-JSON serializable rules to match Jackson JsonNodes using JSON Pointers.
+JSON serializable rules to match Jackson JsonNodes with JSONPath expressions.
 
 ###### Rule
 ```json
@@ -11,7 +11,7 @@ JSON serializable rules to match Jackson JsonNodes using JSON Pointers.
    }
 ```
 
-###### Paylod
+###### Payload
 ```json
    {
       "name": "John Doe",
@@ -29,8 +29,8 @@ Maven repo
 ```
   <dependency>
     <groupId>io.appform.rules</groupId>
-    <artifactId>json-rules</artifactId>
-    <version>1.0.12</version>
+    <artifactId>json-rules-core</artifactId>
+    <version>LATEST</version>
   </dependency>
 ```
 
@@ -38,7 +38,7 @@ Maven repo
 ```java
     // Build expression with java objects
     Expression expression = LessThanExpression.builder()
-                                .path("/$.value")
+                                .path("$.value")
                                 .value(30)
                                 .build();
     // Or read from serialized json sources
@@ -146,7 +146,7 @@ The default value would be the evaluation result if `path` doesn't exist in the 
    }
 ```
 
-##### Preoperations
+##### Pre-Operations
 
 Pre-operations are pre-evaluation mutations that can be applied to payload.
  
@@ -194,9 +194,20 @@ These allow comparison of dynamic values. Using `"extractValueFromPath" : true`,
     }
 ```
 
-### Debuggability
+### Debugging
 
-Debuggability support is provided to understand exact reasons of rule failures for any given context. This support is extended across all the available operators.
+Debugging support is provided to understand exact reasons of rule failures for any given context. This support is extended across all the available operators.
+
+### Performance <> Safety Preference
+There is a performanceSafetyPreference option that can be set to either SPEED or SAFETY depending upon your needs. <br>
+If your application doesn't use an infinite set of json paths, it is recommended to set this option to SPEED. <br>
+If on the other hand, your application uses an infinite or unbounded number of json paths (at least 1 million or more), then to prevent json-rules 
+from using more than a finite amount of heap memory for caching the json path expressions, you may want to set this option to SAFETY. <br>
+It can be set to SPEED as follows
+
+```java
+JsonRulesConfiguration.configure(PerformanceSafetyPreference.SPEED);
+```
 
 
 

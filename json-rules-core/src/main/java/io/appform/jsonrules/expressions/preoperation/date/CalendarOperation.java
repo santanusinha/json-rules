@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.appform.jsonrules.ExpressionEvaluationContext;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.expressions.preoperation.PreOperationType;
-import io.appform.jsonrules.utils.PreOperationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

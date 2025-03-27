@@ -6,7 +6,7 @@
 
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>1.0.16-RC0</version>
+    <version>1.0.16</version>
     <name>JSON Rules</name>
     <packaging>pom</packaging>
     <description>Json serializable rule engine</description>
@@ -198,6 +198,14 @@
                     <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     <stagingProgressTimeoutMinutes>10</stagingProgressTimeoutMinutes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <deployAtEnd>true</deployAtEnd>
                 </configuration>
             </plugin>
         </plugins>

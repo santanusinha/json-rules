@@ -31,10 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.ToString;
 
-import java.util.HashSet;
 import java.util.Set;
-
-import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
  * All collection operable expressions
@@ -64,11 +61,16 @@ public abstract class CollectionJsonPathBasedExpression extends JsonPathBasedExp
         this.valuesPath = valuesPath;
     }
 
+    public void setValues(final Set<Object> values) {
+        this.values = JsonUtils.convertToJsonNode(values);
+    }
+
     @Override
     protected final boolean evaluate(ExpressionEvaluationContext context, String path, JsonNode evaluatedNode) {
         if (extractValues) {
             JsonNode jsonNode = JsonPath.using(ComparisonUtils.SUPPRESS_EXCEPTION_CONFIG)
-                    .parse(context.getNode()).read(String.valueOf(valuesPath));
+                    .parse(context.getNode())
+                    .read(String.valueOf(valuesPath));
             if (jsonNode == null || !jsonNode.isArray()) {
                 return false;
             }

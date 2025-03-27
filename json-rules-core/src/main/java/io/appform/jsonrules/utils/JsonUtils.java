@@ -39,4 +39,24 @@ public class JsonUtils {
         arrayNode.forEach(result::add);
         return result;
     }
+
+    public static boolean checkAllMatch(final ArrayNode arrayNode,
+                                        final Set<Object> values) {
+        for (JsonNode elementNode: arrayNode) {
+            if (!values.contains(elementNode)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkAnyMatch(final ArrayNode arrayNode,
+                                        final Set<Object> values) {
+        for (JsonNode elementNode: arrayNode) {
+            if (values.contains(elementNode)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

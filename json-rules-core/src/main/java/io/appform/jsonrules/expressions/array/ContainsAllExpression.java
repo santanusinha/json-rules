@@ -19,15 +19,12 @@ package io.appform.jsonrules.expressions.array;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.google.common.collect.Sets;
-import com.jayway.jsonpath.JsonPath;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.ExpressionVisitor;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.JsonUtils;
 import lombok.*;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -58,9 +55,7 @@ public class ContainsAllExpression extends CollectionJsonPathBasedExpression {
         if (!evaluatedNode.isArray()) {
             return false;
         }
-        Set<Object> pathValues = JsonUtils.convertToSet((ArrayNode) evaluatedNode);
-        final int commonElementsSize = Sets.intersection(JsonUtils.convertToJsonNode(values), pathValues).size();
-        return commonElementsSize == pathValues.size();
+        return JsonUtils.checkAllMatch((ArrayNode) evaluatedNode, values);
     }
 
     @Override

@@ -19,15 +19,12 @@ package io.appform.jsonrules.expressions.array;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.google.common.collect.Sets;
-import com.jayway.jsonpath.JsonPath;
 import io.appform.jsonrules.ExpressionType;
 import io.appform.jsonrules.ExpressionVisitor;
 import io.appform.jsonrules.expressions.preoperation.PreOperation;
 import io.appform.jsonrules.utils.JsonUtils;
 import lombok.*;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -58,8 +55,7 @@ public class ContainsAnyExpression extends CollectionJsonPathBasedExpression {
         if (null == values || values.isEmpty() || !evaluatedNode.isArray()) {
             return false;
         }
-        Set<Object> pathValues = JsonUtils.convertToSet((ArrayNode) evaluatedNode);
-        return !Sets.intersection(JsonUtils.convertToJsonNode(values), pathValues).isEmpty();
+        return JsonUtils.checkAnyMatch((ArrayNode) evaluatedNode, values);
     }
 
     @Override
