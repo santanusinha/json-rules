@@ -9,6 +9,7 @@ import lombok.Getter;
 
 import java.util.Set;
 
+// Doesn't work with JsonPath expressions that use UDFs or predicate queries since it enforces
 public class OptimizedJacksonJsonNodeJsonProvider extends JacksonJsonNodeJsonProvider {
     @Getter
     private boolean shouldReturnPathAsList;
