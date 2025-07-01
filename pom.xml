@@ -6,7 +6,7 @@
 
     <groupId>io.appform.rules</groupId>
     <artifactId>json-rules</artifactId>
-    <version>1.0.17</version>
+    <version>1.0.18</version>
     <name>JSON Rules</name>
     <packaging>pom</packaging>
     <description>Json serializable rule engine</description>
@@ -67,6 +67,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackson.version>2.18.3</jackson.version>
         <lombok.version>1.18.36</lombok.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
         <guava.version>31.0.1-jre</guava.version>
         <json-path.version>2.9.0</json-path.version>
@@ -85,6 +86,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

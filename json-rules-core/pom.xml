@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.appform.rules</groupId>
         <artifactId>json-rules</artifactId>
-        <version>1.0.17</version>
+        <version>1.0.18</version>
     </parent>
 
     <artifactId>json-rules-core</artifactId>

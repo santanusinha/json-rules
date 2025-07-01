@@ -198,6 +198,8 @@ These allow comparison of dynamic values. Using `"extractValueFromPath" : true`,
 
 Debugging support is provided to understand exact reasons of rule failures for any given context. This support is extended across all the available operators.
 
+## Advanced Configurations
+
 ### Performance <> Safety Preference
 There is a performanceSafetyPreference option that can be set to either SPEED or SAFETY depending upon your needs. <br>
 If your application doesn't use an infinite set of json paths, it is recommended to set this option to SPEED. <br>
@@ -207,6 +209,16 @@ It can be set to SPEED as follows
 
 ```java
 JsonRulesConfiguration.configure(PerformanceSafetyPreference.SPEED);
+```
+
+### Support for complex JSONPath expressions
+Filter expressions and UDF invocations are supported for JSONPath expressions. This allows for more complex evaluations and transformations on the JSON data.
+For more details on which UDFs are supported, please refer to the [UDFs documentation](https://github.com/json-path/JsonPath?tab=readme-ov-file#functions)
+For examples, you can refer to this [test class](./src/test/java/io/appform/rules/jsonpath/JsonPathComplexExpressionsTest.java).
+
+To enable this feature, you need to set the `enableComplexJsonPathExpressions` flag in the configuration as follows:<br>
+```java
+JsonRulesConfiguration.enableComplexJsonPathExpressions(true);
 ```
 
 
