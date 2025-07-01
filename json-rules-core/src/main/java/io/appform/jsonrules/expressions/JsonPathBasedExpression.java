@@ -30,6 +30,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.val;
 
+import java.util.Objects;
+
 import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
@@ -68,7 +70,7 @@ public abstract class JsonPathBasedExpression extends Expression {
                 // See more here: https://github.com/json-path/JsonPath?tab=readme-ov-file#functions
                 nodeAtPath = mapper.valueToTree(value);
             }
-            // If node exists, but value is null, .
+            // If nodeAtPath is null, then we use MissingNode instead
             nodeAtPath = nodeAtPath == null ? MissingNode.getInstance() : nodeAtPath;
         } catch (PathNotFoundException exception) {
             // Using default result when the 'path' doesn't exist
