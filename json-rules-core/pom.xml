@@ -10,7 +10,7 @@
 
     <artifactId>json-rules-core</artifactId>
     <packaging>jar</packaging>
-
+    <name>JSON Rules Core</name>
     <dependencies>
         <dependency>
             <groupId>org.mockito</groupId>

@@ -339,7 +339,6 @@ public class ExpressionTest {
                 .value(30)
                 .build()
                 .evaluate(context));
-
         Assert.assertTrue(GreaterThanExpression.builder()
                 .path("$.v2")
                 .value("$.v1")

@@ -30,6 +30,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.val;
 
+import java.util.Objects;
+
 import static io.appform.jsonrules.utils.ComparisonUtils.mapper;
 
 /**
@@ -59,13 +61,17 @@ public abstract class JsonPathBasedExpression extends Expression {
     public final boolean evaluate(ExpressionEvaluationContext context) {
         JsonNode nodeAtPath = null;
         try {
-            JsonNode nodeValue = JsonPathUtils.read(context.getNode(), path);
-            if (nodeValue != null) {
-                nodeAtPath = nodeValue;
+            Object value = JsonPathUtils.read(context.getNode(), path);
+            if (value instanceof JsonNode) {
+                nodeAtPath = (JsonNode) value;
             } else {
-                // Node exists; but value is null. Proceed as missing node.
-                nodeAtPath = MissingNode.getInstance();
+                // convert value to a json node
+                // this might happen because of the usage of UDFs supported by json path library used
+                // See more here: https://github.com/json-path/JsonPath?tab=readme-ov-file#functions
+                nodeAtPath = mapper.valueToTree(value);
             }
+            // If nodeAtPath is null, then we use MissingNode instead
+            nodeAtPath = nodeAtPath == null ? MissingNode.getInstance() : nodeAtPath;
         } catch (PathNotFoundException exception) {
             // Using default result when the 'path' doesn't exist
             return defaultResult;
