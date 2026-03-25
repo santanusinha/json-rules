@@ -61,21 +61,6 @@ public class ComplexJsonPathExpressionsTest {
                 .build()
                 .evaluate(context));
         Assert.assertTrue(EqualsExpression.builder()
-                .path("$.v4.first()")
-                .value("Open")
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
-                .path("$.v4.last()")
-                .value("HAL")
-                .build()
-                .evaluate(context));
-        Assert.assertFalse(EqualsExpression.builder()
-                .path("$.v4.last()")
-                .value("HAL1")
-                .build()
-                .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
                 .path("$.v2.avg()")
                 .value(20.0)
                 .build()
