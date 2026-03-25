@@ -202,6 +202,7 @@ Debugging support is provided to understand exact reasons of rule failures for a
 
 ### Performance <> Safety Preference
 There is a performanceSafetyPreference option that can be set to either SPEED or SAFETY depending upon your needs. <br>
+By default, it is set to SAFETY <br>
 If your application doesn't use an infinite set of json paths, it is recommended to set this option to SPEED. <br>
 If on the other hand, your application uses an infinite or unbounded number of json paths (at least 1 million or more), then to prevent json-rules 
 from using more than a finite amount of heap memory for caching the json path expressions, you may want to set this option to SAFETY. <br>

@@ -7,6 +7,7 @@ import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 import com.jayway.jsonpath.spi.mapper.MappingProvider;
 import io.appform.jsonrules.jsonpath.caches.UnboundedCache;
+import io.appform.jsonrules.jsonpath.providers.OptimizedJacksonJsonNodeJsonProvider;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -34,6 +35,8 @@ public class JsonRulesConfiguration {
         if (performanceSafetyPreference == PerformanceSafetyPreference.SPEED) {
             log.info("Json Rules configured for speed. Using an unbounded cache for JSONPath evaluations.");
             CacheProvider.setCache(new UnboundedCache());
+            configuration.jsonProvider(new OptimizedJacksonJsonNodeJsonProvider(
+                    JacksonConfiguration.getInstance().options()));
         }
         // if performanceSafetyPreference is set to SAFETY, we don't override the cache implementation provided by jsonpath library
     }
