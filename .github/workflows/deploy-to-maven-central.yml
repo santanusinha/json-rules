@@ -6,9 +6,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup central
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           cache: maven
@@ -17,14 +17,6 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.CENTRAL_GPG_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: Check if secret exists
-        run: |
-          if [[ -z "${{ secrets.CENTRAL_GPG_KEY }}" ]]; then
-            echo "Secret does not exist"
-          else
-            echo "Secret exists"
-            gpg --list-keys
-          fi
       - name: Publish package
         run: mvn --batch-mode deploy -DskipTests -Pcentral-release
         env:
