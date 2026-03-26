@@ -1,0 +1,33 @@
+name: Publish package to the Maven Central Repository
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup central
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          cache: maven
+          distribution: 'temurin'
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.CENTRAL_GPG_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Check if secret exists
+        run: |
+          if [[ -z "${{ secrets.CENTRAL_GPG_KEY }}" ]]; then
+            echo "Secret does not exist"
+          else
+            echo "Secret exists"
+            gpg --list-keys
+          fi
+      - name: Publish package
+        run: mvn --batch-mode deploy -DskipTests -Pcentral-release
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_TOKEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_TOKEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.CENTRAL_GPG_KEY_PASSWORD }}

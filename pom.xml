@@ -52,11 +52,6 @@
         <url>https://github.com/santanusinha/json-rules/issues</url>
     </issueManagement>
 
-    <ciManagement>
-        <system>Travis CI</system>
-        <url>https://travis-ci.org/santanusinha/json-rules</url>
-    </ciManagement>
-
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -79,6 +74,7 @@
         <json-path.version>2.7.0</json-path.version>
         <sonar.organization>santanusinha</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     </properties>
 
     <modules>
@@ -225,19 +221,39 @@
 
     <profiles>
         <profile>
-            <id>release</id>
+            <id>central-release</id>
             <activation>
                 <property>
                     <name>release</name>
                     <value>true</value>
                 </property>
             </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://ossrh-staging-api.central.sonatype.com</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://ossrh-staging-api.central.sonatype.com</url>
+                </repository>
+            </distributionManagement>
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.5.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>github</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -246,10 +262,10 @@
                                     <goal>sign</goal>
                                 </goals>
                                 <configuration>
-                                    <useAgent>true</useAgent>
-                                    <executable>gpg2</executable>
-                                    <!-- Run something like 'gpg2 -ab out' to cache the creds
-                                     on agent before running if needed -->
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
                                 </configuration>
                             </execution>
                         </executions>
@@ -257,5 +273,5 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
+   </profiles>
 </project>
