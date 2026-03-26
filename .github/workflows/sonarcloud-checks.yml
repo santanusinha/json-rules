@@ -22,8 +22,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+          key: ${{ runner.os }}-sonar-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-sonar-
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
@@ -33,4 +34,16 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=santanusinha_json-rules
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=PhonePe_sentinel-ai
+  skip-sonar-for-forked-pr:
+    # This job only runs when the event is a pull_request and the PR head repo is a fork (i.e. different full_name).
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+    name: Skip Sonar for forked PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log skip reason
+        run: |
+          echo "Skipping Sonar analysis for this run."
+          echo "PR originates from a fork: ${{ github.event.pull_request.head.repo.full_name }}"
+          echo "SonarCloud / SonarQube pull request analysis is not supported for forked PRs"
+          echo "See: https://community.sonarsource.com/t/no-sonarcloud-analysis-available-for-prs-from-fork/132569"
