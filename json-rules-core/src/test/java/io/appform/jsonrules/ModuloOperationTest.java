@@ -33,9 +33,9 @@ import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.expressions.preoperation.numeric.ModuloOperation;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
@@ -46,7 +46,7 @@ public class ModuloOperationTest {
     private ObjectMapper mapper;
     private Instant dateTime;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
         dateTime = Instant.now();
@@ -58,40 +58,40 @@ public class ModuloOperationTest {
 
     @Test
     public void testWithEqualsExpression() throws Exception {
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
                 .value(2)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
                 .value(0)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.stringifiedValue")
                 .preoperation(ModuloOperation.builder().operand(100).build())
                 .value(60)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.stringifiedValue")
                 .preoperation(ModuloOperation.builder().operand(100000).build())
                 .value(98860)
                 .build()
                 .evaluate(context));
         try {
-        	Assert.assertTrue(EqualsExpression.builder()
+        	Assertions.assertTrue(EqualsExpression.builder()
                     .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
                     .value(0)
                     .build()
                     .evaluate(context));
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Division by zero is not allowed", true);
+        	Assertions.assertTrue(true, "Division by zero is not allowed");
         }
         
         try {
@@ -101,9 +101,9 @@ public class ModuloOperationTest {
             .value(20)
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
         
         try {
@@ -113,36 +113,36 @@ public class ModuloOperationTest {
             .value(20)
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
     }
 
     @Test
     public void testWithNotEqualsExpression() throws Exception {
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
                 .value(2)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
                 .value(0)
                 .build()
                 .evaluate(context));
         try {
-        	Assert.assertFalse(NotEqualsExpression.builder()
+        	Assertions.assertFalse(NotEqualsExpression.builder()
                     .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
                     .value(0)
                     .build()
                     .evaluate(context));
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Division by zero is not allowed", true);
+        	Assertions.assertTrue(true, "Division by zero is not allowed");
         }
         
         try {
@@ -152,9 +152,9 @@ public class ModuloOperationTest {
             .value(20)
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
         
         try {
@@ -164,36 +164,36 @@ public class ModuloOperationTest {
             .value(20)
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
     }
 
     @Test
     public void testWithInExpression() throws Exception {
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
                 .values(Sets.newHashSet(2))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
                 .values(Sets.newHashSet(0))
                 .build()
                 .evaluate(context));
         try {
-        	Assert.assertTrue(InExpression.builder()
+        	Assertions.assertTrue(InExpression.builder()
                     .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
                     .values(Sets.newHashSet(0))
                     .build()
                     .evaluate(context));
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Division by zero is not allowed", true);
+        	Assertions.assertTrue(true, "Division by zero is not allowed");
         }
         
         try {
@@ -203,9 +203,9 @@ public class ModuloOperationTest {
             .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
         
         try {
@@ -215,36 +215,36 @@ public class ModuloOperationTest {
             .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
     }
     
     @Test
     public void testWithNotInExpression() throws Exception {
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
                 .values(Sets.newHashSet(2))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
                 .values(Sets.newHashSet(0))
                 .build()
                 .evaluate(context));
         try {
-        	Assert.assertFalse(NotInExpression.builder()
+        	Assertions.assertFalse(NotInExpression.builder()
                     .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
                     .values(Sets.newHashSet(0))
                     .build()
                     .evaluate(context));
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Division by zero is not allowed", true);
+        	Assertions.assertTrue(true, "Division by zero is not allowed");
         }
         
         try {
@@ -254,9 +254,9 @@ public class ModuloOperationTest {
             .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
         
         try {
@@ -266,36 +266,36 @@ public class ModuloOperationTest {
             .values(Sets.newHashSet(20))
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
     }
     
     @Test
     public void testWithNumbericExpression() throws Exception {
-        Assert.assertTrue(GreaterThanEqualsExpression.builder()
+        Assertions.assertTrue(GreaterThanEqualsExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(3).build())
                 .value(2)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(LessThanEqualsExpression.builder()
+        Assertions.assertTrue(LessThanEqualsExpression.builder()
                 .path("$.value")
                 .preoperation(ModuloOperation.builder().operand(2).build())
                 .value(0)
                 .build()
                 .evaluate(context));
         try {
-        	Assert.assertTrue(GreaterThanExpression.builder()
+        	Assertions.assertTrue(GreaterThanExpression.builder()
                     .path("$.value")
                     .preoperation(ModuloOperation.builder().operand(0).build())
                     .value(0)
                     .build()
                     .evaluate(context));
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Division by zero is not allowed", true);
+        	Assertions.assertTrue(true, "Division by zero is not allowed");
         }
         
         try {
@@ -305,9 +305,9 @@ public class ModuloOperationTest {
             .value(20)
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
         
         try {
@@ -317,9 +317,9 @@ public class ModuloOperationTest {
             .value(20)
             .build()
             .evaluate(context);
-        	Assert.fail("Should have thrown an exception");
+        	Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-        	Assert.assertTrue("Object numeric operations are not supported", true);
+        	Assertions.assertTrue(true, "Object numeric operations are not supported");
         }
     }
     
@@ -328,7 +328,7 @@ public class ModuloOperationTest {
         final String ruleRepr = TestUtils.read("/moduloOperation.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 8, \"string\" : \"Hello\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -352,7 +352,7 @@ public class ModuloOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"modulo\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"modulo\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assertions.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"modulo\",\"operand\":5},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"modulo\",\"operand\":-5},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 

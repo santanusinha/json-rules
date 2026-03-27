@@ -24,16 +24,16 @@ import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.string.*;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class StringExpressionTest {
 
     private ExpressionEvaluationContext context;
     private ObjectMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
         JsonNode node = mapper.readTree("{ \"value\": 20, \"emptyString\" : \"\", \"s3\" : \"Hello.*\", \"s1\" : \"HelloAllHello\", \"s2\" : \"Hello\",\"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
@@ -42,27 +42,27 @@ public class StringExpressionTest {
  
     @Test
     public void testEmptyExpression() throws Exception {
-        Assert.assertTrue(EmptyExpression.builder()
+        Assertions.assertTrue(EmptyExpression.builder()
         		.path("$.somepath")
         		.defaultResult(true)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(EmptyExpression.builder()
+        Assertions.assertFalse(EmptyExpression.builder()
         		.path("$.string")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(EmptyExpression.builder()
+        Assertions.assertTrue(EmptyExpression.builder()
         		.path("$.emptyString")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(EmptyExpression.builder()
+        Assertions.assertFalse(EmptyExpression.builder()
         		.path("$.kid") // value is null; hence not a textual node
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(EmptyExpression.builder()
+        Assertions.assertFalse(EmptyExpression.builder()
         		.path("$.efgh")
         		.defaultResult(false)
         		.build()
@@ -71,25 +71,25 @@ public class StringExpressionTest {
 
     @Test
     public void testNotEmptyExpression() throws Exception {
-    	Assert.assertTrue(NotEmptyExpression.builder()
+    	Assertions.assertTrue(NotEmptyExpression.builder()
     			.path("$.somepath")
     			.defaultResult(true)
     			.build()
     			.evaluate(context));
-    	Assert.assertTrue(NotEmptyExpression.builder()
+    	Assertions.assertTrue(NotEmptyExpression.builder()
     			.path("$.string")
     			.build()
     			.evaluate(context));
-    	Assert.assertFalse(NotEmptyExpression.builder()
+    	Assertions.assertFalse(NotEmptyExpression.builder()
         		.path("$.emptyString")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-    	Assert.assertFalse(NotEmptyExpression.builder()
+    	Assertions.assertFalse(NotEmptyExpression.builder()
     			.path("$.kid") // value is null; hence not a textual node
     			.build()
     			.evaluate(context));
-    	Assert.assertFalse(NotEmptyExpression.builder()
+    	Assertions.assertFalse(NotEmptyExpression.builder()
     			.path("$.efgh")
     			.build()
     			.evaluate(context));
@@ -97,42 +97,42 @@ public class StringExpressionTest {
 
     @Test
     public void testStartsWithExpression() throws Exception {
-        Assert.assertTrue(StartsWithExpression.builder()
+        Assertions.assertTrue(StartsWithExpression.builder()
         		.path("$.somepath")
         		.defaultResult(true)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(StartsWithExpression.builder()
+        Assertions.assertTrue(StartsWithExpression.builder()
         		.path("$.string")
         		.value("He")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(StartsWithExpression.builder()
+        Assertions.assertFalse(StartsWithExpression.builder()
         		.path("$.string")
         		.value("he")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(StartsWithExpression.builder()
+        Assertions.assertTrue(StartsWithExpression.builder()
         		.path("$.string")
         		.value("he")
         		.ignoreCase(true)
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(StartsWithExpression.builder()
+        Assertions.assertFalse(StartsWithExpression.builder()
         		.path("$.kid") // value is null; hence not a textual node
         		.value("xyz")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(StartsWithExpression.builder()
+        Assertions.assertFalse(StartsWithExpression.builder()
         		.path("$.efgh")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(StartsWithExpression.builder()
+        Assertions.assertTrue(StartsWithExpression.builder()
                 .path("$.s1")
                 .value("$.s2")
                 .extractValueFromPath(true)
@@ -143,42 +143,42 @@ public class StringExpressionTest {
     
     @Test
     public void testEndsWithExpression() throws Exception {
-        Assert.assertTrue(EndsWithExpression.builder()
+        Assertions.assertTrue(EndsWithExpression.builder()
         		.path("$.somepath")
         		.defaultResult(true)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(EndsWithExpression.builder()
+        Assertions.assertTrue(EndsWithExpression.builder()
         		.path("$.string")
         		.value("lo")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(EndsWithExpression.builder()
+        Assertions.assertFalse(EndsWithExpression.builder()
         		.path("$.string")
         		.value("LO")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(EndsWithExpression.builder()
+        Assertions.assertTrue(EndsWithExpression.builder()
         		.path("$.string")
         		.value("LO")
         		.ignoreCase(true)
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(EndsWithExpression.builder()
+        Assertions.assertFalse(EndsWithExpression.builder()
         		.path("$.kid") // value is null; hence not a textual node
         		.value("xyz")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(EndsWithExpression.builder()
+        Assertions.assertFalse(EndsWithExpression.builder()
         		.path("$.efgh")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(EndsWithExpression.builder()
+        Assertions.assertTrue(EndsWithExpression.builder()
                 .path("$.s1")
                 .value("$.s2")
                 .extractValueFromPath(true)
@@ -189,48 +189,48 @@ public class StringExpressionTest {
     
     @Test
     public void testMatchesExpression() throws Exception {
-        Assert.assertTrue(MatchesExpression.builder()
+        Assertions.assertTrue(MatchesExpression.builder()
         		.path("$.somepath")
         		.defaultResult(true)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(MatchesExpression.builder()
+        Assertions.assertTrue(MatchesExpression.builder()
         		.path("$.string")
         		.value(".*lo")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(MatchesExpression.builder()
+        Assertions.assertTrue(MatchesExpression.builder()
         		.path("$.string")
         		.value("H.?llo")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(MatchesExpression.builder()
+        Assertions.assertFalse(MatchesExpression.builder()
         		.path("$.string")
         		.value(".*LO")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(MatchesExpression.builder()
+        Assertions.assertTrue(MatchesExpression.builder()
         		.path("$.string")
         		.value(".*LO")
         		.ignoreCase(true)
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(MatchesExpression.builder()
+        Assertions.assertFalse(MatchesExpression.builder()
         		.path("$.kid") // value is null; hence not a textual node
         		.value("xyz")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertFalse(MatchesExpression.builder()
+        Assertions.assertFalse(MatchesExpression.builder()
         		.path("$.efgh")
         		.defaultResult(false)
         		.build()
         		.evaluate(context));
-        Assert.assertTrue(MatchesExpression.builder()
+        Assertions.assertTrue(MatchesExpression.builder()
                 .path("$.s1")
                 .value("$.s3")
                 .extractValueFromPath(true)
@@ -244,7 +244,7 @@ public class StringExpressionTest {
         final String ruleRepr = TestUtils.read("/emptyExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 8, \"string\" : \"\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -252,7 +252,7 @@ public class StringExpressionTest {
         final String ruleRepr = TestUtils.read("/notEmptyExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 8, \"string\" : \"Hello World\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -260,7 +260,7 @@ public class StringExpressionTest {
         final String ruleRepr = TestUtils.read("/startsWithExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 8, \"string\" : \"Hello World\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -268,7 +268,7 @@ public class StringExpressionTest {
         final String ruleRepr = TestUtils.read("/endsWithExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 8, \"string\" : \"Hello World\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
 
     @Test
@@ -276,7 +276,7 @@ public class StringExpressionTest {
         final String ruleRepr = TestUtils.read("/matchesExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 8, \"string\" : \"Hello World\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -284,7 +284,7 @@ public class StringExpressionTest {
         final String ruleRepr = TestUtils.read("/extractPathExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 8, \"s1\" : \"Hello World\", \"s2\" : \"Hello.*\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
 
     @Test
@@ -309,7 +309,7 @@ public class StringExpressionTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"matches\",\"path\":\"$.string\",\"defaultResult\":false,\"value\":\".*WORLD\",\"ignoreCase\":true,\"extractValueFromPath\":false},{\"type\":\"starts_with\",\"path\":\"$.string\",\"defaultResult\":false,\"value\":\"Hello\",\"ignoreCase\":false,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assertions.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"matches\",\"path\":\"$.string\",\"defaultResult\":false,\"value\":\".*WORLD\",\"ignoreCase\":true,\"extractValueFromPath\":false},{\"type\":\"starts_with\",\"path\":\"$.string\",\"defaultResult\":false,\"value\":\"Hello\",\"ignoreCase\":false,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 

@@ -32,16 +32,16 @@ import io.appform.jsonrules.expressions.string.EmptyExpression;
 import io.appform.jsonrules.expressions.string.NotEmptyExpression;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SubStringOperationTest {
 
     private ExpressionEvaluationContext context;
     private ObjectMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -51,51 +51,51 @@ public class SubStringOperationTest {
 
     @Test
     public void testPositiveCases() throws Exception {
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.abcd")
                 .preoperation(SubStringOperation.builder().beginIndex(0).build())
                 .value("$.abcd")
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.abcd")
                 .preoperation(SubStringOperation.builder().beginIndex(1).build())
                 .value("ello")
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(NotEqualsExpression.builder()
+        Assertions.assertTrue(NotEqualsExpression.builder()
                 .path("$.abcd")
                 .preoperation(SubStringOperation.builder().beginIndex(1).build())
                 .value("$.abcd")
                 .extractValueFromPath(true)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.abcd")
                 .preoperation(SubStringOperation.builder().beginIndex(1).endIndex(2).build())
                 .values(Sets.newHashSet("a","e","i","o","u"))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(InExpression.builder()
+        Assertions.assertFalse(InExpression.builder()
                 .path("$.abcd")
                 .preoperation(SubStringOperation.builder().beginIndex(0).endIndex(1).build())
                 .values(Sets.newHashSet("a","e","i","o","u"))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(NotInExpression.builder()
+        Assertions.assertTrue(NotInExpression.builder()
                 .path("$.abcd")
                 .preoperation(SubStringOperation.builder().beginIndex(0).endIndex(1).build())
                 .values(Sets.newHashSet("a","e","i","o","u"))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EmptyExpression.builder()
+        Assertions.assertTrue(EmptyExpression.builder()
                 .path("$.stringifiedValue")
                 .preoperation(SubStringOperation.builder().beginIndex(0).endIndex(0).build())
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(NotEmptyExpression.builder()
+        Assertions.assertTrue(NotEmptyExpression.builder()
                 .path("$.stringifiedValue")
                 .preoperation(SubStringOperation.builder().beginIndex(0).endIndex(1).build())
                 .build()
@@ -112,9 +112,9 @@ public class SubStringOperationTest {
                 .value(20)
                 .build()
                 .evaluate(context);
-                Assert.fail("Should have thrown an exception");
+                Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Sub string operation is not supported", true);
+            Assertions.assertTrue(true, "Sub string operation is not supported");
         }
         
         try {
@@ -125,9 +125,9 @@ public class SubStringOperationTest {
                 .value(20)
                 .build()
                 .evaluate(context);
-                Assert.fail("Should have thrown an exception");
+                Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Sub string operation is not supported", true);
+            Assertions.assertTrue(true, "Sub string operation is not supported");
         }
         
         try {
@@ -139,9 +139,9 @@ public class SubStringOperationTest {
                 .defaultResult(false)
                 .build()
                 .evaluate(context);
-            Assert.fail("Should have thrown an exception");
+            Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Sub string operation is not supported", true);
+            Assertions.assertTrue(true, "Sub string operation is not supported");
         }
         
         try {
@@ -153,9 +153,9 @@ public class SubStringOperationTest {
                 .defaultResult(false)
                 .build()
                 .evaluate(context);
-            Assert.fail("Should have thrown an exception");
+            Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Sub string operation is not supported", true);
+            Assertions.assertTrue(true, "Sub string operation is not supported");
         }
         
         try {
@@ -167,9 +167,9 @@ public class SubStringOperationTest {
                 .defaultResult(false)
                 .build()
                 .evaluate(context);
-            Assert.fail("Should have thrown an exception");
+            Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Sub string operation is not supported", true);
+            Assertions.assertTrue(true, "Sub string operation is not supported");
         }
         
         try {
@@ -181,9 +181,9 @@ public class SubStringOperationTest {
                 .defaultResult(false)
                 .build()
                 .evaluate(context);
-            Assert.fail("Should have thrown an exception");
+            Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Sub string operation is not supported", true);
+            Assertions.assertTrue(true, "Sub string operation is not supported");
         }
 
         try {
@@ -195,12 +195,12 @@ public class SubStringOperationTest {
                 .defaultResult(false)
                 .build()
                 .evaluate(context);
-            Assert.fail("Should have thrown an exception");
+            Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Sub string operation is not supported", true);
+            Assertions.assertTrue(true, "Sub string operation is not supported");
         }
 
-        Assert.assertTrue(EmptyExpression.builder()
+        Assertions.assertTrue(EmptyExpression.builder()
                 .path("$.stringifiedValue")
                 .preoperation(SubStringOperation.builder().beginIndex(0).endIndex(100).suppressExceptions(true).build())
                 .defaultResult(false)
@@ -213,7 +213,7 @@ public class SubStringOperationTest {
         final String ruleRepr = TestUtils.read("/subStringOperation.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": \"Hello World\", \"string\" : \"Hello\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -239,7 +239,7 @@ public class SubStringOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"equals\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"sub_str\",\"beginIndex\":0,\"endIndex\":-1,\"suppressExceptions\":false},\"defaultResult\":false,\"value\":\"$.value\",\"extractValueFromPath\":true},{\"type\":\"not_equals\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"sub_str\",\"beginIndex\":0,\"endIndex\":1,\"suppressExceptions\":false},\"defaultResult\":true,\"value\":\"$.value\",\"extractValueFromPath\":true}]}]}", ruleRep);
+        Assertions.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"equals\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"sub_str\",\"beginIndex\":0,\"endIndex\":-1,\"suppressExceptions\":false},\"defaultResult\":false,\"value\":\"$.value\",\"extractValueFromPath\":true},{\"type\":\"not_equals\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"sub_str\",\"beginIndex\":0,\"endIndex\":1,\"suppressExceptions\":false},\"defaultResult\":true,\"value\":\"$.value\",\"extractValueFromPath\":true}]}]}", ruleRep);
     }
     
 }

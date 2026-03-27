@@ -31,16 +31,16 @@ import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.expressions.preoperation.string.LengthOperation;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class LengthOperationTest {
 
     private ExpressionEvaluationContext context;
     private ObjectMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
         JsonNode node = mapper.readTree("{ \"array_values\":[1,2,3,4,5],\"stringifiedValue\": \"9886098860\",\"value\": 20, \"abcd\" : \"Hello\", \"string\" : \"Hello\", \"kid\": null}");
@@ -49,43 +49,43 @@ public class LengthOperationTest {
 
     @Test
     public void testPositiveCases() throws Exception {
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.abcd")
                 .preoperation(LengthOperation.builder().build())
                 .value(5)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.stringifiedValue")
                 .preoperation(LengthOperation.builder().build())
                 .value(10)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(NotEqualsExpression.builder()
+        Assertions.assertTrue(NotEqualsExpression.builder()
                 .path("$.abcd")
                 .preoperation(LengthOperation.builder().build())
                 .value(4)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.abcd")
                 .preoperation(LengthOperation.builder().build())
                 .values(Sets.newHashSet(5))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(NotInExpression.builder()
+        Assertions.assertTrue(NotInExpression.builder()
                 .path("$.abcd")
                 .preoperation(LengthOperation.builder().build())
                 .values(Sets.newHashSet(6,7))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(GreaterThanExpression.builder()
+        Assertions.assertTrue(GreaterThanExpression.builder()
                 .path("$.abcd")
                 .preoperation(LengthOperation.builder().build())
                 .value(4)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(LessThanExpression.builder()
+        Assertions.assertTrue(LessThanExpression.builder()
                 .path("$.abcd")
                 .preoperation(LengthOperation.builder().build())
                 .value(6)
@@ -102,9 +102,9 @@ public class LengthOperationTest {
             .value(20)
             .build()
             .evaluate(context);
-            Assert.fail("Should have thrown an exception");
+            Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Size operation is not supported", true);
+            Assertions.assertTrue(true, "Size operation is not supported");
         }
         
         try {
@@ -114,12 +114,12 @@ public class LengthOperationTest {
             .value(20)
             .build()
             .evaluate(context);
-            Assert.fail("Should have thrown an exception");
+            Assertions.fail("Should have thrown an exception");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Size operation is not supported", true);
+            Assertions.assertTrue(true, "Size operation is not supported");
         }
 
-        Assert.assertFalse(EqualsExpression.builder()
+        Assertions.assertFalse(EqualsExpression.builder()
             .path("$.xyzx")
             .preoperation(LengthOperation.builder().build())
             .value(20)
@@ -133,7 +133,7 @@ public class LengthOperationTest {
         final String ruleRepr = TestUtils.read("/lengthOperation.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": \"Hello World\", \"string\" : \"Hello\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -157,7 +157,7 @@ public class LengthOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"length\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"length\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assertions.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"length\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"length\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 }

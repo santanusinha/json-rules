@@ -28,16 +28,16 @@ import io.appform.jsonrules.expressions.composite.NotExpression;
 import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CollectionExpressionTest {
 
     private ExpressionEvaluationContext context;
     private ObjectMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
         JsonNode node = mapper.readTree("{ \"felines\": [\"leopard\",\"lion\",\"tiger\",\"jaguar\"],\"integers\": [10,20,30,40],\"decimals\": [10.01,20.22,30.33,40.55], \"emptyString\" : \"\", \"s3\" : \"Hello.*\", \"s1\" : \"HelloAllHello\", \"s2\" : \"Hello\",\"string\" : \"Hello\", \"kid\": null, \"boolean\" : true }");
@@ -46,40 +46,40 @@ public class CollectionExpressionTest {
     
     @Test
     public void testContainsAnyExpressionPositive() throws Exception {
-        Assert.assertTrue(ContainsAnyExpression.builder()
+        Assertions.assertTrue(ContainsAnyExpression.builder()
                 .path("$.felines")
                 .values(Sets.newHashSet("leopard","lion","panther"))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAnyExpression.builder()
+        Assertions.assertTrue(ContainsAnyExpression.builder()
                 .path("$.integers")
                 .values(Sets.newHashSet(20,10,40,30))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAnyExpression.builder()
+        Assertions.assertTrue(ContainsAnyExpression.builder()
                 .path("$.decimals")
                 .values(Sets.newHashSet(20.22,10.01))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
 
-        Assert.assertTrue(ContainsAnyExpression.builder()
+        Assertions.assertTrue(ContainsAnyExpression.builder()
                 .path("$.felines")
                 .valuesPath("$.felines")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAnyExpression.builder()
+        Assertions.assertTrue(ContainsAnyExpression.builder()
                 .path("$.integers")
                 .valuesPath("$.integers")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAnyExpression.builder()
+        Assertions.assertTrue(ContainsAnyExpression.builder()
                 .path("$.decimals")
                 .valuesPath("$.decimals")
                 .extractValues(true)
@@ -90,70 +90,70 @@ public class CollectionExpressionTest {
     
     @Test
     public void testContainsAnyExpressionNegative() throws Exception {
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.felines")
                 .values(Sets.newHashSet("panther"))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.integers")
                 .values(Sets.newHashSet(50))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.integers")
                 .values(Sets.newHashSet("20","10","30","40"))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.decimals")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.emptyString")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.string")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.kid")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.boolean")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
 
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.felines")
                 .valuesPath("$.integers")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.integers")
                 .valuesPath("$.emptyString")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAnyExpression.builder()
+        Assertions.assertFalse(ContainsAnyExpression.builder()
                 .path("$.decimals")
                 .valuesPath("$.doesNotExist")
                 .extractValues(true)
@@ -164,45 +164,45 @@ public class CollectionExpressionTest {
     
     @Test
     public void testContainsAllExpressionPositive() throws Exception {
-        Assert.assertTrue(ContainsAllExpression.builder()
+        Assertions.assertTrue(ContainsAllExpression.builder()
                 .path("$.felines")
                 .values(Sets.newHashSet("tiger","leopard","lion","jaguar"))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAllExpression.builder()
+        Assertions.assertTrue(ContainsAllExpression.builder()
                 .path("$.integers")
                 .values(Sets.newHashSet(20,10,40,30))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAllExpression.builder()
+        Assertions.assertTrue(ContainsAllExpression.builder()
                 .path("$.integers")
                 .values(Sets.newHashSet(20,10,40,30,50))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAllExpression.builder()
+        Assertions.assertTrue(ContainsAllExpression.builder()
                 .path("$.decimals")
                 .values(Sets.newHashSet(20.22,10.01,40.55,30.33))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAllExpression.builder()
+        Assertions.assertTrue(ContainsAllExpression.builder()
                 .path("$.decimals")
                 .values(Sets.newHashSet(20.22,10.01,40.55,30.33,10000.100050))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
 
-        Assert.assertTrue(ContainsAllExpression.builder()
+        Assertions.assertTrue(ContainsAllExpression.builder()
                 .path("$.felines")
                 .valuesPath("$.felines")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAllExpression.builder()
+        Assertions.assertTrue(ContainsAllExpression.builder()
                 .path("$.integers")
                 .extractValues(true)
                 .valuesPath("$.integers")
@@ -210,7 +210,7 @@ public class CollectionExpressionTest {
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(ContainsAllExpression.builder()
+        Assertions.assertTrue(ContainsAllExpression.builder()
                 .path("$.decimals")
                 .valuesPath("$.decimals")
                 .extractValues(true)
@@ -222,70 +222,70 @@ public class CollectionExpressionTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testContainsAllExpressionNegative() throws Exception {
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.felines")
                 .values(Sets.newHashSet("tiger","leopard","lion","panther"))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.integers")
                 .values(Sets.newHashSet(20,10,30,50))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.integers")
                 .values(Sets.newHashSet("20","10","30","40"))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.decimals")
                 .values(Sets.newHashSet(20,10.0101,40.55,30))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.emptyString")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.string")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.kid")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.boolean")
                 .values(Sets.newHashSet(10.001))
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
 
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.felines")
                 .valuesPath("$.integers")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.integers")
                 .valuesPath("$.emptyString")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(ContainsAllExpression.builder()
+        Assertions.assertFalse(ContainsAllExpression.builder()
                 .path("$.decimals")
                 .valuesPath("$.doesNotExist")
                 .extractValues(true)
@@ -296,21 +296,21 @@ public class CollectionExpressionTest {
 
     @Test
     public void testInExpressionPositive() throws Exception {
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.felines[0]")
                 .valuesPath("$.felines")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.integers[0]")
                 .valuesPath("$.integers")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.decimals[0]")
                 .valuesPath("$.decimals")
                 .extractValues(true)
@@ -321,21 +321,21 @@ public class CollectionExpressionTest {
 
     @Test
     public void testInExpressionNegative() throws Exception {
-        Assert.assertFalse(InExpression.builder()
+        Assertions.assertFalse(InExpression.builder()
                 .path("$.felines[0]")
                 .valuesPath("$.integers")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(InExpression.builder()
+        Assertions.assertFalse(InExpression.builder()
                 .path("$.integers[0]")
                 .valuesPath("$.emptyString")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(InExpression.builder()
+        Assertions.assertFalse(InExpression.builder()
                 .path("$.decimals[0]")
                 .valuesPath("$.doesNotExist")
                 .extractValues(true)
@@ -346,14 +346,14 @@ public class CollectionExpressionTest {
 
     @Test
     public void testNotInExpressionPositive() throws Exception {
-        Assert.assertTrue(NotInExpression.builder()
+        Assertions.assertTrue(NotInExpression.builder()
                 .path("$.felines[0]")
                 .valuesPath("$.integers")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(NotInExpression.builder()
+        Assertions.assertTrue(NotInExpression.builder()
                 .path("$.decimals[0]")
                 .valuesPath("$.integers")
                 .extractValues(true)
@@ -364,21 +364,21 @@ public class CollectionExpressionTest {
     
     @Test
     public void testNotInExpressionNegative() throws Exception {
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.felines[0]")
                 .valuesPath("$.felines")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.integers[0]")
                 .valuesPath("$.emptyString")
                 .extractValues(true)
                 .defaultResult(false)
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.decimals[0]")
                 .valuesPath("$.doesNotExist")
                 .extractValues(true)
@@ -392,7 +392,7 @@ public class CollectionExpressionTest {
         final String ruleRepr = TestUtils.read("/containsAnyExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"felines\": [\"leopard\",\"lion\",\"tiger\",\"jaguar\"],\"integers\": [10,20,30,40],\"decimals\": [10.01,20.22,30.33,40.55]}");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -400,7 +400,7 @@ public class CollectionExpressionTest {
         final String ruleRepr = TestUtils.read("/containsAllExpression.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"felines\": [\"leopard\",\"lion\",\"tiger\",\"jaguar\"],\"integers\": [10,20,30,40],\"decimals\": [10.01,20.22,30.33,40.55]}");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -424,7 +424,7 @@ public class CollectionExpressionTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"contains_any\",\"path\":\"$.felines\",\"defaultResult\":false,\"values\":[\"leopard\",\"panther\",\"lion\"],\"extractValues\":false},{\"type\":\"contains_all\",\"path\":\"$.integers\",\"defaultResult\":false,\"values\":[40,10,20,30],\"extractValues\":false}]}]}", ruleRep);
+        Assertions.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"contains_any\",\"path\":\"$.felines\",\"defaultResult\":false,\"values\":[\"leopard\",\"panther\",\"lion\"],\"extractValues\":false},{\"type\":\"contains_all\",\"path\":\"$.integers\",\"defaultResult\":false,\"values\":[40,10,20,30],\"extractValues\":false}]}]}", ruleRep);
     }
     
 

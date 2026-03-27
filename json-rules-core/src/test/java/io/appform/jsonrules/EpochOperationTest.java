@@ -31,9 +31,9 @@ import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.expressions.preoperation.date.EpochOperation;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -46,7 +46,7 @@ public class EpochOperationTest {
     private ObjectMapper mapper;
     private Instant dateTime;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
         dateTime = Instant.now();
@@ -59,49 +59,49 @@ public class EpochOperationTest {
     @Test
 	public void testWithEqualsExpression() {
 		// EpochOperation
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.MINUTE_OF_HOUR))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.HOUR_OF_DAY))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_week").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_WEEK))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_month").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_MONTH))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_year").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_YEAR))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("week_of_month").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.ALIGNED_WEEK_OF_MONTH))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("week_of_year").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.ALIGNED_WEEK_OF_YEAR))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("month_of_year").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.MONTH_OF_YEAR))
@@ -109,13 +109,13 @@ public class EpochOperationTest {
                 .evaluate(context));
         
         // Would only match with the specified ZoneOffSet
-        Assert.assertFalse(EqualsExpression.builder()
+        Assertions.assertFalse(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(EqualsExpression.builder()
+        Assertions.assertFalse(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.HOUR_OF_DAY))
@@ -123,20 +123,20 @@ public class EpochOperationTest {
                 .evaluate(context));
         
         // Default ZoneOffSet considered is UTC
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").build())
                 .value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(EqualsExpression.builder()
+        Assertions.assertTrue(EqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").build())
                 .value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.HOUR_OF_DAY))
                 .build()
                 .evaluate(context));
         
-        Assert.assertFalse(EqualsExpression.builder()
+        Assertions.assertFalse(EqualsExpression.builder()
         		.path("$.dateTime")
         		.preoperation(EpochOperation.builder().operand("minute_of_hour").build())
         		.value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR))
@@ -147,49 +147,49 @@ public class EpochOperationTest {
     @Test
 	public void testWithNotEqualsExpression() {
 		// EpochOperation
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.MINUTE_OF_HOUR))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.HOUR_OF_DAY))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_week").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_WEEK))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_month").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_MONTH))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_year").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_YEAR))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("week_of_month").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.ALIGNED_WEEK_OF_MONTH))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("week_of_year").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.ALIGNED_WEEK_OF_YEAR))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("month_of_year").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.MONTH_OF_YEAR))
@@ -197,13 +197,13 @@ public class EpochOperationTest {
                 .evaluate(context));
         
         // Would only match with the specified ZoneOffSet
-        Assert.assertTrue(NotEqualsExpression.builder()
+        Assertions.assertTrue(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(NotEqualsExpression.builder()
+        Assertions.assertTrue(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").zoneOffSet("+05:30").build())
                 .value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.HOUR_OF_DAY))
@@ -211,20 +211,20 @@ public class EpochOperationTest {
                 .evaluate(context));
         
         // Default ZoneOffSet considered is UTC
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").build())
                 .value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotEqualsExpression.builder()
+        Assertions.assertFalse(NotEqualsExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").build())
                 .value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.HOUR_OF_DAY))
                 .build()
                 .evaluate(context));
         
-        Assert.assertTrue(NotEqualsExpression.builder()
+        Assertions.assertTrue(NotEqualsExpression.builder()
         		.path("$.dateTime")
         		.preoperation(EpochOperation.builder().operand("minute_of_hour").build())
         		.value(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR))
@@ -235,49 +235,49 @@ public class EpochOperationTest {
     @Test
     public void testWithInExpression() throws Exception {
 		// EpochOperation
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.MINUTE_OF_HOUR)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.HOUR_OF_DAY)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_week").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_WEEK)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_month").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_MONTH)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_year").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_YEAR)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("week_of_month").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.ALIGNED_WEEK_OF_MONTH)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("week_of_year").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.ALIGNED_WEEK_OF_YEAR)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("month_of_year").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.MONTH_OF_YEAR)))
@@ -285,13 +285,13 @@ public class EpochOperationTest {
                 .evaluate(context));
         
         // Would only match with the specified ZoneOffSet
-        Assert.assertFalse(InExpression.builder()
+        Assertions.assertFalse(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(InExpression.builder()
+        Assertions.assertFalse(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.HOUR_OF_DAY)))
@@ -299,20 +299,20 @@ public class EpochOperationTest {
                 .evaluate(context));
         
         // Default ZoneOffSet considered is UTC
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(InExpression.builder()
+        Assertions.assertTrue(InExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.HOUR_OF_DAY)))
                 .build()
                 .evaluate(context));
         
-        Assert.assertFalse(InExpression.builder()
+        Assertions.assertFalse(InExpression.builder()
         		.path("$.dateTime")
         		.preoperation(EpochOperation.builder().operand("minute_of_hour").build())
         		.values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR)))
@@ -323,49 +323,49 @@ public class EpochOperationTest {
     @Test
     public void testWithNotInExpression() throws Exception {
 		// EpochOperation
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.MINUTE_OF_HOUR)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.HOUR_OF_DAY)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_week").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_WEEK)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_month").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_MONTH)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("day_of_year").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.DAY_OF_YEAR)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("week_of_month").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.ALIGNED_WEEK_OF_MONTH)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("week_of_year").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.ALIGNED_WEEK_OF_YEAR)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("month_of_year").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.of("+05:30")).get(ChronoField.MONTH_OF_YEAR)))
@@ -373,13 +373,13 @@ public class EpochOperationTest {
                 .evaluate(context));
         
         // Would only match with the specified ZoneOffSet
-        Assert.assertTrue(NotInExpression.builder()
+        Assertions.assertTrue(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR)))
                 .build()
                 .evaluate(context));
-        Assert.assertTrue(NotInExpression.builder()
+        Assertions.assertTrue(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").zoneOffSet("+05:30").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.HOUR_OF_DAY)))
@@ -387,20 +387,20 @@ public class EpochOperationTest {
                 .evaluate(context));
         
         // Default ZoneOffSet considered is UTC
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("minute_of_hour").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR)))
                 .build()
                 .evaluate(context));
-        Assert.assertFalse(NotInExpression.builder()
+        Assertions.assertFalse(NotInExpression.builder()
                 .path("$.epochTime")
                 .preoperation(EpochOperation.builder().operand("hour_of_day").build())
                 .values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.HOUR_OF_DAY)))
                 .build()
                 .evaluate(context));
         
-        Assert.assertTrue(NotInExpression.builder()
+        Assertions.assertTrue(NotInExpression.builder()
         		.path("$.dateTime")
         		.preoperation(EpochOperation.builder().operand("minute_of_hour").build())
         		.values(Sets.newHashSet(dateTime.atOffset(ZoneOffset.UTC).get(ChronoField.MINUTE_OF_HOUR)))
@@ -413,7 +413,7 @@ public class EpochOperationTest {
         final String ruleRepr = TestUtils.read("/epochOperation.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"unixTime\": 1496209177, \"string\" : \"Hello\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
     
     @Test
@@ -437,7 +437,7 @@ public class EpochOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.unixTime\",\"preoperation\":{\"operation\":\"epoch\",\"operand\":\"hour_of_day\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.unixTime\",\"preoperation\":{\"operation\":\"epoch\",\"operand\":\"week_of_month\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assertions.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.unixTime\",\"preoperation\":{\"operation\":\"epoch\",\"operand\":\"hour_of_day\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.unixTime\",\"preoperation\":{\"operation\":\"epoch\",\"operand\":\"week_of_month\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
     
 }

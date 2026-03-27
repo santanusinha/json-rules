@@ -10,9 +10,9 @@ import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.expressions.preoperation.date.DiffFromCurrentEpochOperation;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
@@ -24,7 +24,7 @@ public class DiffFromCurrentEpochOperationTest {
     private ExpressionEvaluationContext context;
     private ObjectMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
         long epoch = System.currentTimeMillis();
@@ -37,7 +37,7 @@ public class DiffFromCurrentEpochOperationTest {
         Expression expression = EqualsExpression.builder().path("$.setEpoch")
                 .preoperation(DiffFromCurrentEpochOperation.builder()
                                 .build()).value(0).build();
-        Assert.assertTrue(expression.evaluate(context.getNode(), Collections.singletonMap(OptionKeys.SYSTEM_TIME,new Long(1500000000000L))));
+        Assertions.assertTrue(expression.evaluate(context.getNode(), Collections.singletonMap(OptionKeys.SYSTEM_TIME,new Long(1500000000000L))));
     }
 
     @Test
@@ -47,9 +47,9 @@ public class DiffFromCurrentEpochOperationTest {
                     .preoperation(DiffFromCurrentEpochOperation.builder()
                             .build()).value(0).build();
             expression.evaluate(context.getNode(), Collections.singletonMap(OptionKeys.SYSTEM_TIME,1500000000));
-            Assert.fail("No Exception thrown");
+            Assertions.fail("No Exception thrown");
         } catch(IllegalArgumentException e) {
-            Assert.assertTrue("Invalid Time", true);
+            Assertions.assertTrue(true, "Invalid Time");
         }
     }
 
@@ -58,7 +58,7 @@ public class DiffFromCurrentEpochOperationTest {
         Expression expression = GreaterThanExpression.builder().path("$.setEpoch")
                 .preoperation(DiffFromCurrentEpochOperation.builder()
                         .build()).value(0).build();
-        Assert.assertTrue(expression.evaluate(context.getNode()));
+        Assertions.assertTrue(expression.evaluate(context.getNode()));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class DiffFromCurrentEpochOperationTest {
         final String ruleRepr = TestUtils.read("/diffFromEpochOperation.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": "+System.currentTimeMillis()+" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
     }
 
     @Test
@@ -90,6 +90,6 @@ public class DiffFromCurrentEpochOperationTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"current_epoch_diff\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"current_epoch_diff\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assertions.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"current_epoch_diff\"},\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"preoperation\":{\"operation\":\"current_epoch_diff\"},\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
 }

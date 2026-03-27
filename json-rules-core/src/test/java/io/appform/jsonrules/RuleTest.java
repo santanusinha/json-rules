@@ -8,9 +8,9 @@ import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
 import io.appform.jsonrules.utils.Rule;
 import io.appform.jsonrules.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test to check rule functionality
@@ -23,7 +23,7 @@ public class RuleTest {
         final String ruleRepr = TestUtils.read("/simple.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode node = mapper.readTree("{ \"value\": 20, \"string\" : \"Hello\" }");
-        Assert.assertTrue(rule.matches(node));
+        Assertions.assertTrue(rule.matches(node));
         long currentTime = System.currentTimeMillis();
         for (int i = 0; i < 1000000; i++) {
             if(!rule.matches(node)) {
@@ -38,15 +38,15 @@ public class RuleTest {
         final String ruleRepr = TestUtils.read("/simple_rule_with_default.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode nodeWithMissingOperandPath = mapper.readTree("{ \"value\": 20, \"name\" : \"Hello\" }");
-        Assert.assertTrue(rule.matches(nodeWithMissingOperandPath));
+        Assertions.assertTrue(rule.matches(nodeWithMissingOperandPath));
 
         final String ruleRepr2 = TestUtils.read("/simple.rule");
         Rule rule2 = Rule.create(ruleRepr2, mapper);
-        Assert.assertFalse(rule2.matches(nodeWithMissingOperandPath));
+        Assertions.assertFalse(rule2.matches(nodeWithMissingOperandPath));
 
         final String ruleRepr3 = TestUtils.read("/complex.rule");
         Rule rule3 = Rule.create(ruleRepr3, mapper);
-        Assert.assertTrue(rule3.matches(nodeWithMissingOperandPath));
+        Assertions.assertTrue(rule3.matches(nodeWithMissingOperandPath));
     }
 
     @Test
@@ -54,12 +54,12 @@ public class RuleTest {
         final String ruleRepr = TestUtils.read("/notExists.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
         JsonNode nodeWithMissingOperandPath = mapper.readTree("{ \"value\": 20, \"name\" : \"Hello\" }");
-        Assert.assertTrue(rule.matches(nodeWithMissingOperandPath));
+        Assertions.assertTrue(rule.matches(nodeWithMissingOperandPath));
 
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testPerf() throws Exception {
         final String ruleRepr = TestUtils.read("/complex.rule");
         Rule rule = Rule.create(ruleRepr, mapper);
@@ -94,6 +94,6 @@ public class RuleTest {
         final String ruleRep = rule.representation(mapper);
 
         System.out.println(ruleRep);
-        Assert.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
+        Assertions.assertEquals("{\"type\":\"not\",\"children\":[{\"type\":\"or\",\"children\":[{\"type\":\"less_than\",\"path\":\"$.value\",\"defaultResult\":false,\"value\":11,\"extractValueFromPath\":false},{\"type\":\"greater_than\",\"path\":\"$.value\",\"defaultResult\":false,\"value\":30,\"extractValueFromPath\":false}]}]}", ruleRep);
     }
 }

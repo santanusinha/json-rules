@@ -24,9 +24,9 @@ import io.appform.jsonrules.expressions.composite.OrExpression;
 import io.appform.jsonrules.expressions.debug.FailureDetail;
 import io.appform.jsonrules.expressions.numeric.GreaterThanExpression;
 import io.appform.jsonrules.expressions.numeric.LessThanExpression;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
@@ -35,7 +35,7 @@ public class CompositeExpressionDebugTest {
     private ExpressionEvaluationContext context;
     private ObjectMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(
@@ -57,10 +57,10 @@ public class CompositeExpressionDebugTest {
                         .value(10)
                         .build())
                 .build();
-        Assert.assertTrue(positiveCase.evaluate(context));
+        Assertions.assertTrue(positiveCase.evaluate(context));
         final FailureDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isFailed());
-        Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
+        Assertions.assertFalse(debugPositive.isFailed());
+        Assertions.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final AndExpression negativeCase = AndExpression.builder()
                 .child(LessThanExpression.builder()
@@ -72,12 +72,12 @@ public class CompositeExpressionDebugTest {
                         .value(10)
                         .build())
                 .build();
-        Assert.assertFalse(negativeCase.evaluate(context));
+        Assertions.assertFalse(negativeCase.evaluate(context));
         final FailureDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isFailed());
-        Assert.assertTrue(debugNegative.getReason()
+        Assertions.assertTrue(debugNegative.isFailed());
+        Assertions.assertTrue(debugNegative.getReason()
                 .size() == 1);
-        Assert.assertEquals("Value of [20] at path [$.value] is not less than [5]",
+        Assertions.assertEquals("Value of [20] at path [$.value] is not less than [5]",
                 debugNegative.getReason()
                         .get(0));
     }
@@ -94,10 +94,10 @@ public class CompositeExpressionDebugTest {
                         .value(10)
                         .build())
                 .build();
-        Assert.assertTrue(positiveCase.evaluate(context));
+        Assertions.assertTrue(positiveCase.evaluate(context));
         final FailureDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertFalse(debugPositive.isFailed());
-        Assert.assertTrue(Objects.isNull(debugPositive.getReason()));
+        Assertions.assertFalse(debugPositive.isFailed());
+        Assertions.assertTrue(Objects.isNull(debugPositive.getReason()));
 
         final OrExpression negativeCase = OrExpression.builder()
                 .child(LessThanExpression.builder()
@@ -109,15 +109,15 @@ public class CompositeExpressionDebugTest {
                         .value(30)
                         .build())
                 .build();
-        Assert.assertFalse(negativeCase.evaluate(context));
+        Assertions.assertFalse(negativeCase.evaluate(context));
         final FailureDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertTrue(debugNegative.isFailed());
-        Assert.assertTrue(debugNegative.getReason()
+        Assertions.assertTrue(debugNegative.isFailed());
+        Assertions.assertTrue(debugNegative.getReason()
                 .size() == 2);
-        Assert.assertEquals("Value of [20] at path [$.value] is not less than [11]",
+        Assertions.assertEquals("Value of [20] at path [$.value] is not less than [11]",
                 debugNegative.getReason()
                         .get(0));
-        Assert.assertEquals("Value of [20] at path [$.value] is not greater than [30]",
+        Assertions.assertEquals("Value of [20] at path [$.value] is not greater than [30]",
                 debugNegative.getReason()
                         .get(1));
 
@@ -137,10 +137,10 @@ public class CompositeExpressionDebugTest {
                                 .build())
                         .build())
                 .build();
-        Assert.assertFalse(positiveCase.evaluate(context));
+        Assertions.assertFalse(positiveCase.evaluate(context));
         final FailureDetail debugPositive = positiveCase.debug(context.getNode());
-        Assert.assertTrue(debugPositive.isFailed());
-        Assert.assertTrue(debugPositive.getReason()
+        Assertions.assertTrue(debugPositive.isFailed());
+        Assertions.assertTrue(debugPositive.getReason()
                 .size() == 0);
 
         final NotExpression negativeCase = NotExpression.builder()
@@ -155,10 +155,10 @@ public class CompositeExpressionDebugTest {
                                 .build())
                         .build())
                 .build();
-        Assert.assertTrue(negativeCase.evaluate(context));
+        Assertions.assertTrue(negativeCase.evaluate(context));
         final FailureDetail debugNegative = negativeCase.debug(context.getNode());
-        Assert.assertFalse(debugNegative.isFailed());
-        Assert.assertTrue(Objects.isNull(debugNegative.getReason()));
+        Assertions.assertFalse(debugNegative.isFailed());
+        Assertions.assertTrue(Objects.isNull(debugNegative.getReason()));
     }
 
 }
