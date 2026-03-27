@@ -34,6 +34,12 @@ Maven repo
   </dependency>
 ```
 
+### Versions
+
+- `1.0.19` uses `json-path` `2.7.0` and is backward compatible with older `json-rules` versions (`1.0.16` and lower).
+- `1.2.0` uses `json-path` `2.9.0`; `2.9.0` is not backward compatible with `2.7.0`.
+- `1.3.0` changes the minimum supported `JDK/JRE` version to `17`.
+
 ### Usage
 ```java
     // Build expression with java objects
