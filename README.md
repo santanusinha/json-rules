@@ -201,12 +201,34 @@ Debugging support is provided to understand exact reasons of rule failures for a
 ## Advanced Configurations
 
 ### Performance <> Safety Preference
-There is a performanceSafetyPreference option that can be set to either SPEED or SAFETY depending upon your needs. <br>
-By default, it is set to SAFETY <br>
-If your application doesn't use an infinite set of json paths, it is recommended to set this option to SPEED. <br>
-If on the other hand, your application uses an infinite or unbounded number of json paths (at least 1 million or more), then to prevent json-rules 
-from using more than a finite amount of heap memory for caching the json path expressions, you may want to set this option to SAFETY. <br>
-It can be set to SPEED as follows
+There is a `performanceSafetyPreference` option that can be set to either `SPEED` or `SAFETY` depending upon your needs. <br>
+By default, it is set to `SAFETY`. <br>
+If your application doesn't use an infinite set of JSON paths, it is recommended to set this option to `SPEED`. <br>
+If on the other hand, your application uses an infinite or unbounded number of JSON paths (at least 1 million or more), then to prevent json-rules
+from using more than a finite amount of heap memory for caching the JSON path expressions, you may want to set this option to `SAFETY`. <br>
+
+#### Option 1 – JVM system property
+
+Pass the `-DjsonRules.performanceSafetyPreference` flag when starting your JVM (or when running tests with Maven):
+
+```shell
+# Prefer speed
+java -DjsonRules.performanceSafetyPreference=SPEED -jar your-app.jar
+
+# Prefer safety – this is the default mode
+java -DjsonRules.performanceSafetyPreference=SAFETY -jar your-app.jar
+```
+
+To override the default when running Maven tests:
+
+```shell
+mvn test -DjsonRules.performanceSafetyPreference=SPEED
+```
+
+Valid values are `SPEED` and `SAFETY` (case-insensitive). 
+An invalid value will be logged as a warning and the preference will fall back to `SAFETY`.
+
+#### Option 2 – Programmatic configuration
 
 ```java
 JsonRulesConfiguration.configure(PerformanceSafetyPreference.SPEED);

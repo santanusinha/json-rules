@@ -1,5 +1,6 @@
 package io.appform.jsonrules.config;
 
+import com.google.common.base.Strings;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.spi.cache.CacheProvider;
@@ -12,9 +13,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class JsonRulesConfiguration {
@@ -28,6 +27,16 @@ public class JsonRulesConfiguration {
                     defaultJacksonConfiguration.jsonProvider(),
                     defaultJacksonConfiguration.mappingProvider(),
                     defaultJacksonConfiguration.options());
+            val performanceSafetyPreference = System.getProperty("jsonRules.performanceSafetyPreference");
+            if (!Strings.isNullOrEmpty(performanceSafetyPreference)) {
+                try {
+                    val pref = PerformanceSafetyPreference.valueOf(performanceSafetyPreference.toUpperCase());
+                    configure(pref);
+                } catch (IllegalArgumentException e) {
+                    log.warn("Invalid value for -D property jsonRules.performanceSafetyPreference: {}. " +
+                            "Defaulting to SAFETY.", performanceSafetyPreference);
+                }
+            }
         }
     }
 
